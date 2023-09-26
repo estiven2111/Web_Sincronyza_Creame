@@ -1,0 +1,49 @@
+/* .container {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  }
+  .logoCreame {
+    width: "400"
+  }
+  .titulo {
+    font-size: 30,
+  }
+  .inputContainer {
+    width: "80%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#ccc',
+    marginBottom: 10,
+    backgroundColor: "lightgray",
+    borderRadius: 10,
+  }
+  input {
+    width: "80%",
+    padding: 3,
+    margin: 8,
+  },
+  .icon {
+    paddingHorizontal: 10,
+  },
+  .modal {
+    width: 250,
+    height: 130,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button {
+    padding: 20
+  },
+  .errorMesage {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold"
+  }
+  footer {
+    position: 'absolute',
+    flex: "row",
+    alignItems: "center",
+    bottom: 0
+  } */

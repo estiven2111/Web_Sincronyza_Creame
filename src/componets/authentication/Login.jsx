@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import icon from "../../assets/img/icon.png"
-
+import swal from "sweetalert";
+import { useDispatch,useSelector } from "react-redux";
+import { loginredux } from "../redux/reducer/login.slice";
 const Login = () => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState(false);
     const navigation = useNavigate();
+    const {date_login} = useSelector((state) => state.loginSlice)
+    const dispatch = useDispatch()
 
   useEffect(() => {
     setTimeout(() => {
@@ -24,56 +28,29 @@ const Login = () => {
     }
   };
 
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const toggleSecureTextEntry = () => {
-    setSecureTextEntry(!secureTextEntry);
-  };
-
-  const [errorMessage, setErrorMessage] = useState("");
   const handleLogin = async (e) => {
-    try {
-        e.preventDefault();
-      console.log("object", user, password );
-      const response = await axios.post("/login", { user, password });
-      console.log(response)
-    //   await localStorage.multiSet([
-    //     ["name", response.data.userName],
-    //     ["token", response.data.token],
-    //     ["email", response.data.userEmail],
-    //     ["doc_empleado", response.data.doc_empleado]
-    //   ]);
-    await localStorage.setItem("name", response.data.userName)
-    await localStorage.setItem("token", response.data.token)
-    await localStorage.setItem("email", response.data.userEmail)
-    await localStorage.setItem("doc_empleado", response.data.doc_empleado)
-      console.log("paso");
-      setPassword("");
-      navigation.navigate("/home");
-
-      // Realiza la navegación a la siguiente pantalla
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        setErrorMessage(error.response.data.message);
-        toggleOverlay();
-      }
-    }
-  };
-
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleOverlay = () => {
-    setIsVisible(!isVisible);
+    e.preventDefault();
+    console.log("object", user, password );
+    const response = await dispatch(loginredux(user, password ))
+   localStorage.setItem("name", response.userName)
+   localStorage.setItem("token", response.token)
+   localStorage.setItem("email", response.userEmail)
+   localStorage.setItem("doc_empleado", response.doc_empleado)
+    setPassword("");
+    navigation.navigate("/home");
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900">
+    // <div className="bg-gray-50 dark:bg-gray-900">
+      <section className="bg-gray-900 dark:bg-gray-900"> 
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         {/* <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
             <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
             Flowbite    
         </a> */}
-      <a href="" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+      {/* <a href="" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
          <img className="mr-2" src={icon} alt="" />
-         </a>
+         </a> */}
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -107,8 +84,8 @@ const Login = () => {
             </div>
         </div>
     </div>
-
-  </div>
+    </section>
+  // </div>
   );
 // return (
 //     <div>

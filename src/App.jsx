@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ThemeProvider } from "./componets/context/themeContext";
 
 import {
@@ -9,21 +10,23 @@ import {
 import './App.css'
 import NavBar from "./componets/navigation/NavBar";
 import Login from "./componets/authentication/login";
+import Gastos from "./componets/screens/gastos/Gastos";
+
 function App() {
    const url = window.location.pathname.includes("/")
    console.log(url,window.location.pathname)
   return (
     <ThemeProvider>
-       <div className="container bg-white">
+       <div className="container bg-slate-600">
         {/* {window.location.pathname === "/"? <NavBar />:""} */}
       <Router>
-        <NavBar />
+        {/* <NavBar /> */}
        <Routes>
         
        {/* <Route
           path="/"
           element={
-            location.pathname === "/home" ? (
+            location.pathname === "/" ? (
               <>
                 <NavBar />
               </>
@@ -34,6 +37,7 @@ function App() {
           
         /> */}
        <Route path="/" element={<Login />}/>
+       <Route path="/gastos" element={<Gastos />}/>
        </Routes>
       </Router>
       </div>

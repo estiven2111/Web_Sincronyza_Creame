@@ -23,16 +23,16 @@ export const ThemeProvider = ({ children }) => {
     }
   }, [theme]);
 
-  useEffect(() => {
-    const element = document.documentElement;
-    if (theme === "dark") {
-      element.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      element.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   const element = document.documentElement;
+  //   if (theme === "dark") {
+  //     element.classList.add("dark");
+  //     localStorage.setItem("theme", "dark");
+  //   } else {
+  //     element.classList.remove("dark");
+  //     localStorage.setItem("theme", "light");
+  //   }
+  // }, [theme]);
 
   const themeChangeHandler = () => {
     setTheme(theme === "dark" ? "light" : "dark");

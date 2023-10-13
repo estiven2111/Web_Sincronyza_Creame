@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios'
 
+// axios.defaults.baseURL = "http://localhost:5000/user/api"
 axios.defaults.baseURL = "https://syncronizabackup-production.up.railway.app/user/api"
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

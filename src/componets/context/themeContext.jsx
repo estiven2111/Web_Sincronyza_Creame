@@ -1,46 +1,60 @@
-/* eslint-disable react/prop-types */
-import { createContext, useState, useEffect } from "react";
+import React, {createContext, useState} from "react";
 
-export const ThemeContext = createContext({
-  theme: null,
-  themeChangeHandler: () => {},
-});
+export const ThemeContext = createContext({})
 
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    const storedTheme = localStorage.getItem("theme");
-    return storedTheme;
-  });
+export const ThemeProvider = ({children}) => {
 
-  useEffect(() => {
-    if (theme === null) {
-      // verificar si el tema no se ha guardado previamente
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setTheme("dark");
-      } else {
-        setTheme("light");
-      }
+    const [inputValue, setInputValue] = useState("")
+    const finalValue = (input) => {
+        setInputValue(input)
     }
-  }, [theme]);
 
-  // useEffect(() => {
-  //   const element = document.documentElement;
-  //   if (theme === "dark") {
-  //     element.classList.add("dark");
-  //     localStorage.setItem("theme", "dark");
-  //   } else {
-  //     element.classList.remove("dark");
-  //     localStorage.setItem("theme", "light");
-  //   }
-  // }, [theme]);
+    const resetInputValue = () => {
+        setInputValue("")
+    }
+    
+    const [startTime, setStartTime] = useState("")
+    const [endTime, setEndTime] = useState("")
+    const persistStartTime = (input) => {
+        setStartTime(input)
+    }
+    const persistEndTime = (input) => {
+        setEndTime(input)
+    }
 
-  const themeChangeHandler = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+    const [infoProject, setInfoProject] = useState({})
+    const setProjectData = (input) => {
+        setInfoProject({
+            ...infoProject,
+            input
+        })
+    }
 
-  return (
-    <ThemeContext.Provider value={{ theme, themeChangeHandler }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+    const [searchText, setSearchText] = useState('');
+    const globalSearch = (input) => {
+        setSearchText(input)
+    }
+    const [showOptions, setShowOptions] = useState(false);
+    const globalOptions = (input) => {
+        setShowOptions(input)
+    }
+
+    const [anticipos, setAnticipos] = useState([]);
+    const todosAnticipos = (input) => {
+        setAnticipos(input)
+    }
+
+    const [fechasIndicadores, setFechasIndicadores] = useState([])
+    const todasLasFechas = (input) => {
+        setFechasIndicadores(input)
+    }
+
+
+    return(
+        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos, fechasIndicadores, todasLasFechas }}>
+            {children}
+        </ThemeContext.Provider>
+    )
+}
+
+// export default ThemeProvider

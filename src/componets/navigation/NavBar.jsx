@@ -1,4 +1,3 @@
-import ThemeToggle from "./ThemeToggle";
 import { useState } from "react";
 import { NavLink,Link } from "react-router-dom";
 import { MdPayment, MdLogin } from "react-icons/md";
@@ -7,6 +6,10 @@ import { SlBadge } from "react-icons/sl";
 import { VscChromeClose } from "react-icons/vsc";
 import { IoMenuSharp } from "react-icons/io5";
 import icon from "../../assets/img/icon.png"
+import SearchBar from "../searchBar/searchBar";
+import WelcomeBar from "./welcomeBar";
+import Logout from "./logout";
+
 function NavBar() {
   // return (
   //   <div className="container bg-slate-50">
@@ -28,7 +31,7 @@ function NavBar() {
     setShowMenu(!showMenu);
   };
   return (
-    <div className="lg:px-20 bg-primaryblue/80 transition-colors z-20 duration-500 dark:bg-darkblue fixed top-0 left-0 w-full  bg-neutral-500">
+    <div className="lg:px-20 bg-primaryblue/80 transition-colors z-20 duration-500 dark:bg-darkblue fixed top-0 left-0 w-full bg-neutral-500">
       <div className="px-5">
         <div className="flex justify-between items-center h-[90px]  my-5">
           <div className="flex gap-6 sm:grid sm:grid-cols-3 w-full  text-white items-center relative">
@@ -105,6 +108,9 @@ function NavBar() {
             </div>
           </div>
         </div>
+        <SearchBar/>
+        <WelcomeBar/>
+        <Logout/>
       </div>
 
       {/* Menu content for medium and small screens */}

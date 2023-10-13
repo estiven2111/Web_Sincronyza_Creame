@@ -2,44 +2,32 @@
 import { ThemeProvider } from "./componets/context/themeContext";
 
 import {
+  useLocation,
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import './App.css'
 import NavBar from "./componets/navigation/NavBar";
-import Login from "./componets/authentication/login";
+import Login from "./componets/authentication/Login";
 import Gastos from "./componets/screens/gastos/Gastos";
 
+import Home from "./componets/home/home"
+
+
 function App() {
-   const url = window.location.pathname.includes("/")
-   console.log(url,window.location.pathname)
+  const location = useLocation()
   return (
     <ThemeProvider>
-       <div className="container bg-slate-600">
-        {/* {window.location.pathname === "/"? <NavBar />:""} */}
-      <Router>
-        {/* <NavBar /> */}
-       <Routes>
-        
-       {/* <Route
-          path="/"
-          element={
-            location.pathname === "/" ? (
-              <>
-                <NavBar />
-              </>
-            ) : (
-              <Login />
-            )
-          }
-          
-        /> */}
-       <Route path="/" element={<Login />}/>
-       <Route path="/gastos" element={<Gastos />}/>
-       </Routes>
-      </Router>
+      <div className='bg-white container w-full '  >
+        {location.pathname === "/" ? <Login /> :<NavBar/>}
+          <Routes>
+            <Route path='/home' element= {<Home/>} />
+             <Route path='/Gastos' element= {<Gastos/>} />
+           {/* <Route path='/about' element={<About/>} />
+            <Route path='/detail/:detailId' element={<Detail/>} />
+            <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}
+          </Routes>
       </div>
     </ThemeProvider>
   )

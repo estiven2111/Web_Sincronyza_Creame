@@ -1,4 +1,3 @@
-import ThemeToggle from "./ThemeToggle";
 import { useState } from "react";
 import { NavLink,Link } from "react-router-dom";
 import { MdPayment, MdLogin } from "react-icons/md";
@@ -7,6 +6,10 @@ import { SlBadge } from "react-icons/sl";
 import { VscChromeClose } from "react-icons/vsc";
 import { IoMenuSharp } from "react-icons/io5";
 import icon from "../../assets/img/icon.png"
+import SearchBar from "../searchBar/searchBar";
+import WelcomeBar from "./welcomeBar";
+import Logout from "./logout";
+
 function NavBar() {
   // return (
   //   <div className="container bg-slate-50">
@@ -105,6 +108,9 @@ function NavBar() {
             </div>
           </div>
         </div>
+        <SearchBar/>
+        <WelcomeBar/>
+        <Logout/>
       </div>
 
       {/* Menu content for medium and small screens */}

@@ -15,18 +15,18 @@ import Home from "./componets/home/home"
 function App() {
   const location = useLocation()
   return (
-    // <ThemeProvider>
+    <ThemeProvider>
       <div className='bg-white w-full' >
-      {location.pathname === "/" ? <Login /> :<NavBar/>}
-        <Routes>
-          <Route path='/home' element= {<Home/>} />
-          {/* <Route path='/home' element= {<Home/>} />
-          <Route path='/about' element={<About/>} />
-          <Route path='/detail/:detailId' element={<Detail/>} />
-          <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}
-        </Routes>
-    </div>
-    // </ThemeProvider>
+        {location.pathname === "/" ? <Login /> :<NavBar/>}
+          <Routes>
+            <Route path='/home' element= {<Home/>} />
+            {/* <Route path='/home' element= {<Home/>} />
+            <Route path='/about' element={<About/>} />
+            <Route path='/detail/:detailId' element={<Detail/>} />
+            <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}
+          </Routes>
+      </div>
+    </ThemeProvider>
   )
 }
 

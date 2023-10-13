@@ -5,7 +5,6 @@ import axios from 'axios';
 
 const SearchBar = () => {
   const { finalValue, searchText, globalSearch, showOptions, globalOptions } = useContext(ThemeContext);
-  console.log(finalValue, searchText, globalSearch, showOptions, globalOptions, "hola")
   const [options, setOptions] = useState([]);
 
   useEffect(() => {

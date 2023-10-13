@@ -31,7 +31,7 @@ function NavBar() {
     setShowMenu(!showMenu);
   };
   return (
-    <div className="lg:px-20 bg-primaryblue/80 transition-colors z-20 duration-500 dark:bg-darkblue fixed top-0 left-0 w-full  bg-neutral-500">
+    <div className="lg:px-20 bg-primaryblue/80 transition-colors z-20 duration-500 dark:bg-darkblue fixed top-0 left-0 w-full bg-neutral-500">
       <div className="px-5">
         <div className="flex justify-between items-center h-[90px]  my-5">
           <div className="flex gap-6 sm:grid sm:grid-cols-3 w-full  text-white items-center relative">

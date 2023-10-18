@@ -50,15 +50,15 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="container">
+    <div className="w-full px-4">
       <input
-        className="input"
+        className="input flex w-full grow rounded md:w-1/2"
         value={searchText}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder="Busca el Proyecto o sin Proyecto"
       />
       {showOptions && (
-        <div className="modalContainer">
+        <div className="modalContainer absolute bg-gray-50 p-1 m-1 border-2 border-gray-200 rounded">
           <ul>
             {options.map((option, index) => (
               <li key={index}>

@@ -22,9 +22,9 @@ const Login = () => {
   const handleGetToken = () => {
     const datatoken = localStorage.getItem("token");
     if (!datatoken) {
-        // navigation("/home");
+        navigation("/");
     } else {
-        // navigation("/home");
+         navigation("/actividades");
     }
   };
 
@@ -37,7 +37,7 @@ const Login = () => {
    localStorage.setItem("email", response.userEmail)
    localStorage.setItem("doc_empleado", response.doc_empleado)
     setPassword("");
-    navigation("/home");
+    navigation("/actividades");
   };
 
   return (

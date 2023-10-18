@@ -23,7 +23,6 @@ function App() {
       <div className='w-full min-h-screen'  >
         {location.pathname === "/" ? <Login /> :<NavBar/>}
           <Routes>
-            <Route path='/home' element= {<Home/>} />
              <Route path='/Gastos' element= {<Gastos/>} />
              <Route path='/actividades' element= {<Actividades/>} />
            {/* <Route path='/about' element={<About/>} />

@@ -113,7 +113,7 @@ const Gastos = () => {
   //   </>)
   //  }
   return (
-    <div className="mt-56 m-6">
+    <div className="mt-4 m-6">
       <form className="">
         {imageSrc ? (
           <>

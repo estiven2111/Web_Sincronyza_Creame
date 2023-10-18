@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import NavBar from "./componets/navigation/NavBar";
 import Login from "./componets/authentication/Login";
-import Gastos from "./componets/screens/gastos/Gastos";
+import Gastos from "./componets/gastos/gastos";
 import Actividades from "./componets/actividades/actividades";
 
 import Home from "./componets/home/home"

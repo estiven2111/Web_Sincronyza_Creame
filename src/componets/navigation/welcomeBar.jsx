@@ -21,11 +21,10 @@ const WelcomeBar = () => {
     }, []);
 
     return (
-        <div className="container">
-            <div className="rowContainer">
-                {/* <img src={logoCompleto} alt="Logo" /> */}
-                <div className="userinfo">
-                    <p className="text" title={info.name} width="50px">{info.name}</p>
+        <div className="px-1 md:px-4">
+            <div className="">
+                <div className="">
+                    <p className="text-gray-50 text-xs md:text-base max-w-[180px] md:w-[200px]" title={info.name} width="50px">{info.name}</p>
                 </div>
             </div>
         </div>

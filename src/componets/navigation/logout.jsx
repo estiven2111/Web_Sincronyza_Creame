@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Icon from "react-fontawesome"; // Asegúrate de tener esta biblioteca de iconos instalada
 import jwtDecode from "jwt-decode";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 import { ThemeContext } from "../context/themeContext";
 
@@ -23,6 +25,7 @@ const Logout = () => {
       localStorage.removeItem("doc_empleado");
       navigate("/"); // Redirige al usuario a la página de inicio de sesión
     } catch (error) {
+
       console.error(error);
     }
   };
@@ -44,8 +47,7 @@ const Logout = () => {
 
   return (
     <button onClick={handleLogout}>
-      <Icon name="sign-out" size="2x" style={{ marginRight: "10px" }} />
-      boton
+      <FontAwesomeIcon icon={faRightFromBracket} className="h-8 text-gray-50"/>
     </button>
   );
 };

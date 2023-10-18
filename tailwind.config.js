@@ -8,7 +8,11 @@ export default {
     "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        'azulCreame': '#0C4279', 
+      },
+    },
   },
   plugins: [twElementPlugin],
 }

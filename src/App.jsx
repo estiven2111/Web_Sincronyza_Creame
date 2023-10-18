@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import NavBar from "./componets/navigation/NavBar";
 import Login from "./componets/authentication/Login";
-import Gastos from "./componets/screens/gastos/Gastos";
+import Gastos from "./componets/gastos/gastos";
 
 import Home from "./componets/home/home"
 
@@ -19,7 +19,7 @@ function App() {
   const location = useLocation()
   return (
     <ThemeProvider>
-      <div className='bg-white container w-full '  >
+      <div className=''  >
         {location.pathname === "/" ? <Login /> :<NavBar/>}
           <Routes>
             <Route path='/home' element= {<Home/>} />

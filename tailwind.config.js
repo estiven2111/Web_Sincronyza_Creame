@@ -12,6 +12,13 @@ export default {
       backgroundColor: {
         'azulCreame': '#0C4279', 
       },
+      width: {
+        '3/5': '60%', // Ancho del 60%
+        '2/5': '40%', // Ancho del 56.25% (proporción 9:16 para videos)
+        '1/10': '10%',
+        '9/10': '90%',
+
+      },
     },
   },
   plugins: [twElementPlugin],

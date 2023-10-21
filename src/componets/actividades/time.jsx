@@ -117,67 +117,69 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center bg-indigo-300 rounded p-1">
       <button className={`btn btn-blue ${entrega ? '' : 'btn-disabled'}`} onClick={openModal}>
         {!isNaN(totalTime) ? totalTime : '00:00'}
       </button>
       {modalVisible && (
-        <div className="modal">
-          <div className="modal-content">
-            <p className="text-white">Fecha: {date}</p>
-            <div className="flex items-center justify-between w-60 my-2">
-              <label className="text-white">Hora inicio:</label>
-              <input
-                type="time"
-                className="input input-bordered w-24"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center justify-between w-60 my-2">
-              <label className="text-white">Hora final:</label>
-              <input
-                type="time"
-                className="input input-bordered w-24"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </div>
-            {manualDuration ? (
-              <div className="flex items-center w-60 my-2">
-                <label className="text-white">Duración:</label>
+        <div className='fixed inset-0 bg-black bg-opacity-30 blackdrop-blur-sm flex justify-center items-center'>
+          <div className="bg-azulCreame rounded-xl p-6">
+            <div className='flex justify-center flex-col items-center'>
+              <p className="text-white">Fecha: {date}</p>
+              <div className="flex items-center justify-between w-60 my-2">
+                <label className="text-white">Hora inicio:</label>
                 <input
-                  type="text"
+                  type="time"
                   className="input input-bordered w-24"
-                  maxLength="5"
-                  placeholder="00:00"
-                  value={newDuration}
-                  onChange={(e) => handleNewDuration(e.target.value)}
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
                 />
-                <button className="btn btn-primary btn-sm mx-2" onClick={() => { setEditedTime(true); setManualDuration(false); }}>
-                  <i className="fas fa-check"></i>
-                </button>
               </div>
-            ) : (
-              <div className="flex items-center w-60 my-2">
-                <label className="text-white">Duración:</label>
-                {editedTime ? (
-                  <p className="text-white">{newDuration}</p>
-                ) : (
-                  <p className="text-white">{getDuration() !== '' ? getDuration() : '00:00'}</p>
-                )}
-                <button className="btn btn-primary btn-sm mx-2" onClick={() => setManualDuration(true)}>
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
+              <div className="flex items-center justify-between w-60 my-2">
+                <label className="text-white">Hora final:</label>
+                <input
+                  type="time"
+                  className="input input-bordered w-24"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
               </div>
-            )}
-            <p className="text-white">Tiempo Total: {!isNaN(totalTime) ? totalTime : '00:00'}</p>
-            <button className={`btn btn-primary mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
-              Aceptar
-            </button>
-            <div className={`modal ${errorModal ? 'block' : 'hidden'}`}>
-              <div className="modal-content">
-                <p className="text-white text-center font-bold">Formato no válido</p>
+              {manualDuration ? (
+                <div className="flex items-center w-60 my-2">
+                  <label className="text-white">Duración:</label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-24"
+                    maxLength="5"
+                    placeholder="00:00"
+                    value={newDuration}
+                    onChange={(e) => handleNewDuration(e.target.value)}
+                  />
+                  <button className="btn btn-primary btn-sm mx-2" onClick={() => { setEditedTime(true); setManualDuration(false); }}>
+                    <i className="fas fa-check"></i>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center my-2">
+                  <label className="text-white">Duración:</label>
+                  {editedTime ? (
+                    <p className="text-white">{newDuration}</p>
+                  ) : (
+                    <p className="text-white">{getDuration() !== '' ? getDuration() : '00:00'}</p>
+                  )}
+                  <button className="btn btn-primary btn-sm mx-2" onClick={() => setManualDuration(true)}>
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                </div>
+              )}
+              <p className="text-white">Tiempo Total: {!isNaN(totalTime) ? totalTime : '00:00'}</p>
+              <button className={`btn btn-primary mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
+                Aceptar
+              </button>
+              <div className={`modal ${errorModal ? 'block' : 'hidden'}`}>
+                <div className="modal-content">
+                  <p className="text-white text-center font-bold">Formato no válido</p>
+                </div>
               </div>
             </div>
           </div>

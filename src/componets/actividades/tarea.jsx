@@ -72,13 +72,13 @@ const Tarea = (props) => {
   };
 
   return (
-    <div className="flex items-center justify-between px-8 py-5">
-      <div className="w-1/2 pr-4">
-        <button onClick={handlePress} className={`text-black ${numberOfLines ? 'truncate' : ''}`}>
+    <div className="flex items-center justify-between ">
+      <div className="w-3/5 pr-4 ">
+        <p onClick={handlePress} className={`text-black ${numberOfLines ? 'truncate' : ''} cursor-pointer text-xs sm:text-base`}>
           {props.actividad}
-        </button>
+        </p>
       </div>
-      <div className="w-1/2 flex items-center justify-end">
+      <div className="w-2/5 flex items-center justify-between">
         <input
           type="checkbox"
           checked={checked}

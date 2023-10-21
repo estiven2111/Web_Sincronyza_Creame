@@ -27,7 +27,7 @@ function NavBar() {
     setShowMenu(!showMenu);
   };
   return (
-    <div className=" bg-azulCreame p-5">
+    <div className=" bg-azulCreame p-5 fixed w-full">
       <div className="">
         <div className="">
           <div className="flex w-full justify-between items-center">
@@ -78,12 +78,11 @@ function NavBar() {
 
           </div>
         </div>
-        <SearchBar/>
       </div>
 
       {/* Menu content for medium and small screens */}
       {showMenu && (
-        <div className={`lg:hidden bg-slate-50 py-3 px-5 mt-[0.5px] shadow-md text-black absolute w-4/5 rounded ${
+        <div className={`lg:hidden bg-slate-50 py-3 px-5 mt-[0.5px] shadow-md text-black right-1 absolute w-4/5 rounded ${
             showMenu
               ? "opacity-100 max-h-full transition-all duration-200 ease-in-out"
               : "opacity-0 max-h-0"
@@ -94,31 +93,32 @@ function NavBar() {
           }}
         >
           <NavLink to="/actividades" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-            <div className="flex pl-5 mb-2 gap-3 pt-4 items-center hover:text-lightblueone cursor-pointer" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={faListCheck} />
+            <div className="flex pl-5 mb-2 gap-3 pt-4 items-center hover:text-lightblueone cursor-pointer justify-end" onClick={toggleMenu}>
               Actividades
+              <FontAwesomeIcon icon={faListCheck} />
             </div>
           </NavLink>
           <NavLink to="/Gastos" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-            <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={faMagnifyingGlassDollar} />
+            <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer justify-end" onClick={toggleMenu}>
               Gastos
+              <FontAwesomeIcon icon={faMagnifyingGlassDollar} />
             </div>
           </NavLink>
           <NavLink to="/Graficas" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-            <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={faChartLine} />
+            <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer justify-end" onClick={toggleMenu}>
               Indicadores
+              <FontAwesomeIcon icon={faChartLine} />
             </div>
           </NavLink>
           <NavLink to="/" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-            <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={faRightFromBracket}/>
+            <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer justify-end" onClick={toggleMenu}>
               Salir
+              <FontAwesomeIcon icon={faRightFromBracket}/>
             </div>
           </NavLink>
         </div>
       )}
+      <SearchBar/>
     </div>
   );
 }

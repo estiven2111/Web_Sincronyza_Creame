@@ -5,12 +5,8 @@ import LogoSync from "../../assets/img/icon.png";
 
 const Actividades = () => {
   return (
-    <div className="container mx-auto mt-4 p-4 ">
+    <div className="mx-auto md:container p-2 pt-28 xl:px-40">
       <Checklist />
-      <div className="flex items-center justify-end p-2 bg-white absolute right-0 bottom-0">
-        <span className="text-sm">Powered by: </span>
-        <img src={LogoSync} alt="LogoSync" className="h-8 w-20 object-contain" />
-      </div>
     </div>
   );
 };

@@ -189,9 +189,111 @@ const Gastos = () => {
         codepostal,
       });
       setFillData(true);
+      
     } catch (error) {
       console.error(error,"Error")
     }
+  }
+
+  const conetionMicrosoft = async() => {
+    const URLS = "https://syncronizabackup-production.up.railway.app/user/api/callback"
+    const popup = window.open(`${URLS}`, "_blank", `location=none width=620 height=700 toolbar=no status=no menubar=no scrollbars=yes resizable=yes`)
+   
+    window.addEventListener('message', event => {
+      alert(event.origin)
+      if (event.origin === `${URLS}`) {
+        alert(event.data)
+        if (event.data) {
+          alert(event.data)
+          // localStorage.setItem('token', event.data.token)
+
+          popup.close()
+
+        }
+      }
+    })
+    return
+    const respon = await axios.get(
+      "https://syncronizabackup-production.up.railway.app/user/api/files"
+    );
+ if (respon.data.token === true) {
+  console.log("entro el token")
+    const user_name = await localStorage.getItem("name");
+    const email = await localStorage.getItem("email");
+    const docEmpleado = await localStorage.getItem("doc_empleado");
+
+
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
+    const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
+    const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
+    const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
+    const formatDate = (new Date().toISOString().split("T"))[0]
+    const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
+
+
+    // const ActualizarEntregable = {
+    //   ...infoProject.input,
+    //   N_DocumentoEmpleado: docEmpleado,
+    //   Nombre_Empleado: user_name.normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
+    //   NumeroComprobante : prepayment?prepayment.NumeroComprobante : "",//
+    //   Fecha: formatDate,//
+    //   FechaComprobante: responsedata.fecha?responsedata.fecha.split("/").join("-"):"", //
+    //   ValorComprobante: responsedata.total?parseInt(responsedata.total):0,//
+    //   NitComprobante: responsedata.nit?responsedata.nit:"",//
+    //   NombreComprobante: responsedata.concepto?responsedata.concepto:"",//
+    //   CiudadComprobante:responsedata.municipio?responsedata.municipio:"",//
+    //   DireccionComprobante:responsedata.codepostal?responsedata.codepostal.toString():"",//
+    //   CCostos : prepayment?prepayment.IdCentroCostos.toString() : "",//
+    //   idAnticipo: prepayment?parseInt(prepayment.IdResponsable) : "",//
+    //   ipc: responsedata.ipc?parseInt(responsedata.ipc):0,//
+    //   Sub_Total : responsedata.totalSinIva?parseInt(responsedata.totalSinIva):0,//
+      
+    // }
+    const ActualizarEntregable = {nmbre:"hola"}
+    console.log("***************************", ActualizarEntregable)
+    const formData = new FormData();
+    formData.append("ActualizarEntregable", JSON.stringify(ActualizarEntregable))
+    formData.append("token", respon.data.tokenSecret);
+    formData.append("imagen", imagen);
+    formData.append("user", user_name);
+    formData.append("tipo", "OCR");
+         // https://syncronizabackup-production.up.railway.app
+        // https://appsyncroniza-production.up.railway.app
+    const send = await axios.post(
+      "https://syncronizabackup-production.up.railway.app/user/api/dashboard",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    console.log("este es el send!!!!!", send.data)
+    // setBan(true);
+    setResponsedata({
+      nit: "",
+      numFact: "",
+      doc: "",
+      total: "",
+      totalSinIva: "",
+      nombre: "",
+      rete: "",
+      retePorc: "",
+      iva: "",
+      ivaPorc: "",
+      fecha: "",
+      concepto: "",
+      municipio: "",
+      codepostal: "",
+      ipc: "",
+    });
+    // setIsLoading(false);
+    // Alert.alert("Envío de datos completado")
+    // setToScan("");
+    setFillData(false);
+ }
   }
 
   const handlerScan = async (e) => {
@@ -264,8 +366,7 @@ const Gastos = () => {
 
   const handlerSend = (e) =>{
     e.preventDefault()
-
-    alert(e.target.value)
+    conetionMicrosoft()
   }
 
   const handleOnChange = (e) => {
@@ -305,7 +406,7 @@ const Gastos = () => {
   };
 
   return (
-    <div className="mt-4 m-6">
+    <div className="mt-44 m-6">
       <div className="text-center m-14">
         <h1 className="font-serif text-5xl">
           <span className="font-s">GASTOS</span>

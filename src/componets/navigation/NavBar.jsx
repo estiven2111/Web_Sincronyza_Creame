@@ -27,7 +27,7 @@ function NavBar() {
     setShowMenu(!showMenu);
   };
   return (
-    <div className=" bg-azulCreame p-5 fixed w-full">
+    <div className=" bg-azulCreame p-5  z-20 fixed top-0 left-0 w-full">
       <div className="">
         <div className="">
           <div className="flex w-full justify-between items-center">

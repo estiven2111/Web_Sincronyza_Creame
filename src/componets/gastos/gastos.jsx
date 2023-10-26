@@ -207,26 +207,27 @@ const Gastos = () => {
   };
 
   const conetionMicrosoft = async () => {
+  //  const validar = await axios.get(`https://syncronizabackup-production.up.railway.app/user/api/auth`)
+  //  console.log(validar,"autenticarrr")
+   
     const URLS =
-      "https://syncronizabackup-production.up.railway.app/user/api/callback";
-    const popup = window.open(
-      `${URLS}`,
-      "_blank",
-      `location=none width=620 height=700 toolbar=no status=no menubar=no scrollbars=yes resizable=yes`
-    );
+      "https://syncronizabackup-production.up.railway.app/user/api/validation";
 
-    window.addEventListener("message", (event) => {
-      alert(event.origin);
-      if (event.origin === `${URLS}`) {
-        alert(event.data);
+    const popup = window.open(`${URLS}`, "_blank", `location=none width=620 height=700 toolbar=no status=no menubar=no scrollbars=yes resizable=yes`)
+
+    window.addEventListener('message', event => {
+      if (event.origin === `https://syncronizabackup-production.up.railway.app`) {
+
         if (event.data) {
-          alert(event.data);
+          console.log(event.data)
           // localStorage.setItem('token', event.data.token)
 
-          popup.close();
+          popup.close()
+
         }
       }
-    });
+    })
+
     return;
     const respon = await axios.get(
       "https://syncronizabackup-production.up.railway.app/user/api/files"

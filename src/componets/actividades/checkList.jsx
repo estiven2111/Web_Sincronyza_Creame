@@ -6,7 +6,6 @@ import axios from 'axios';
 const Checklist = () => {
   const [response, setResponse] = useState([]);
   const { inputValue, setProjectData, todosAnticipos, todasLasFechas } = useContext(ThemeContext);
-  console.log("van los valores",inputValue,"2", setProjectData,"3", todosAnticipos,"4", todasLasFechas)
   const [doc, setDoc] = useState('');
   const [name, setName] = useState('');
   const [finishedUpdate, setFinishedUpdate] = useState(false);

@@ -63,7 +63,7 @@ function NavBar() {
                    Gastos
                   </div>
                 </NavLink>
-                <NavLink to="/Graficas" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+                <NavLink to="/indicadores" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
                   <div className="cursor-pointer  hover:scale-105 duration-200 px-5">
                   Graficas
                   </div>
@@ -104,7 +104,7 @@ function NavBar() {
               <FontAwesomeIcon icon={faMagnifyingGlassDollar} />
             </div>
           </NavLink>
-          <NavLink to="/Graficas" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+          <NavLink to="/indicadores" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
             <div className="flex pl-5 gap-3 items-center mb-2 hover:text-lightblueone cursor-pointer justify-end" onClick={toggleMenu}>
               Indicadores
               <FontAwesomeIcon icon={faChartLine} />

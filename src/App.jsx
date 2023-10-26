@@ -12,6 +12,7 @@ import NavBar from "./componets/navigation/NavBar";
 import Login from "./componets/authentication/Login";
 import Gastos from "./componets/gastos/gastos";
 import Actividades from "./componets/actividades/actividades";
+import Indicadores from "./componets/indicadores/indicadores";
 
 import Home from "./componets/home/home"
 
@@ -25,6 +26,7 @@ function App() {
           <Routes>
              <Route path='/Gastos' element= {<Gastos/>} />
              <Route path='/actividades' element= {<Actividades/>} />
+             <Route path='/indicadores' element= {<Indicadores/>} />
            {/* <Route path='/about' element={<About/>} />
             <Route path='/detail/:detailId' element={<Detail/>} />
             <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}

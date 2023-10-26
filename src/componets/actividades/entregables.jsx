@@ -169,7 +169,7 @@ const Entregables = (props) => {
       </button>
       {modalVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-azulCreame text-white p-8 rounded-xl w-1/2">
+          <div className="bg-azulCreame text-white p-8 rounded-xl w-9/10 md:w-1/2">
             <p className="text-lg font-bold mb-4 text-center">ENTREGABLES A ENVIAR:</p>
             {newList.map((ent, index) => (
               <div className="flex items-center mb-2" key={index}>

@@ -14,6 +14,7 @@ import loading from "../../assets/img/loading.gif";
 let imagen = null;
 let latitude = 0;
 let longitude = 0;
+let hasLogicExecuted = false;
 const Gastos = () => {
   useEffect(() => {
     initTE({ Input });
@@ -22,6 +23,7 @@ const Gastos = () => {
   const [imageSrc, setImageSrc] = useState(null);
   // const fileInputRef = useRef(null);
   const [fillData, setFillData] = useState(false);
+  const [data, setData] = useState({});
   const [responsedata, setResponsedata] = useState({
     nit: "",
     numFact: "",
@@ -96,6 +98,7 @@ const Gastos = () => {
             longitude = position.coords.longitude;
             console.log("Latitud: " + latitude);
             console.log("Longitud: " + longitude);
+            peticionOcr();
             // Aquí puedes usar la latitud y la longitud como desees
           },
           function (error) {
@@ -108,6 +111,7 @@ const Gastos = () => {
                   icon: "warning",
                   buttons: "Aceptar",
                 });
+                peticionOcr();
                 break;
               case error.POSITION_UNAVAILABLE:
                 Swal({
@@ -130,6 +134,7 @@ const Gastos = () => {
             }
           }
         );
+        return true
       } else {
         // El navegador no admite geolocalización
         Swal({
@@ -201,33 +206,154 @@ const Gastos = () => {
       });
       setFillData(true);
       setIsLoading(false);
+      console.log("finalizo")
     } catch (error) {
       console.error(error, "Error");
     }
   };
 
+  // const execute = async () => {
+  //   const validar = await axios.get(
+  //     `https://syncronizabackup-production.up.railway.app/user/api/auth`
+  //   );
+  //   console.log(validar.data, "autenticarrr");
+  // };
+  // useEffect(() => {
+  //   execute();
+  // }, []);
+
   const conetionMicrosoft = async () => {
-  //  const validar = await axios.get(`https://syncronizabackup-production.up.railway.app/user/api/auth`)
-  //  console.log(validar,"autenticarrr")
+
+    if (imagen) {
+      
    
+    const user_name = await localStorage.getItem("name");
     const URLS =
       "https://syncronizabackup-production.up.railway.app/user/api/validation";
 
-    const popup = window.open(`${URLS}`, "_blank", `location=none width=620 height=700 toolbar=no status=no menubar=no scrollbars=yes resizable=yes`)
+    const popup = window.open(
+      `${URLS}`,
+      "_blank",
+      `location=none width=620 height=700 toolbar=no status=no menubar=no scrollbars=yes resizable=yes`
+    );
+    // const popup = window.open(`${URLS}`)
 
-    window.addEventListener('message', event => {
-      if (event.origin === `https://syncronizabackup-production.up.railway.app`) {
-
+    window.addEventListener("message", async (event) => {
+      if (
+        event.origin === `https://syncronizabackup-production.up.railway.app`
+      ) {
         if (event.data) {
-          console.log(event.data)
+          setData(event.data);
+          console.log(event.data.token);
+          popup.close();
           // localStorage.setItem('token', event.data.token)
-
-          popup.close()
-
+          console.log(Object.keys(data).length, "estado local");
+          if (
+            !hasLogicExecuted ||
+            (Object.keys(data).length === 1 && data.token === "true")
+          ) {
+            const formatDate = new Date().toISOString().split("T")[0];
+            const formData = new FormData();
+            formData.append(
+              "ActualizarEntregable",
+              JSON.stringify({
+                SKU_Proyecto: "sku",
+                NitCliente: "nit",
+                idNodoProyecto: 1,
+                idProceso: 2,
+                N_DocumentoEmpleado: "102044",
+                Nombre_Empleado: "estiven",
+                NumeroComprobante: "num compro",
+                URLArchivo: "htt",
+                Fecha: formatDate,
+                FechaComprobante: formatDate,
+                ValorComprobante: 1000,
+                NitComprobante: "nit compr",
+                NombreComprobante: "nom comprobante",
+                CiudadComprobante: "bello",
+                DireccionComprobante: "cr54",
+                CCostos: "cccosto",
+                idAnticipo: 222,
+                ipc: 2000,
+                Sub_Total: 1000,
+              })
+            );
+            formData.append("token", event.data.tokenSecret);
+            formData.append("imagen", imagen);
+            formData.append("user", user_name);
+            formData.append("tipo", "OCR");
+            // https://syncronizabackup-production.up.railway.app
+            // https://appsyncroniza-production.up.railway.app
+            const send = await axios.post("/creame-dashboard", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+            console.log(send.data);
+            if (send.data === "archivos enviados correctamente") {
+              Swal({
+                title: "ENVIO CORRECTO",
+                text: "Archivos enviados correctamente",
+                icon: "success",
+                buttons: "Aceptar",
+              });
+            }
+          }
         }
       }
-    })
+    
+    });
+  }else{
+    Swal({
+      title: "SUBA UNA IMAGEN",
+      text: "Escane y suba una imagen",
+      icon: "warning",
+      buttons: "Aceptar",
+    });
+  }
+    // console.log(Object.keys(data).length,"estado local")
+    // if (Object.keys(data).length >  0) {
 
+    //   const formData = new FormData();
+    //   formData.append("ActualizarEntregable", JSON.stringify({
+    //   SKU_Proyecto:"sku",
+    // NitCliente:"nit",
+    // idNodoProyecto:1,
+    // idProceso:2,
+    // N_DocumentoEmpleado:"102044",
+    // Nombre_Empleado:"estiven",
+    // NumeroComprobante:"num compro",
+    // URLArchivo:"htt",
+    // Fecha:"10-10-2023",
+    // FechaComprobante:"10-10-2023",
+    // ValorComprobante:1000,
+    // NitComprobante:"nit compr",
+    // NombreComprobante:"nom comprobante",
+    // CiudadComprobante:"bello",
+    // DireccionComprobante:"cr54",
+    // CCostos:"cccosto",
+    // idAnticipo:"anticipo",
+    // ipc:2000,
+    // Sub_Total:1000,
+    //   }))
+    //   formData.append("token", event.data.tokenSecret);
+    //   formData.append("imagen",imagen);
+    //   formData.append("user", user_name);
+    //   formData.append("tipo", "OCR");
+    //        // https://syncronizabackup-production.up.railway.app
+    //       // https://appsyncroniza-production.up.railway.app
+    //   const send = await axios.post(
+    //     "/creame-dashboard",
+    //     formData,
+    //     {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     }
+    //   );
+    //   console.log(send)
+    // }
+    //     execute();
     return;
     const respon = await axios.get(
       "https://syncronizabackup-production.up.railway.app/user/api/files"
@@ -317,7 +443,8 @@ const Gastos = () => {
     try {
       console.log(e.target.files);
       locations();
-      peticionOcr();
+      
+     
 
       // // Solicitar permiso para acceder a la ubicación del dispositivo
       // const { status } = await Location.requestForegroundPermissionsAsync();
@@ -542,7 +669,7 @@ const Gastos = () => {
                 </div>
               </div>
               {/* NOMBRE */}
-              <div className="flex items-center justify-center col-span-1">
+              {/* <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
@@ -562,7 +689,23 @@ const Gastos = () => {
                     Nombre
                   </label>
                 </div>
-              </div>
+              </div> */}
+              <div className="relative mb-3 w-full" data-te-input-wrapper-init>
+  <input
+    value={responsedata.nombre}
+    name="nombre"
+    onChange={handleOnChange}
+    type="text"
+    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none"
+    id="Nombre"
+  />
+  <label
+    htmlFor="Nombre"
+    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none"
+  >
+    Nombre
+  </label>
+</div>
               {/* VALOR PAGADO */}
               <div className="flex items-center justify-center col-span-1 ">
                 <div
@@ -680,7 +823,6 @@ const Gastos = () => {
                     className="relative mb-3 col-span-1 "
                     data-te-input-wrapper-init
                   >
-                    {console.log(responsedata)}
                     <input
                       value={fillData ? `${responsedata.retePorc}` : ""}
                       name="retePorc"

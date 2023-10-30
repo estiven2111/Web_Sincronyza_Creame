@@ -151,7 +151,7 @@ const Gastos = () => {
 
   const peticionOcr = async () => {
     try {
-      const user_name = await localStorage.getItem("name");
+      const user_name = localStorage.getItem("name");
       setIsLoading(true);
       console.log("Latitud: " + latitude);
       console.log("Longitud: " + longitude);
@@ -628,7 +628,7 @@ const Gastos = () => {
             <div className="grid lg:grid-cols-4 grid-cols-2 gap-4  mx-auto border-2 border-black bg-slate-200/50 p-2">
               <div className="lg:col-span-4 col-span-2 flex items-center justify-center">
                 <div
-                  className="relative mb-3 w-full   "
+                  className="relative mb-3 w-full"
                   data-te-input-wrapper-init
                 >
                   <input

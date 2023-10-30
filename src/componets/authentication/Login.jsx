@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import icon from "../../assets/img/icon.png"
-
+import swal from "sweetalert";
+import { useDispatch,useSelector } from "react-redux";
+import { loginredux } from "../redux/reducer/login.slice";
 const Login = () => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState(false);
     const navigation = useNavigate();
+    const {date_login} = useSelector((state) => state.loginSlice)
+    const dispatch = useDispatch()
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,50 +22,22 @@ const Login = () => {
   const handleGetToken = () => {
     const datatoken = localStorage.getItem("token");
     if (!datatoken) {
-        // navigation("/home");
+        navigation("/");
     } else {
-        // navigation("/home");
+         navigation("/actividades");
     }
   };
 
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const toggleSecureTextEntry = () => {
-    setSecureTextEntry(!secureTextEntry);
-  };
-
-  const [errorMessage, setErrorMessage] = useState("");
   const handleLogin = async (e) => {
-    try {
-        e.preventDefault();
-      console.log("object", user, password );
-      const response = await axios.post("/login", { user, password });
-      console.log(response)
-    //   await localStorage.multiSet([
-    //     ["name", response.data.userName],
-    //     ["token", response.data.token],
-    //     ["email", response.data.userEmail],
-    //     ["doc_empleado", response.data.doc_empleado]
-    //   ]);
-    localStorage.setItem("name", response.data.userName)
-    localStorage.setItem("token", response.data.token)
-    localStorage.setItem("email", response.data.userEmail)
-    localStorage.setItem("doc_empleado", response.data.doc_empleado)
-      console.log("paso", response.data.userName, response.data.token, response.data.userEmail, response.data.doc_empleado);
-      setPassword("");
-      navigation("/home");
-
-      // Realiza la navegación a la siguiente pantalla
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        setErrorMessage(error.response.data.message);
-        toggleOverlay();
-      }
-    }
-  };
-
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleOverlay = () => {
-    setIsVisible(!isVisible);
+    e.preventDefault();
+    console.log("object", user, password );
+    const response = await dispatch(loginredux(user, password ))
+   localStorage.setItem("name", response.userName)
+   localStorage.setItem("token", response.token)
+   localStorage.setItem("email", response.userEmail)
+   localStorage.setItem("doc_empleado", response.doc_empleado)
+    setPassword("");
+    navigation("/actividades");
   };
 
   return (

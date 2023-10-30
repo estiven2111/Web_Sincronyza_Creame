@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { Input, initTE } from "tw-elements";
 import Swals from "sweetalert2";
 import Swal from "sweetalert";
@@ -10,12 +10,75 @@ import { GiCancel } from "react-icons/gi";
 import { BiScan } from "react-icons/bi";
 import axios from "axios";
 import loading from "../../assets/img/loading.gif";
+import { ThemeContext } from '../context/themeContext';
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
+  const { infoProject, anticipos, inputValue,} = useContext(ThemeContext);
+  const [prepayment, setPrepayment] =useState("")
+  const [justSelected, SetJustSelected] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [totalAnt, setTotalAnt] = useState([])
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  useEffect(() => {
+    const ActulizarOptions = () => {
+      if (anticipos){
+      setTotalAnt(anticipos)
+      }
+    }
+    ActulizarOptions()
+    },[anticipos])
+  
+  const toggleDropdown = () => {
+    SetJustSelected(false)
+    setIsOpen(!isOpen);
+  };
+  const handleOptionSelect = (option) => {
+    if (!selectedOptions.includes(option)) {
+      setSelectedOptions([option]);
+    }
+    setIsOpen(false);
+    SetJustSelected(true)
+  };
+
+  const renderOptions = () => {
+    return totalAnt.map((option, index) => (
+      <button
+      style={{
+        backgroundColor: 'blue',
+        padding: '10px',
+        marginBottom: '10px',
+        outline: 'none',
+        border: 'none',
+        cursor: 'pointer',
+      }}
+      onClick={() => {
+        handleOptionSelect(option.DetalleConcepto + option.NumeroComprobante);
+        setPrepayment(option);
+        console.log(option, 'es aqui!!!!!!  ****************************');
+      }}
+    >
+      <span style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+        {option.NumeroComprobante + option.DetalleConcepto}
+      </span>
+    </button>
+    ));
+  };
+
+
+  const renderSelectedOptions = () => {
+    return 
+    <div>
+      {selectedOptions.map((option, index) => (
+        <p key={index}>{option}</p>
+      ))}
+    </div>
+  };
+
   useEffect(() => {
     initTE({ Input });
   });
@@ -151,7 +214,7 @@ const Gastos = () => {
 
   const peticionOcr = async () => {
     try {
-      const user_name = await localStorage.getItem("name");
+      const user_name = localStorage.getItem("name");
       setIsLoading(true);
       console.log("Latitud: " + latitude);
       console.log("Longitud: " + longitude);
@@ -252,30 +315,62 @@ const Gastos = () => {
             !hasLogicExecuted ||
             (Object.keys(data).length === 1 && data.token === "true")
           ) {
-            const formatDate = new Date().toISOString().split("T")[0];
             const formData = new FormData();
+            
+            const user_name = localStorage.getItem("name");
+            const email = localStorage.getItem("email");
+            const docEmpleado = localStorage.getItem("doc_empleado");
+
+            const currentDate = new Date();
+            const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
+            const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
+            const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
+            const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
+            const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
+            const formatDate = new Date().toISOString().split("T")[0];
+            const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
+
+            const ActualizarEntregable = {
+              ...infoProject.input,
+              N_DocumentoEmpleado: docEmpleado,
+              Nombre_Empleado: user_name.normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
+              NumeroComprobante : prepayment?prepayment.NumeroComprobante : "",//
+              Fecha: formatDate,//
+              FechaComprobante: responsedata.fecha?responsedata.fecha.split("/").join("-"):"", //
+              ValorComprobante: responsedata.total?parseInt(responsedata.total):0,//
+              NitComprobante: responsedata.nit?responsedata.nit:"",//
+              NombreComprobante: responsedata.concepto?responsedata.concepto:"",//
+              CiudadComprobante:responsedata.municipio?responsedata.municipio:"",//
+              DireccionComprobante:responsedata.codepostal?responsedata.codepostal.toString():"",//
+              CCostos : prepayment?prepayment.IdCentroCostos.toString() : "",//
+              idAnticipo: prepayment?parseInt(prepayment.IdResponsable) : "",//
+              ipc: responsedata.ipc?parseInt(responsedata.ipc):0,//
+              Sub_Total : responsedata.totalSinIva?parseInt(responsedata.totalSinIva):0,//
+            }
+
             formData.append(
               "ActualizarEntregable",
               JSON.stringify({
-                SKU_Proyecto: "sku",
-                NitCliente: "nit",
-                idNodoProyecto: 1,
-                idProceso: 2,
-                N_DocumentoEmpleado: "102044",
-                Nombre_Empleado: "estiven",
-                NumeroComprobante: "num compro",
-                URLArchivo: "htt",
-                Fecha: formatDate,
-                FechaComprobante: formatDate,
-                ValorComprobante: 1000,
-                NitComprobante: "nit compr",
-                NombreComprobante: "nom comprobante",
-                CiudadComprobante: "bello",
-                DireccionComprobante: "cr54",
-                CCostos: "cccosto",
-                idAnticipo: 222,
-                ipc: 2000,
-                Sub_Total: 1000,
+                ...ActualizarEntregable
+                // SKU_Proyecto: "sku",
+                // NitCliente: "nit",
+                // idNodoProyecto: 1,
+                // idProceso: 2,
+                // N_DocumentoEmpleado: "102044",
+                // Nombre_Empleado: "estiven",
+                // NumeroComprobante: "num compro",
+                // URLArchivo: "htt",
+                // Fecha: formatDate,
+                // FechaComprobante: formatDate,
+                // ValorComprobante: 1000,
+                // NitComprobante: "nit compr",
+                // NombreComprobante: "nom comprobante",
+                // CiudadComprobante: "bello",
+                // DireccionComprobante: "cr54",
+                // CCostos: "cccosto",
+                // idAnticipo: 222,
+                // ipc: 2000,
+                // Sub_Total: 1000,
               })
             );
             formData.append("token", event.data.tokenSecret);
@@ -553,6 +648,30 @@ const Gastos = () => {
           <span className="font-s">GASTOS</span>
         </h1>
       </div>
+      <div className="bg-blue-300/50 peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none">
+        <div className="singleInput">
+          <div className="inputCont">
+            <div className="inputIntLeftDrop">
+              {justSelected ? (
+                <div className="block">
+                  <button onClick={toggleDropdown}>
+                    <span>{renderSelectedOptions()}</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="blockNoSelected">
+                  <button onClick={toggleDropdown}>
+                    <span>Seleccionar opciones</span>
+                  </button>
+                </div>
+              )}
+            </div>
+            {isOpen && <div className="options">{renderOptions()}</div>}
+            <input className="inputIntRight" placeholder="$000.000.00" value={prepayment ? prepayment.Valor.toString() : ''} />
+          </div>
+        </div>
+      </div>
+
       <form className="" onSubmit={handlerSend}>
         <div className="">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-12 mx-auto">
@@ -628,7 +747,7 @@ const Gastos = () => {
             <div className="grid lg:grid-cols-4 grid-cols-2 gap-4  mx-auto border-2 border-black bg-slate-200/50 p-2">
               <div className="lg:col-span-4 col-span-2 flex items-center justify-center">
                 <div
-                  className="relative mb-3 w-full   "
+                  className="relative mb-3 w-full"
                   data-te-input-wrapper-init
                 >
                   <input

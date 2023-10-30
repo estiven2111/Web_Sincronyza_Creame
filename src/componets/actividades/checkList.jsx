@@ -22,7 +22,6 @@ const Checklist = () => {
           const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
           const anticipo = await axios.post(`/proyect/anticipo`, { sku: response.data[0].skuP, doc: docEmpleado });
           const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
-          console.log('indicadores****************************', indicadores.data);
           todosAnticipos(anticipo.data);
           todasLasFechas(indicadores.data);
           setProjectData({

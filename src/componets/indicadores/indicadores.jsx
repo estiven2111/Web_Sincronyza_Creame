@@ -127,64 +127,60 @@ const Indicadores = () => {
         setNumberOfLines(!numberOfLines);
     };
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-10">
-      <div className="p-10">
-        {/* <RangeDatePicker/> */}
-        <div className="flex flex-col">
-          {/* Dropdown */}
-          <div className="flex items-center mb-5">
-            {/* Resto del código */}
-          </div>
-
-          {/* Campos de entrada */}
-          <div className="flex mb-5">
-            <div className="w-1/4">
-              <label className="block text-sm font-bold mb-1">Horas Disp.:</label>
-              <input
-                className="w-full p-2 rounded border border-gray-300"
-                type="text"
-                value={isNaN(horasDisp) ? "" : horasDisp.toString()}
-                onChange={(e) => handleOnChange(e.target.value, "hDisp")}
-                placeholder="Horas"
-              />
-            </div>
-            {/* Resto de los campos */}
-          </div>
-
-          {/* NIVEL DE ACTIVIDAD */}
-          <div className="flex mb-5">
-            <div className="w-1/4">
-              <label className="block text-sm font-bold mb-1">NIVEL DE ACTIVIDAD(%):</label>
-              <input
-                className="w-full p-2 rounded border border-gray-300"
-                type="text"
-                value={infoFecha.nivActividad ? infoFecha.nivActividad.toString() : ""}
-                onChange={(e) => handleOnChange(e.target.value, "activity")}
-                placeholder="%"
-              />
-            </div>
-          </div>
-
-          {/* Gráfico */}
-          <div className="flex items-center justify-center h-96">
-            {(!isNaN(aTiempo) && !isNaN(cRetraso) && !isNaN(pFrec)) && (
-              <div>
-                <div className="font-bold mb-2">{name}</div>
-                {/* <PieComp aTiempo={parseFloat(aTiempo)} cRetraso={parseFloat(cRetraso)} pFrec={parseFloat(pFrec)} /> */}
+    return (
+      <div className="container pt-48">
+        <div className="scroll">
+          {/* <RangeDatePicker/> */}
+          
+          <div className="singleInput">
+            <div className="inputContOptions">
+              <div className="inputIntLeftDrop">
+                {justSelected ? (
+                  <div className="block">
+                    <button onClick={toggleDropdown}>{renderSelectedOptions()}</button>
+                  </div>
+                ) : (
+                  <div className="blockNoSelected">
+                    <button onClick={toggleDropdown}>Seleccionar opciones</button>
+                  </div>
+                )}
               </div>
-            )}
+              {isOpen && <div className="options">{renderOptions()}</div>}
+            </div>
+          </div>
+    
+          <div className="inputCont">
+            <label className="label">Horas Disp.:</label>
+            <input className="input" value={isNaN(horasDisp) ? "" : horasDisp.toString()} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
+            <label className="label">Horas Cumplidas:</label>
+            <input className="input" value={!isNaN(infoFecha.CumplidasPeriodo) && !isNaN(infoFecha.atrazo) ? (infoFecha.CumplidasPeriodo + infoFecha.atrazo).toString() : ""} onChange={(e) => handleOnChange(e.target.value, "hCump")} placeholder="Horas" type="number"/>
+            {console.log(infoFecha.CumplidasPeriodo + infoFecha.atrazo, "hola!!!")}
+          </div>
+          <div className="inputCont">
+            <label className="label">Horas Prog.:</label>
+            <input className="input" value={!isNaN(infoFecha.HoraProgramada) ? infoFecha.HoraProgramada.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "hProg")} placeholder="Horas" type="number"/>
+            <label className="label">Horas Frecuencia:</label>
+            <input className="input" value={!isNaN(infoFecha.HorasFrecuencia) ? infoFecha.HorasFrecuencia.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "hFrec")} placeholder="Horas" type="number"/>
+          </div>
+          <div className="inputCont">
+            <label className="label2">NIVEL DE ACTIVIDAD(%):</label>
+            <input className="input" value={infoFecha.nivActividad ? infoFecha.nivActividad.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "activity")} placeholder="%" type="number"/>
+          </div>
+          <div className="grafico">
+            <div>
+              {!isNaN(aTiempo) && !isNaN(cRetraso) && !isNaN(pFrec)
+              ? (<>
+              <div>
+                <span className="name">{name}</span>
+              </div>
+              <PieComp aTiempo={parseFloat(aTiempo)} cRetraso={parseFloat(cRetraso)} pFrec={parseFloat(pFrec)}/></>) 
+              : null}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="fixed bottom-0 right-0 p-5 flex items-center bg-white">
-        <span className="text-sm">Powered by: </span>
-        <img src={LogoSync} alt="Logo Sync" className="h-8 ml-2" />
-      </div>
-    </div>
-  );
+    );
+    
 };
 
 export default Indicadores;

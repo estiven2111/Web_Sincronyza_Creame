@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Input, initTE } from "tw-elements";
-import Swals from "sweetalert2";
 import Swal from "sweetalert";
 import Webcam from "react-webcam";
 import Modalcam from "./CameraGastos";
@@ -48,6 +47,7 @@ const Gastos = () => {
   const renderOptions = () => {
     return totalAnt.map((option, index) => (
       <button
+      key={index}
       style={{
         backgroundColor: 'blue',
         padding: '10px',
@@ -141,12 +141,6 @@ const Gastos = () => {
           icon: "warning",
           buttons: "Aceptar",
         });
-        // Swals.fire({
-        //   title: "ARCHIVO INCORRECTO",
-        //   text: "Debe seleccionar un archivo .JPG O JPEG",
-        //   icon: "warning",
-        //   confirmButtonText: "Aceptar",
-        // });
         input.value = "";
       }
     }
@@ -159,8 +153,6 @@ const Gastos = () => {
           function (position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            console.log("Latitud: " + latitude);
-            console.log("Longitud: " + longitude);
             peticionOcr();
             // Aquí puedes usar la latitud y la longitud como desees
           },
@@ -183,6 +175,7 @@ const Gastos = () => {
                   icon: "warning",
                   buttons: "Aceptar",
                 });
+                peticionOcr();
                 break;
               case error.TIMEOUT:
                 Swal({
@@ -275,16 +268,6 @@ const Gastos = () => {
     }
   };
 
-  // const execute = async () => {
-  //   const validar = await axios.get(
-  //     `https://syncronizabackup-production.up.railway.app/user/api/auth`
-  //   );
-  //   console.log(validar.data, "autenticarrr");
-  // };
-  // useEffect(() => {
-  //   execute();
-  // }, []);
-
   const conetionMicrosoft = async () => {
 
     if (imagen) {
@@ -307,9 +290,7 @@ const Gastos = () => {
       ) {
         if (event.data) {
           setData(event.data);
-          console.log(event.data.token);
           popup.close();
-          // localStorage.setItem('token', event.data.token)
           console.log(Object.keys(data).length, "estado local");
           if (
             !hasLogicExecuted ||
@@ -352,33 +333,12 @@ const Gastos = () => {
               "ActualizarEntregable",
               JSON.stringify({
                 ...ActualizarEntregable
-                // SKU_Proyecto: "sku",
-                // NitCliente: "nit",
-                // idNodoProyecto: 1,
-                // idProceso: 2,
-                // N_DocumentoEmpleado: "102044",
-                // Nombre_Empleado: "estiven",
-                // NumeroComprobante: "num compro",
-                // URLArchivo: "htt",
-                // Fecha: formatDate,
-                // FechaComprobante: formatDate,
-                // ValorComprobante: 1000,
-                // NitComprobante: "nit compr",
-                // NombreComprobante: "nom comprobante",
-                // CiudadComprobante: "bello",
-                // DireccionComprobante: "cr54",
-                // CCostos: "cccosto",
-                // idAnticipo: 222,
-                // ipc: 2000,
-                // Sub_Total: 1000,
               })
             );
             formData.append("token", event.data.tokenSecret);
             formData.append("imagen", imagen);
             formData.append("user", user_name);
             formData.append("tipo", "OCR");
-            // https://syncronizabackup-production.up.railway.app
-            // https://appsyncroniza-production.up.railway.app
             const send = await axios.post("/creame-dashboard", formData, {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -406,132 +366,6 @@ const Gastos = () => {
       buttons: "Aceptar",
     });
   }
-    // console.log(Object.keys(data).length,"estado local")
-    // if (Object.keys(data).length >  0) {
-
-    //   const formData = new FormData();
-    //   formData.append("ActualizarEntregable", JSON.stringify({
-    //   SKU_Proyecto:"sku",
-    // NitCliente:"nit",
-    // idNodoProyecto:1,
-    // idProceso:2,
-    // N_DocumentoEmpleado:"102044",
-    // Nombre_Empleado:"estiven",
-    // NumeroComprobante:"num compro",
-    // URLArchivo:"htt",
-    // Fecha:"10-10-2023",
-    // FechaComprobante:"10-10-2023",
-    // ValorComprobante:1000,
-    // NitComprobante:"nit compr",
-    // NombreComprobante:"nom comprobante",
-    // CiudadComprobante:"bello",
-    // DireccionComprobante:"cr54",
-    // CCostos:"cccosto",
-    // idAnticipo:"anticipo",
-    // ipc:2000,
-    // Sub_Total:1000,
-    //   }))
-    //   formData.append("token", event.data.tokenSecret);
-    //   formData.append("imagen",imagen);
-    //   formData.append("user", user_name);
-    //   formData.append("tipo", "OCR");
-    //        // https://syncronizabackup-production.up.railway.app
-    //       // https://appsyncroniza-production.up.railway.app
-    //   const send = await axios.post(
-    //     "/creame-dashboard",
-    //     formData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     }
-    //   );
-    //   console.log(send)
-    // }
-    //     execute();
-    return;
-    const respon = await axios.get(
-      "https://syncronizabackup-production.up.railway.app/user/api/files"
-    );
-    if (respon.data.token === true) {
-      console.log("entro el token");
-      const user_name = await localStorage.getItem("name");
-      const email = await localStorage.getItem("email");
-      const docEmpleado = await localStorage.getItem("doc_empleado");
-
-      const currentDate = new Date();
-      const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
-      const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
-      const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
-      const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
-      const formatDate = new Date().toISOString().split("T")[0];
-      const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
-
-      // const ActualizarEntregable = {
-      //   ...infoProject.input,
-      //   N_DocumentoEmpleado: docEmpleado,
-      //   Nombre_Empleado: user_name.normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
-      //   NumeroComprobante : prepayment?prepayment.NumeroComprobante : "",//
-      //   Fecha: formatDate,//
-      //   FechaComprobante: responsedata.fecha?responsedata.fecha.split("/").join("-"):"", //
-      //   ValorComprobante: responsedata.total?parseInt(responsedata.total):0,//
-      //   NitComprobante: responsedata.nit?responsedata.nit:"",//
-      //   NombreComprobante: responsedata.concepto?responsedata.concepto:"",//
-      //   CiudadComprobante:responsedata.municipio?responsedata.municipio:"",//
-      //   DireccionComprobante:responsedata.codepostal?responsedata.codepostal.toString():"",//
-      //   CCostos : prepayment?prepayment.IdCentroCostos.toString() : "",//
-      //   idAnticipo: prepayment?parseInt(prepayment.IdResponsable) : "",//
-      //   ipc: responsedata.ipc?parseInt(responsedata.ipc):0,//
-      //   Sub_Total : responsedata.totalSinIva?parseInt(responsedata.totalSinIva):0,//
-
-      // }
-      const ActualizarEntregable = { nmbre: "hola" };
-      console.log("***************************", ActualizarEntregable);
-      const formData = new FormData();
-      formData.append(
-        "ActualizarEntregable",
-        JSON.stringify(ActualizarEntregable)
-      );
-      formData.append("token", respon.data.tokenSecret);
-      formData.append("imagen", imagen);
-      formData.append("user", user_name);
-      formData.append("tipo", "OCR");
-      // https://syncronizabackup-production.up.railway.app
-      // https://appsyncroniza-production.up.railway.app
-      const send = await axios.post(
-        "https://syncronizabackup-production.up.railway.app/user/api/dashboard",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("este es el send!!!!!", send.data);
-      // setBan(true);
-      setResponsedata({
-        nit: "",
-        numFact: "",
-        doc: "",
-        total: "",
-        totalSinIva: "",
-        nombre: "",
-        rete: "",
-        retePorc: "",
-        iva: "",
-        ivaPorc: "",
-        fecha: "",
-        concepto: "",
-        municipio: "",
-        codepostal: "",
-        ipc: "",
-      });
-      // setIsLoading(false);
-      // Alert.alert("Envío de datos completado")
-      // setToScan("");
-      setFillData(false);
-    }
   };
 
   const handlerScan = async (e) => {
@@ -788,7 +622,7 @@ const Gastos = () => {
                 </div>
               </div>
               {/* NOMBRE */}
-              {/* <div className="flex items-center justify-center col-span-1">
+              <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
@@ -808,23 +642,7 @@ const Gastos = () => {
                     Nombre
                   </label>
                 </div>
-              </div> */}
-              <div className="relative mb-3 w-full" data-te-input-wrapper-init>
-  <input
-    value={responsedata.nombre}
-    name="nombre"
-    onChange={handleOnChange}
-    type="text"
-    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none"
-    id="Nombre"
-  />
-  <label
-    htmlFor="Nombre"
-    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none"
-  >
-    Nombre
-  </label>
-</div>
+              </div>
               {/* VALOR PAGADO */}
               <div className="flex items-center justify-center col-span-1 ">
                 <div

@@ -50,9 +50,9 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full px-2 py-3 bg-white flex justify-center">
       <input
-        className="input flex w-full grow rounded md:w-1/2"
+        className="input flex w-full grow rounded md:w-3/6 bg-gray-200 px-2 py-1 text-sm"
         value={searchText}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder="Busca el Proyecto o sin Proyecto"

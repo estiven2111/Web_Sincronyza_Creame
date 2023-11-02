@@ -24,7 +24,7 @@ const WelcomeBar = () => {
         <div className="px-1 md:px-4">
             <div className="">
                 <div className="">
-                    <p className="text-gray-50 text-xs md:text-base max-w-[180px] md:w-[200px]" title={info.name} width="50px">{info.name}</p>
+                    <p className="text-black text-xs md:text-base" title={info.name} width="50px">{info.name}</p>
                 </div>
             </div>
         </div>

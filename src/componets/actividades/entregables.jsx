@@ -38,6 +38,7 @@ let hasLogicExecuted = false;
   };
 
   const handlerInfo = (value) => {
+    console.log("voy a cambiar el valor de info ahora!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", value)
     setInfo({
       ...info,
       ...value,
@@ -56,7 +57,7 @@ let hasLogicExecuted = false;
 
   const sendInfoToBack = async () => {
     try {
-      console.log(info)
+      console.log(info, "******************************************")
       const URLS =
       "https://syncronizabackup-production.up.railway.app/user/api/validation";
       const popup = window.open(
@@ -66,18 +67,19 @@ let hasLogicExecuted = false;
       );
 
       window.addEventListener("message", async (event) => {
+        console.log(info,"antes de entrar el if infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
         if (
           event.origin === `https://syncronizabackup-production.up.railway.app`
         ) {
+          console.log(info,"00000000infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
           if (event.data) {
             setData(event.data);
-            console.log(event.data,"datossssssssssssssssssssssssssssss");
             popup.close();
             console.log(Object.keys(data).length, "estado local");
             if (!validates ||
               (Object.keys(data).length === 1 && data.token === "true")
             ) {
-
+              console.log(info,"11111infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
               if (Object.keys(info).length <= 0) {
                 console.log("Por favor seleccione al menos un archivo");
                 return;
@@ -107,15 +109,17 @@ let hasLogicExecuted = false;
                 Fecha : finalDate,
                 idProceso : props.Codi_parteA
             }
-        console.log(ActualizarEntregable,"actualizar entregable")
         
               const formData = new FormData();
               formData.append("token", event.data.tokenSecret);
               formData.append('tipo', 'entregable');
               formData.append('user', user_name);
               formData.append('ActualizarEntregable', JSON.stringify({...ActualizarEntregable}));
+              console.log(info,"infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+              console.log("estoy dentro del ifffffff")
               Object.entries(info).forEach(([key, value]) => {
-                const extension = value.file.name.split('.').pop().toLowerCase();
+                console.log(value, "esta es el value del foreach de value")
+                const extension = value.uri.name.split('.').pop().toLowerCase();
                 const contentTypeMap = {
                   pdf: 'application/pdf',
                   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -130,14 +134,14 @@ let hasLogicExecuted = false;
                 const name = `${formatKey}${currentDate}.${extension}`;
                 console.log(`${value.Numero}-${name}`,"nombre de la imagennnn")
                 // formData.append(key, value.file);
-                console.log(value.file,"imageeeeeeeeenansnassssssssssssssssssssss")
+                console.log(value.uri,"imageeeeeeeeenansnassssssssssssssssssssss")
               const nombre_img =  `${value.Numero}-${name}`
-              formData.append(key, value.file, nombre_img);
-                // formData.append(key, {
-                //   uri: value.file,
-                //   type: type,
-                //   name: nombre_img,
-                // });
+              // formData.append(key, value.uri, nombre_img);
+                formData.append(key, {
+                  uri: value.uri,
+                  type: type,
+                  name: nombre_img,
+                });
               });
         
               const response = await axios.post('/creame-dashboard', formData, {
@@ -167,6 +171,8 @@ let hasLogicExecuted = false;
               console.log("no entro al iffff")
             }
           }
+        } else {
+          console.log("no entro al iffff del evento")
         }
       
       });
@@ -217,7 +223,7 @@ let hasLogicExecuted = false;
     <div>
       <button
         className={`${
-          props.entrega ? "bg-indigo-300" : "bg-gray-400"
+          props.entrega ? "bg-lightBlueCreame" : "bg-gray-400"
         } p-2 rounded ${
           props.entrega ? "cursor-pointer" : "cursor-not-allowed"
         }`}

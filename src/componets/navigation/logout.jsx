@@ -46,7 +46,7 @@ const Logout = () => {
 
   return (
     <button onClick={handleLogout}>
-      <FontAwesomeIcon icon={faRightFromBracket} className="h-8 text-gray-50"/>
+      <FontAwesomeIcon icon={faRightFromBracket} className="h-8 text-black"/>
     </button>
   );
 };

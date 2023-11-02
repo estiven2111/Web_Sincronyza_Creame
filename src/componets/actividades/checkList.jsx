@@ -47,14 +47,14 @@ const Checklist = () => {
   };
 
   return (
-    <div className="md:container mx-auto pt-10 md:px-10">
+    <div className="md:container mx-auto md:px-10">
       {response?.map((pro, index) => (
-        <div key={index} className="mb-10 border p-1 bg-indigo-200 rounded-lg">
+        <div key={index} className="mb-10">
           {pro.componentes.map((compo, index) => (
-            <div key={index} className="mb-8">
+            <div key={index} className="mb-5 bg-lightBlueCreame p-3 rounded-lg">
               {compo.actividades.length === 0 ? null : (
                 <>
-                  <div className="flex items-center mb-2 ">
+                  <div className="flex items-center mb-2">
                   <p className="mr-3 text-xs sm:text-base break-normal min-w-fit">{compo.fecha}</p>
                     <p onClick={handlePress} className={`text-black ${numberOfLines ? 'truncate' : ''} text-blue-500 underline cursor-pointer text-xs sm:text-base`}>
                       {compo.componente}

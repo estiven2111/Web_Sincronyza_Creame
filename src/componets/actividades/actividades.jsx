@@ -5,7 +5,7 @@ import LogoSync from "../../assets/img/icon.png";
 
 const Actividades = () => {
   return (
-    <div className="mx-auto md:container p-2 xl:px-40">
+    <div className="md:px-24 p-2 xl:px-40 min-h-screen">
       <Checklist />
     </div>
   );

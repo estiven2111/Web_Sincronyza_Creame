@@ -3,9 +3,52 @@ import React, { useEffect, useState, useContext } from 'react';
 // import RangeDatePicker from './datePicker';
 import LogoSync from "../../assets/img/icon.png";
 import { ThemeContext} from "../context/themeContext"
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
-
+let grafica = {
+  dis:35,
+  pro:35,
+  cump:30
+}
 const Indicadores = () => {
+  const [justSelected, SetJustSelected] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [totalFechas, setTotlaFechas] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [infoFecha, setInfoFecha] = useState({});
+  const [horasDisp, setHorasDisp] = useState({});
+
+  ChartJS.register(ArcElement, Tooltip, Legend);
+
+var options = {
+    responsive : true,
+    maintainAspectRatio: false,
+};
+
+var datas = {
+    labels: ['A tiempo', 'Con retraso', 'Por frecuencia'],
+    datasets: [
+        {
+            label: 'Nivel Actividad',
+            data: [grafica.dis,grafica.cump , grafica.pro],
+            backgroundColor: [
+                '#1148D6',
+                '#9755CF',
+                '#7A3E03',
+            ],
+            borderColor: [
+                '#86A5F7',
+                '#D7AEFA',
+                '#F2B274',
+            ],
+            borderWidth: 1,
+        },
+    ],
+};
+
+
+
   const [name, setName] = useState("");
   const { fechasIndicadores, inputValue, todasLasFechas } = useContext(ThemeContext);
   const docId =  localStorage.getItem("doc_empleado")
@@ -35,14 +78,19 @@ const Indicadores = () => {
     ...data,
     [name]: text
     });
+    if (name === "hDisp") {
+         grafica.dis   = text
+    }
+if (name === "hCump") {
+  grafica.cump = text
+}
+if (name === "hProg") {
+  grafica.pro = text
+}
+console.log( grafica.dis,"rrrrr")
   };
   
-  const [justSelected, SetJustSelected] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [totalFechas, setTotlaFechas] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [infoFecha, setInfoFecha] = useState({});
-  const [horasDisp, setHorasDisp] = useState({});
+
 
   const aTiempo = ((infoFecha.CumplidasPeriodo/infoFecha.HoraProgramada)*100).toFixed(1)
   const cRetraso = ((infoFecha.atrazo/infoFecha.HoraProgramada)*100).toFixed(1)
@@ -60,12 +108,12 @@ const Indicadores = () => {
     }
     fechasSinProyectos()
   }, [])
-  useEffect(() => {
-    setIsOpen(false);
-    SetJustSelected(false)
-    setInfoFecha({})
-    setHorasDisp({})
-  },[inputValue])
+  // useEffect(() => {
+  //   setIsOpen(false);
+  //   SetJustSelected(false)
+  //   setInfoFecha({})
+  //   setHorasDisp({})
+  // },[inputValue])
 
   useEffect(() => {
     const ActulizarOptions = () => {
@@ -100,7 +148,7 @@ const Indicadores = () => {
       return totalFechas.map((option, index) => (
         <div
           className="mb-2 cursor-pointer"
-          style={{ backgroundColor: "blue" }}
+          // style={{ backgroundColor: "blue" }}
           key={index}
           onClick={() => {
             handleOptionSelect([option]);
@@ -128,11 +176,11 @@ const Indicadores = () => {
     };
 
     return (
-      <div className="container pt-48">
-        <div className="scroll">
+      <div className="md:container mx-auto md:px-10">
+        <div className="scroll mb-10 text-center m-10">
           {/* <RangeDatePicker/> */}
           
-          <div className="singleInput">
+          <div className="singleInput  m-10 flex items-center justify-center">
             <div className="inputContOptions">
               <div className="inputIntLeftDrop">
                 {justSelected ? (
@@ -145,28 +193,30 @@ const Indicadores = () => {
                   </div>
                 )}
               </div>
-              {isOpen && <div className="options">{renderOptions()}</div>}
+              {isOpen && <div className="options absolute bg-slate-500 ">{renderOptions()}</div>}
             </div>
           </div>
-    
-          <div className="inputCont">
-            <label className="label">Horas Disp.:</label>
-            <input className="input" value={isNaN(horasDisp) ? "" : horasDisp.toString()} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
-            <label className="label">Horas Cumplidas:</label>
-            <input className="input" value={!isNaN(infoFecha.CumplidasPeriodo) && !isNaN(infoFecha.atrazo) ? (infoFecha.CumplidasPeriodo + infoFecha.atrazo).toString() : ""} onChange={(e) => handleOnChange(e.target.value, "hCump")} placeholder="Horas" type="number"/>
+         
+          <div className="inputCont  m-5">
+            <label className="label">Horas Disp :</label>
+            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={isNaN(horasDisp) ? data.hDisp: data.hDisp} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
+            <label className="label">Horas Cumplidas :</label>
+            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.CumplidasPeriodo) && !isNaN(infoFecha.atrazo) ? (infoFecha.CumplidasPeriodo + infoFecha.atrazo).toString() : data.hCump} onChange={(e) => handleOnChange(e.target.value, "hCump")} placeholder="Horas" type="number"/>
             {console.log(infoFecha.CumplidasPeriodo + infoFecha.atrazo, "hola!!!")}
           </div>
-          <div className="inputCont">
-            <label className="label">Horas Prog.:</label>
-            <input className="input" value={!isNaN(infoFecha.HoraProgramada) ? infoFecha.HoraProgramada.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "hProg")} placeholder="Horas" type="number"/>
-            <label className="label">Horas Frecuencia:</label>
-            <input className="input" value={!isNaN(infoFecha.HorasFrecuencia) ? infoFecha.HorasFrecuencia.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "hFrec")} placeholder="Horas" type="number"/>
+          <div className="inputCont  m-5">
+            <label className="label">Horas Prog :</label>
+            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.HoraProgramada) ? infoFecha.HoraProgramada.toString() : data.hProg} onChange={(e) => handleOnChange(e.target.value, "hProg")} placeholder="Horas" type="number"/>
+            <label className="label">Horas Frecuencia :</label>
+            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.HorasFrecuencia) ? infoFecha.HorasFrecuencia.toString() : data.hFrec} onChange={(e) => handleOnChange(e.target.value, "hFrec")} placeholder="Horas" type="number"/>
           </div>
-          <div className="inputCont">
+          <div className="inputCont  m-5">
             <label className="label2">NIVEL DE ACTIVIDAD(%):</label>
-            <input className="input" value={infoFecha.nivActividad ? infoFecha.nivActividad.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "activity")} placeholder="%" type="number"/>
+            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={infoFecha.nivActividad ? infoFecha.nivActividad.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "activity")} placeholder="%" type="number"/>
           </div>
-          <div className="grafico">
+
+
+          {/* <div className="grafico">
             <div>
               {!isNaN(aTiempo) && !isNaN(cRetraso) && !isNaN(pFrec)
               ? (<>
@@ -176,8 +226,9 @@ const Indicadores = () => {
               <PieComp aTiempo={parseFloat(aTiempo)} cRetraso={parseFloat(cRetraso)} pFrec={parseFloat(pFrec)}/></>) 
               : null}
             </div>
-          </div>
+          </div> */}
         </div>
+        <div className='h-96'><Pie data={datas} options={options}  /></div>
       </div>
     );
     

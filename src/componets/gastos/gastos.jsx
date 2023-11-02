@@ -491,7 +491,7 @@ const Gastos = () => {
     // });
     // console.log("on change", responsedata);
   };
-
+  const handlerAnticipo = () => {};
   return (
     <div className="mt-44 m-6">
       <div className="text-center m-14">
@@ -522,6 +522,7 @@ const Gastos = () => {
               className="inputIntRight"
               placeholder="$000.000.00"
               value={prepayment ? prepayment.Valor.toString() : ""}
+              onChange={handlerAnticipo}
             />
           </div>
         </div>
@@ -610,11 +611,21 @@ const Gastos = () => {
                     name="concepto"
                     onChange={handleOnChange}
                     type="text"
-                    className=" bg-blue-300/50 peer block min-h-[auto] w-full text-neutral-950 rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none  "
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+    ${
+      responsedata.concepto
+        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+        : ""
+    }`}
                   />
                   <label
                     htmlFor="Concepto"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+    ${
+      responsedata.concepto
+        ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+        : ""
+    }`}
                   >
                     Concepto
                   </label>
@@ -631,17 +642,28 @@ const Gastos = () => {
                     name="nit"
                     onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.nit
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                     id="NIT/CC"
                   />
                   <label
-                    htmlFor="NIT/CC"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    htmlFor="nit"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.nit
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
                     NIT/CC
                   </label>
                 </div>
               </div>
+
               {/* NOMBRE */}
               <div className="flex items-center justify-center col-span-1">
                 <div
@@ -653,17 +675,28 @@ const Gastos = () => {
                     name="nombre"
                     onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.nombre
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                     id="Nombre"
                   />
                   <label
                     htmlFor="Nombre"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                ${
+                  responsedata.nombre
+                    ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                    : ""
+                }`}
                   >
                     Nombre
                   </label>
                 </div>
               </div>
+
               {/* VALOR PAGADO */}
               <div className="flex items-center justify-center col-span-1 ">
                 <div
@@ -675,17 +708,28 @@ const Gastos = () => {
                     name="total"
                     onChange={handleOnChange}
                     type="number"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.total
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                     id="Valor pagado"
                   />
                   <label
-                    htmlFor="Valor pagado"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    htmlFor="total"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.total
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
                     $ Valor pagado
                   </label>
                 </div>
               </div>
+
               {/* IVA */}
               <div className="flex items-center justify-center col-span-1 ">
                 <div className="grid grid-cols-3">
@@ -708,16 +752,27 @@ const Gastos = () => {
                       name="iva"
                       onChange={handleOnChange}
                       type="number"
-                      className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                      className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.totalSinIva
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                       id="Valor Iva"
                     />
                     <label
                       htmlFor="Valor Iva"
-                      className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.totalSinIva
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                     >
                       Valor Iva
                     </label>
                   </div>
+
                   <div
                     className="relative  mb-3 col-span-1 "
                     data-te-input-wrapper-init
@@ -733,18 +788,29 @@ const Gastos = () => {
                       name="ivaPorc"
                       onChange={handleOnChange}
                       type="number"
-                      className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                      className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.ivaPorc
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                       id="$ IVA"
                     />
                     <label
                       htmlFor="$ IVA"
-                      className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.ivaPorc
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                     >
                       %
                     </label>
                   </div>
                 </div>
               </div>
+
               {/* RETEFUENTE */}
               <div className="flex items-center justify-center col-span-1">
                 <div className="grid grid-cols-3">
@@ -767,37 +833,59 @@ const Gastos = () => {
                       name="rete"
                       onChange={handleOnChange}
                       type="number"
-                      className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                      className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.rete
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                       id="Valor Rete"
                     />
                     <label
                       htmlFor="Valor Rete"
-                      className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.rete
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                     >
                       Valor Rete
                     </label>
                   </div>
+
                   <div
                     className="relative mb-3 col-span-1 "
                     data-te-input-wrapper-init
                   >
                     <input
-                      value={fillData ? `${responsedata.retePorc}` : ""}
+                      value={responsedata.retePorc}
                       name="retePorc"
                       onChange={handleOnChange}
                       type="number"
-                      className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                      className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.retePorc
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                       id="% Rete"
                     />
                     <label
                       htmlFor="% Rete"
-                      className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.retePorc
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100"
+                          : ""
+                      }`}
                     >
                       %
                     </label>
                   </div>
                 </div>
               </div>
+
               {/* FECHA */}
               <div className="flex items-center justify-center col-span-1">
                 <div
@@ -809,17 +897,28 @@ const Gastos = () => {
                     name="fecha"
                     onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.fecha
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
                     id="Fecha"
                   />
                   <label
                     htmlFor="Fecha"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.fecha
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
                     Fecha
                   </label>
                 </div>
               </div>
+
               {/* CODIGO POSTAL */}
               <div className="flex items-center justify-center col-span-1">
                 <div
@@ -827,18 +926,32 @@ const Gastos = () => {
                   data-te-input-wrapper-init
                 >
                   <input
+                    value={responsedata.codepostal}
+                    name="Codpostal"
+                    onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
-                    id="CodPostal"
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.codepostal
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="Codpostal"
                   />
                   <label
-                    htmlFor="CodPostal"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    htmlFor="Codpostal"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.codepostal
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
-                    CodPostal
+                    Cod postal
                   </label>
                 </div>
               </div>
+
               {/* MUNICIPIO */}
               <div className="flex items-center justify-center col-span-1">
                 <div
@@ -846,18 +959,32 @@ const Gastos = () => {
                   data-te-input-wrapper-init
                 >
                   <input
+                    value={responsedata.municipio}
+                    name="municipio"
+                    onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
-                    id="Municipio"
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.municipio
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="municipio"
                   />
                   <label
-                    htmlFor="Municipio"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    htmlFor="municipio"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.municipio
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
                     Municipio
                   </label>
                 </div>
               </div>
+
               {/* IPC */}
               <div className="flex items-center justify-center col-span-1 lg:col-start-2 lg:col-end-2">
                 <div
@@ -865,18 +992,32 @@ const Gastos = () => {
                   data-te-input-wrapper-init
                 >
                   <input
+                    value={responsedata.ipc}
+                    name="ipc"
+                    onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
-                    id="Ipc"
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.ipc
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="ipc"
                   />
                   <label
-                    htmlFor="Ipc"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    htmlFor="ipc"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.ipc
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
                     Ipc
                   </label>
                 </div>
               </div>
+
               {/* SUBTOTAL */}
               <div className="flex items-center justify-center col-span-1 lg:col-start-3 lg:col-end-3">
                 <div
@@ -884,15 +1025,28 @@ const Gastos = () => {
                   data-te-input-wrapper-init
                 >
                   <input
+                    value={responsedata.Sub_Total}
+                    name="subtotal"
+                    onChange={handleOnChange}
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-0 bg-blue-300/50 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none "
-                    id="SubTotal"
+                    className={`bg-blue-300/50 peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    ${
+                      responsedata.subtotal
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="subtotal"
                   />
                   <label
-                    htmlFor="SubTotal"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+                    htmlFor="subtotal"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.subtotal
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
                   >
-                    SubTotal
+                    Sub total
                   </label>
                 </div>
               </div>

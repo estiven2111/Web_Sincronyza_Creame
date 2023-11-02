@@ -27,10 +27,10 @@ function NavBar() {
     setShowMenu(!showMenu);
   };
   return (
-    <div className="sticky top-0 left-0 w-full">
+    <div className="z-20 sticky top-0 left-0 w-full">
       <div className="">
         <div className="">
-          <div className="flex w-full justify-between items-center p-5 bg-white text-black">
+          <div className="flex w-full justify-between items-center px-5 bg-white text-black">
             <div className="">
                 <Link to="/" >
                   <img
@@ -153,7 +153,9 @@ function NavBar() {
         //   </NavLink>
         // </div>
       )} */}
-      <SearchBar/>
+      <div className="flex justify-center">
+        <SearchBar/>
+      </div>
     </div>
   );
 }

@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gray-900 w-full">
+    <div className="w-full">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen h-full md:pb-10">
         <a href="" className="flex items-center mb-6 text-2xl font-semibold text-white max-w-[550px]">
           <img className="" src={icon} alt="" />

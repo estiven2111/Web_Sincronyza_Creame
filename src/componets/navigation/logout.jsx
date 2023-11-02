@@ -18,7 +18,6 @@ const Logout = () => {
     try {
       localStorage.removeItem("token");
       const email = localStorage.getItem("email");
-      console.log(email, "hola") 
       await axios.get(`/proyect/logout?email=${email}`);
       localStorage.removeItem("name");
       localStorage.removeItem("email");

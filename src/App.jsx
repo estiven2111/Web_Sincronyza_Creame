@@ -15,6 +15,7 @@ import Actividades from "./componets/actividades/actividades";
 import Indicadores from "./componets/indicadores/indicadores";
 
 import Home from "./componets/home/home"
+import Footer from "../src/componets/navigation/footer"
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path='/detail/:detailId' element={<Detail/>} />
             <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}
           </Routes>
+          <Footer/>
       </div>
     </ThemeProvider>
   )

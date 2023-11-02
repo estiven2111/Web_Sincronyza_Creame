@@ -10,7 +10,8 @@ export default {
   theme: {
     extend: {
       backgroundColor: {
-        'azulCreame': '#0C4279', 
+        'azulCreame' : '#0C4279', 
+        'lightBlueCreame' : '#ADD8E6'
       },
       width: {
         '3/5': '60%',

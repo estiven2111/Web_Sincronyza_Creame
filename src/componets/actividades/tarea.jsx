@@ -5,6 +5,7 @@ import Entregables from './entregables';
 
 
 const Tarea = (props) => {
+  console.log("props de tarea", props)
   const [checked, setChecked] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [isTotalTime, setIsTotalTime] = useState('');

@@ -117,7 +117,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-indigo-300 rounded p-1">
+    <div className="flex items-center justify-center bg-lightBlueCreame rounded p-1">
       <button className={`btn btn-blue ${entrega ? '' : 'btn-disabled'}`} onClick={openModal}>
         {!isNaN(totalTime) ? totalTime : '00:00'}
       </button>

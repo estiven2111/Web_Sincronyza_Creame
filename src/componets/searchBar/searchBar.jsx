@@ -38,6 +38,7 @@ const SearchBar = () => {
       globalSearch(text);
       globalOptions(true);
     } else {
+      console.log("vamos a cerra", text)
       globalOptions(false);
     }
   };

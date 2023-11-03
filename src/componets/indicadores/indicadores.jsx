@@ -228,7 +228,7 @@ console.log( grafica.dis,"rrrrr")
             </div>
           </div> */}
         </div>
-        <div className='h-96'><Pie data={datas} options={options}  /></div>
+        <div className='lg:h-96 md:h-80 h-64'><Pie data={datas} options={options}  /></div>
       </div>
     );
     

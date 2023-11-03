@@ -289,11 +289,13 @@ const Gastos = () => {
       // const popup = window.open(`${URLS}`)
 
       window.addEventListener("message", async (event) => {
+        console.log("entrooooo")
         if (
           event.origin === `https://syncronizabackup-production.up.railway.app`
         ) {
           if (event.data) {
             setData(event.data);
+            console.log(event.data);
             popup.close();
             console.log(Object.keys(data).length, "estado local");
             if (
@@ -366,7 +368,7 @@ const Gastos = () => {
                   "Content-Type": "multipart/form-data",
                 },
               });
-              console.log(send.data);
+              console.log(send.data,"datos ocr");
               if (send.data === "archivos enviados correctamente") {
                 Swal({
                   title: "ENVIO CORRECTO",
@@ -374,6 +376,7 @@ const Gastos = () => {
                   icon: "success",
                   buttons: "Aceptar",
                 });
+                handlerCancel()
               }
             }
           }

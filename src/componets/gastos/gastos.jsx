@@ -544,24 +544,24 @@ const Gastos = () => {
                     </div>
 
                     <div className="col-span-1 flex items-center justify-center mb-5">
-                      <div className="hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-700 border-dashed cursor-pointer bg-gray-50  ">
+                      <div className="hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
                         <button
                           className="flex items-center justify-center w-28 h-16 rounded-full"
                           type="button"
                           onClick={handlerCancel}
                         >
                           <GiCancel size={40} />
-                          <p>cancelar</p>
+                          <p>Cancelar</p>
                         </button>
                       </div>
-                      <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-700 border-dashed cursor-pointer bg-gray-50 ">
+                      <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
                         <button
                           className="flex items-center justify-center w-28 h-16 rounded-full"
                           type="button"
                           onClick={handlerScan}
                         >
                           <BiScan size={40} />
-                          <p>Scan</p>
+                          <p>Escanear</p>
                         </button>
                       </div>
                     </div>
@@ -600,8 +600,8 @@ const Gastos = () => {
               </>
             )}
 
-            <div className="grid lg:grid-cols-4 grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2">
-              <div className="lg:col-span-4 col-span-2 flex items-center justify-center">
+            <div className="grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2">
+              <div className="col-span-2 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
                   data-te-input-wrapper-init
@@ -611,7 +611,7 @@ const Gastos = () => {
                     name="concepto"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.concepto
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -639,7 +639,7 @@ const Gastos = () => {
                     name="nit"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.nit
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -672,7 +672,7 @@ const Gastos = () => {
                     name="nombre"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.nombre
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -705,7 +705,7 @@ const Gastos = () => {
                     name="total"
                     onChange={handleOnChange}
                     type="number"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.total
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -749,7 +749,7 @@ const Gastos = () => {
                       name="iva"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -785,7 +785,7 @@ const Gastos = () => {
                       name="ivaPorc"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ivaPorc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -830,7 +830,7 @@ const Gastos = () => {
                       name="rete"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.rete
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -860,7 +860,7 @@ const Gastos = () => {
                       name="retePorc"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.retePorc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -894,7 +894,7 @@ const Gastos = () => {
                     name="fecha"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.fecha
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -927,7 +927,7 @@ const Gastos = () => {
                     name="Codpostal"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.codepostal
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -960,7 +960,7 @@ const Gastos = () => {
                     name="municipio"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.municipio
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -983,7 +983,7 @@ const Gastos = () => {
               </div>
 
               {/* IPC */}
-              <div className="flex items-center justify-center col-span-1 lg:col-start-2 lg:col-end-2">
+              <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
@@ -993,7 +993,7 @@ const Gastos = () => {
                     name="ipc"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ipc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -1016,7 +1016,7 @@ const Gastos = () => {
               </div>
 
               {/* SUBTOTAL */}
-              <div className="flex items-center justify-center col-span-1 lg:col-start-3 lg:col-end-3">
+              <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
@@ -1026,7 +1026,7 @@ const Gastos = () => {
                     name="subtotal"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none 
+                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.subtotal
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -1047,6 +1047,7 @@ const Gastos = () => {
                   </label>
                 </div>
               </div>
+
             </div>
           </div>
         </div>

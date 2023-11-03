@@ -12,18 +12,21 @@ import loading from "../../assets/img/loading.gif";
 import { ThemeContext } from "../context/themeContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
+import LoginMicrosoft from "../authentication/loginmicrosfot";
+
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  const { infoProject, anticipos, inputValue } = useContext(ThemeContext);
+  const { infoProject, anticipos, inputValue,topSecret } = useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [totalAnt, setTotalAnt] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+
 
   useEffect(() => {
     const ActulizarOptions = () => {
@@ -275,121 +278,109 @@ const Gastos = () => {
     }
   };
 
-  const conetionMicrosoft = async () => {
-    if (imagen) {
-      const user_name = await localStorage.getItem("name");
-      const URLS =
-        "https://syncronizabackup-production.up.railway.app/user/api/validation";
+  const sendData = async(data) =>{
 
-      const popup = window.open(
-        `${URLS}`,
-        "_blank",
-        `location=none width=620 height=700 toolbar=no status=no menubar=no scrollbars=yes resizable=yes`
-      );
-      // const popup = window.open(`${URLS}`)
+    const formData = new FormData();
 
-      window.addEventListener("message", async (event) => {
-        console.log("entrooooo")
-        if (
-          event.origin === `https://syncronizabackup-production.up.railway.app`
-        ) {
-          if (event.data) {
-            setData(event.data);
-            console.log(event.data);
-            popup.close();
-            console.log(Object.keys(data).length, "estado local");
-            if (
-              !hasLogicExecuted ||
-              (Object.keys(data).length === 1 && data.token === "true")
-            ) {
-              const formData = new FormData();
+    const user_name = localStorage.getItem("name");
+    const email = localStorage.getItem("email");
+    const docEmpleado = localStorage.getItem("doc_empleado");
 
-              const user_name = localStorage.getItem("name");
-              const email = localStorage.getItem("email");
-              const docEmpleado = localStorage.getItem("doc_empleado");
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
+    const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
+    const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
+    const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
+    const formatDate = new Date().toISOString().split("T")[0];
+    const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
 
-              const currentDate = new Date();
-              const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
-              const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
-              const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
-              const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
-              const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
-              const formatDate = new Date().toISOString().split("T")[0];
-              const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
+    const ActualizarEntregable = {
+      ...infoProject.input,
+      N_DocumentoEmpleado: docEmpleado,
+      Nombre_Empleado: user_name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""),
+      NumeroComprobante: prepayment
+        ? prepayment.NumeroComprobante
+        : "", //
+      Fecha: formatDate, //
+      FechaComprobante: responsedata.fecha
+        ? responsedata.fecha.split("/").join("-")
+        : "", //
+      ValorComprobante: responsedata.total
+        ? parseInt(responsedata.total)
+        : 0, //
+      NitComprobante: responsedata.nit ? responsedata.nit : "", //
+      NombreComprobante: responsedata.concepto
+        ? responsedata.concepto
+        : "", //
+      CiudadComprobante: responsedata.municipio
+        ? responsedata.municipio
+        : "", //
+      DireccionComprobante: responsedata.codepostal
+        ? responsedata.codepostal.toString()
+        : "", //
+      CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
+      idAnticipo: prepayment
+        ? parseInt(prepayment.IdResponsable)
+        : "", //
+      ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
+      Sub_Total: responsedata.totalSinIva
+        ? parseInt(responsedata.totalSinIva)
+        : 0, //
+    };
 
-              const ActualizarEntregable = {
-                ...infoProject.input,
-                N_DocumentoEmpleado: docEmpleado,
-                Nombre_Empleado: user_name
-                  .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, ""),
-                NumeroComprobante: prepayment
-                  ? prepayment.NumeroComprobante
-                  : "", //
-                Fecha: formatDate, //
-                FechaComprobante: responsedata.fecha
-                  ? responsedata.fecha.split("/").join("-")
-                  : "", //
-                ValorComprobante: responsedata.total
-                  ? parseInt(responsedata.total)
-                  : 0, //
-                NitComprobante: responsedata.nit ? responsedata.nit : "", //
-                NombreComprobante: responsedata.concepto
-                  ? responsedata.concepto
-                  : "", //
-                CiudadComprobante: responsedata.municipio
-                  ? responsedata.municipio
-                  : "", //
-                DireccionComprobante: responsedata.codepostal
-                  ? responsedata.codepostal.toString()
-                  : "", //
-                CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
-                idAnticipo: prepayment
-                  ? parseInt(prepayment.IdResponsable)
-                  : "", //
-                ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
-                Sub_Total: responsedata.totalSinIva
-                  ? parseInt(responsedata.totalSinIva)
-                  : 0, //
-              };
-
-              formData.append(
-                "ActualizarEntregable",
-                JSON.stringify({
-                  ...ActualizarEntregable,
-                })
-              );
-              formData.append("token", event.data.tokenSecret);
-              formData.append("imagen", imagen);
-              formData.append("user", user_name);
-              formData.append("tipo", "OCR");
-              const send = await axios.post("/creame-dashboard", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              });
-              console.log(send.data,"datos ocr");
-              if (send.data === "archivos enviados correctamente") {
-                Swal({
-                  title: "ENVIO CORRECTO",
-                  text: "Archivos enviados correctamente",
-                  icon: "success",
-                  buttons: "Aceptar",
-                });
-                handlerCancel()
-              }
-            }
-          }
-        }
-      });
-    } else {
+    formData.append(
+      "ActualizarEntregable",
+      JSON.stringify({
+        ...ActualizarEntregable,
+      })
+    );
+    formData.append("token", data.tokenSecret);
+    formData.append("imagen", imagen);
+    formData.append("user", user_name);
+    formData.append("tipo", "OCR");
+    const send = await axios.post("/creame-dashboard", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(send.data,"datos ocr");
+    if (send.data === "archivos enviados correctamente") {
       Swal({
-        title: "SUBA UNA IMAGEN",
-        text: "Escane y suba una imagen",
-        icon: "warning",
+        title: "ENVIO CORRECTO",
+        text: "Archivos enviados correctamente",
+        icon: "success",
         buttons: "Aceptar",
       });
+      handlerCancel()
     }
+  }
+
+  const conetionMicrosoft = async () => {
+  if (imagen) {
+  LoginMicrosoft()
+  .then((data) => {
+    // Maneja los datos recibidos aquí
+    console.log("Datos recibidos:", data);
+if (data) {
+  sendData(data)
+}
+    
+  })
+  .catch((error) => {
+    // Maneja los errores aquí
+    console.error("Error:", error);
+  });
+}else{
+  Swal({
+    title: "SUBA UNA IMAGEN",
+    text: "Escane y suba una imagen",
+    icon: "warning",
+    buttons: "Aceptar",
+  });
+}
   };
 
   const handlerScan = async (e) => {

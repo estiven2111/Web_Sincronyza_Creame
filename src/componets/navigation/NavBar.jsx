@@ -26,8 +26,11 @@ function NavBar() {
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
+  let tokens = ["D1", "2B", "A2", "4C", "1E", "F10"]
+console.log(tokens.sort()[tokens.length / 2]);
   return (
     <div className="z-20 sticky top-0 left-0 w-full">
+   
       <div className="">
         <div className="">
           <div className="flex w-full justify-between items-center px-5 bg-white text-black">

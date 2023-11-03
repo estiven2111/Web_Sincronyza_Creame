@@ -67,7 +67,7 @@ let hasLogicExecuted = false;
       );
 
       window.addEventListener("message", async (event) => {
-        console.log(info,"antes de entrar el if infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+        console.log(event.origin,"antes de entrar el if infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
         if (
           event.origin === `https://syncronizabackup-production.up.railway.app`
         ) {

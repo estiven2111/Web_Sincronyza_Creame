@@ -2,3 +2,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Horatio';
+    src: url('./assets/fonts/Horatio.otf') format('opentype');
+  }
+
+  @font-face {
+    font-family: 'Helvetica';
+    src: url('./assets/fonts/Helvetica_Neue_Regular.otf') format('opentype');
+  }
+/* .{
+    color: rgb(11, 86, 166);
+    color: rgb(187, 202, 229);
+    color: rgb(55, 52, 53)
+} */

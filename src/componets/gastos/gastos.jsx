@@ -140,14 +140,14 @@ const Gastos = () => {
     const input = event.target;
     if (input.files.length > 0) {
       const file = input.files[0];
-      const Extensions = [".jpg", ".jpeg"];
+      const Extensions = [".jpg", ".jpeg", ".png"];
       const fileExtension = file.name.slice(
         ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
       );
       if (!Extensions.includes("." + fileExtension.toLowerCase())) {
         Swal({
           title: "ARCHIVO INCORRECTO",
-          text: "Debe seleccionar un archivo .JPG O JPEG",
+          text: "Debe seleccionar un archivo .JPG, .JPEG o .PNG",
           icon: "warning",
           buttons: "Aceptar",
         });
@@ -272,6 +272,7 @@ const Gastos = () => {
       });
       setFillData(true);
       setIsLoading(false);
+      console.log(response.data)
       console.log("finalizo");
     } catch (error) {
       console.error(error, "Error");
@@ -581,7 +582,7 @@ if (data) {
                           className="hidden"
                           onChange={handleFileChange}
                           // ref={fileInputRef}
-                          accept=".jpg, .jpeg"
+                          accept=".jpg, .jpeg, .png"
                           onInput={handlerValidation}
                         />
                       </label>
@@ -1013,13 +1014,13 @@ if (data) {
                   data-te-input-wrapper-init
                 >
                   <input
-                    value={responsedata.Sub_Total}
+                    value={responsedata.totalSinIva}
                     name="subtotal"
                     onChange={handleOnChange}
                     type="text"
                     className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.subtotal
+                      responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
                         : ""
                     }`}
@@ -1029,7 +1030,7 @@ if (data) {
                     htmlFor="subtotal"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                       ${
-                        responsedata.subtotal
+                        responsedata.totalSinIva
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
                           : ""
                       }`}

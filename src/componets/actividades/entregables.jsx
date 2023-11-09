@@ -81,7 +81,7 @@ const Entregables = (props) => {
     };
 
     const formData = new FormData();
-    formData.append("token", event.data.tokenSecret);
+    formData.append("token",data.tokenSecret);
     formData.append("tipo", "entregable");
     formData.append("user", user_name);
     formData.append(
@@ -158,7 +158,7 @@ const Entregables = (props) => {
           // Maneja los errores aquí
           console.error("Error:", error);
         });
-        
+
     } catch (error) {
       console.error("Error al enviar el objeto:", error);
     }

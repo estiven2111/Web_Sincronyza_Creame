@@ -14,7 +14,11 @@ export default {
         'naranjaCreame' : '#DA7800',
         'turquesaCreame' : '#00FFFF',
         'negroCreame' : '#333333',
-        'lightBlueCreame' : '#ADD8E6'
+        'lightBlueCreame' : '#ADD8E6',
+        'lightGrayCreame' : '#D1D2D2',
+        'grayCreame' : '#A5A7AA',
+        'darkGrayCreame' : '#58595B',
+        
       },
       width: {
         '3/5': '60%',

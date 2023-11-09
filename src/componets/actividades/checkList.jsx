@@ -4,58 +4,23 @@ import Tarea from './tarea';
 import axios from 'axios';
 
 const Checklist = () => {
-  const [response, setResponse] = useState([]);
-  const { inputValue, finalValue, globalSearch, globalOptions, showOptions, setProjectData, todosAnticipos, todasLasFechas } = useContext(ThemeContext);
-  const [doc, setDoc] = useState('');
-  const [name, setName] = useState('');
-  const [finishedUpdate, setFinishedUpdate] = useState(false);
-
-  const [indice, setIndice] = useState(false)
-  const [proyectos, setProyectos] = useState([])
+  // const [response, setResponse] = useState([]);
+  const { finalValue, globalSearch, globalOptions, showOptions, indice, setindexProject, response, doc, proyectos, setAllProjects} = useContext(ThemeContext);  
 
   useEffect(()=>{
     const constulta = async() => {
-      if (localStorage.getItem("email")) {
+      console.log(indice, "*********************indice****************", !proyectos.length)
+      if(!proyectos.length){
+        if (localStorage.getItem("email")) {
         const nomproyecto = await axios.get(`/proyect/nomProyect?email=${localStorage.getItem("email")}`)
-        setIndice(true)
-        setProyectos(nomproyecto.data)
+        setindexProject(true)
+        setAllProjects(nomproyecto.data)
         console.log(nomproyecto.data)
+      }
       }
     }
     constulta()
   },[])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (inputValue !== '') {
-          const user_name = localStorage.getItem('name');
-          setName(user_name.toString());
-          const docEmpleado = localStorage.getItem('doc_empleado');
-          setDoc(docEmpleado.toString());
-          const email = localStorage.getItem('email');
-          const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
-          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response.data[0].skuP, doc: docEmpleado });
-          const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
-          setIndice(false)
-          todosAnticipos(anticipo.data);
-          todasLasFechas(indicadores.data);
-          setProjectData({
-            //! aquí se agregarían más datos
-            SKU_Proyecto: response.data[0].skuP || '',
-            NitCliente: response.data[0].nitCliente || '',
-            idNodoProyecto: response.data[0].idNodoP || '',
-            idProceso: response.data[0].Codi_parteP || '',
-          });
-          setResponse(response?.data);
-          setFinishedUpdate(false);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, [inputValue, finishedUpdate]);
 
   const [numberOfLines, setNumberOfLines] = useState(true);
   const handlePress = () => {
@@ -69,7 +34,7 @@ const Checklist = () => {
     console.log(showOptions, "**********")
     setTimeout(() => {
       globalOptions(false);
-    }, 3000);
+    }, 2000);
   }
 
   return (
@@ -79,11 +44,16 @@ const Checklist = () => {
         <p className='py-4'>
           indice de proyectos
         </p>
-        <ol className='list-decimal pl-6'>
+        <ol className='list-decimal'>
           {proyectos.map((proyecto, index)=>
-            <li className='p-2'>
-              <div onClick={handleSelect} key={index} className='cursor-pointer'>
-                  {proyecto}
+            <li key={index} className='bg-darkGrayCreame my-2 flex flex-row rounded-lg border-turquesaCreame border-2 font-Horatio'>
+              <div className='flex items-center justify-center w-20 text-3xl text-turquesaCreame font-bold'>
+                {index+1}
+              </div>
+              <div className='rounded-r-lg pt-4 bg-naranjaCreame w-full'>
+                <div onClick={handleSelect} className='cursor-pointer bg-white p-4 rounded-br-lg'>
+                    {proyecto}
+                </div>
               </div>
             </li>
           )}
@@ -92,17 +62,19 @@ const Checklist = () => {
       :response?.map((pro, index) => (
         <div key={index} className="">
           {pro.componentes.map((compo, index) => (
-            <div key={index} className="mb-5 bg-lightBlueCreame p-3 rounded-lg">
+            <div key={index} className="mb-5 bg-azulCreame rounded-lg text-white border-turquesaCreame border-2 shadow-lg">
               {compo.actividades.length === 0 ? null : (
                 <>
-                  <div className="flex items-center mb-2">
-                  <p className="mr-3 text-xs sm:text-base break-normal min-w-fit">{compo.fecha}</p>
-                    <p onClick={handlePress}  className={`text-black ${numberOfLines ? 'truncate' : ''} text-black cursor-pointer text-xs sm:text-base no-underline`}>
-                      {compo.componente}
-                    </p>
+                  <div className="flex items-center m-2">
+                  <p className="mr-3 text-xs sm:text-base break-normal min-w-fit">
+                    {compo.fecha}
+                  </p>
+                  <p onClick={handlePress}  className={`text-white ${numberOfLines ? 'truncate' : ''} text-white cursor-pointer text-xs sm:text-base no-underline`}>
+                    {compo.componente}
+                  </p>
                   </div>
                   {compo.actividades.map((act, ind) => (
-                    <div key={ind} className="bg-white mb-5 p-1 rounded">
+                    <div key={ind} className="bg-white m-2 p-1 rounded">
                       <Tarea
                         proyecto={pro.proyecto}
                         skuP={pro.skuP}

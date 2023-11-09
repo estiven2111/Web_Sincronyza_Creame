@@ -13,6 +13,7 @@ const Login = () => {
     const navigation = useNavigate();
     const {date_login} = useSelector((state) => state.loginSlice)
     const dispatch = useDispatch()
+    const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,19 +31,33 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
     console.log("object", user, password );
+    setIsLoading(true)
     const response = await dispatch(loginredux(user, password ))
    localStorage.setItem("name", response.userName)
    localStorage.setItem("token", response.token)
    localStorage.setItem("email", response.userEmail)
    localStorage.setItem("doc_empleado", response.doc_empleado)
     setPassword("");
+    setIsLoading(false)
     navigation("/actividades");
+    } catch (error) {
+      setIsLoading(false)
+    }
+    
   };
 
   return (
     <div className="w-full">
+      {isLoading 
+      ?
+        <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+          <div className="loader"></div>
+        </div>
+      : null}
+      
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen h-full md:pb-10">
         <a href="" className="flex items-center mb-6 text-2xl font-semibold text-white max-w-[550px]">
           <img className="" src={icon} alt="" />

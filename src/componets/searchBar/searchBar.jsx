@@ -4,8 +4,10 @@ import axios from 'axios';
 // import api from '../../api/api';
 
 const SearchBar = () => {
-  const { finalValue, searchText, globalSearch, showOptions, globalOptions } = useContext(ThemeContext);
+  const { indice, setindexProject, finishedHandler, finishedUpdate, inputValue, finalValue, searchText, globalSearch, showOptions, globalOptions, todosAnticipos, todasLasFechas, setProjectData, response, setNewResponse, doc, setDocument } = useContext(ThemeContext);
   const [options, setOptions] = useState([]);
+  // const [doc, setDoc] = useState('');
+
 
   useEffect(() => {
     finalValue('');
@@ -32,6 +34,37 @@ const SearchBar = () => {
     }
   }, [searchText]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (inputValue !== '') {
+          const user_name = localStorage.getItem('name');
+          const docEmpleado = localStorage.getItem('doc_empleado');
+          setDocument(docEmpleado.toString());
+          const email = localStorage.getItem('email');
+          const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
+          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response.data[0].skuP, doc: docEmpleado });
+          const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
+          setindexProject(false)
+          todosAnticipos(anticipo.data);
+          todasLasFechas(indicadores.data);
+          setProjectData({
+            //! aquí se agregarían más datos
+            SKU_Proyecto: response.data[0].skuP || '',
+            NitCliente: response.data[0].nitCliente || '',
+            idNodoProyecto: response.data[0].idNodoP || '',
+            idProceso: response.data[0].Codi_parteP || '',
+          });
+          setNewResponse(response?.data);
+          finishedHandler(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [inputValue, finishedUpdate]);
+
   const handleSearch = (text) => {
     if (text !== searchText) {
       console.log(text)
@@ -53,13 +86,13 @@ const SearchBar = () => {
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full bg-white">
       <input
-        className=" mx-auto bg-gray-200 w-full px-2"
+        className=" mx-auto bg-lightGrayCreame   w-full px-2"
         value={searchText}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder="Busca el Proyecto o sin Proyecto"
       />
       {showOptions && (
-        <div className="modalContainer absolute bg-gray-50 p-1 m-1 border-2 border-gray-200 rounded">
+        <div className="modalContainer absolute bg-gray-50 p-1 m-1 border-2 border-lightGrayCreame rounded">
           <ul>
             {options.map((option, index) => (
               <li key={index}>

@@ -209,7 +209,7 @@ const Entregables = (props) => {
     <div>
       <button
         className={`${
-          props.entrega ? "bg-lightBlueCreame" : "bg-gray-400"
+          props.entrega ? "bg-naranjaCreame" : "bg-grayCreame"
         } p-2 rounded ${
           props.entrega ? "cursor-pointer" : "cursor-not-allowed"
         }`}
@@ -219,8 +219,8 @@ const Entregables = (props) => {
         ...
       </button>
       {modalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-azulCreame text-white p-8 rounded-xl w-9/10 md:w-1/2">
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50">
+          <div className="bg-azulCreame text-white p-8 rounded-xl w-9/10 md:w-1/2 mt-36">
             <p className="text-lg font-bold mb-4 text-center">
               ENTREGABLES A ENVIAR:
             </p>

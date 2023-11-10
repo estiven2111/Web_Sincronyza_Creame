@@ -11,6 +11,7 @@ const Tarea = (props) => {
   const [isTotalTime, setIsTotalTime] = useState('');
   const [finished, setFinished] = useState(false);
   const spinValue = useRef(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setFinished(false);
@@ -22,11 +23,11 @@ const Tarea = (props) => {
   };
 
   const handleCheckboxToggle = () => {
-    if (readyTocheck) {
       setConfirmModal(true);
-    } else {
-      alert('Por favor adjunte todos los entregables');
-    }
+    // } 
+    // else {
+    //   alert('Por favor adjunte todos los entregables');
+  
   };
 
   const postInfo = {
@@ -42,6 +43,7 @@ const Tarea = (props) => {
   };
 
   const confirmChecked = async () => {
+    setIsLoading(true)
     try {
       const email = localStorage.getItem('email'); // Obtener el email del almacenamiento local
       await axios.put('/proyect/update', {
@@ -49,17 +51,21 @@ const Tarea = (props) => {
         SKU_Proyecto: props.skuP,
         finished: 1,
       });
-      await axios.put('/proyect/updateProyect', {
+      const response = await axios.put('/proyect/updateProyect', {
         email: email,
         doc_id: props.documentoEmpleado,
       });
+      console.log(response.data, "respuesta de update/*********");
       setConfirmModal(false);
       setChecked(true);
       setFinished(true);
       props.finishedUpdate(true);
+      console.log("ya chuleao")
+      setIsLoading(false)
       setIsTotalTime('');
       alert('Se completó la tarea');
       setReadyTocheck(false);
+      console.log("va a chulear")
     } catch (error) {
       console.error(error);
     }
@@ -91,8 +97,8 @@ const Tarea = (props) => {
         />
         {confirmModal && (
           <div className="modal">
-            <div className="modal-content">
-              <p className="text-white">
+            <div className="modal-content bg-black">
+              <p className="text-red-500">
                 Después de confirmar, la actividad ya no estará disponible en su dispositivo. ¿Está seguro de haber
                 enviado todos los elementos requeridos?
               </p>

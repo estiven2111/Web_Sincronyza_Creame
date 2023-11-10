@@ -38,13 +38,14 @@ const SearchBar = () => {
     const fetchData = async () => {
       try {
         if (inputValue !== '') {
+          console.log(inputValue,"peticionnnnnnnnnnn   inputvalue");
           const user_name = localStorage.getItem('name');
           const docEmpleado = localStorage.getItem('doc_empleado');
           setDocument(docEmpleado.toString());
           const email = localStorage.getItem('email');
           const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
           console.log(response.data, "response!!!!!");
-          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0].skuP, doc: docEmpleado });
+          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0]?.skuP, doc: docEmpleado });
           console.log(anticipo.data, "anticipo!!!!!");
           const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
           console.log("todas las solicutudes", response.data, "segunda", anticipo.data, "y", indicadores.data)
@@ -53,10 +54,10 @@ const SearchBar = () => {
           todasLasFechas(indicadores.data);
           setProjectData({
             //! aquí se agregarían más datos
-            SKU_Proyecto: response?.data[0].skuP || '',
-            NitCliente: response?.data[0].nitCliente || '',
-            idNodoProyecto: response?.data[0].idNodoP || '',
-            idProceso: response?.data[0].Codi_parteP || '',
+            SKU_Proyecto: response?.data[0]?.skuP || '',
+            NitCliente: response?.data[0]?.nitCliente || '',
+            idNodoProyecto: response?.data[0]?.idNodoP || '',
+            idProceso: response?.data[0]?.Codi_parteP || '',
           });
           setNewResponse(response?.data);
           finishedHandler(false);

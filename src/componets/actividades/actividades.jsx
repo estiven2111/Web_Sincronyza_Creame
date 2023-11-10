@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Checklist from "./checkList";
 // import SearchBar from "../../searchBar"; //! ya no se usara aqui
 import LogoSync from "../../assets/img/icon.png";
+import axios from "axios"
 
 const Actividades = () => {
+
   return (
-    <div className="mx-auto md:container p-2 pt-28 xl:px-40">
+    <div className="md:px-24 p-2 xl:px-40 min-h-screen">
       <Checklist />
     </div>
   );

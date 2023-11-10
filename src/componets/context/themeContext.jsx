@@ -49,9 +49,32 @@ export const ThemeProvider = ({children}) => {
         setFechasIndicadores(input)
     }
 
+    const [finishedUpdate, setFinishedUpdate] = useState(false);
+    const finishedHandler = (input) => {
+        setFinishedUpdate(input)
+    }
 
+    const [indice, setIndice] = useState(false)
+    const setindexProject = (input) => {
+        setIndice(input)
+    }
+
+    const [response, setResponse] = useState([]);
+    const setNewResponse = (input) => {
+        setResponse(input)
+    }
+
+    const [doc, setDoc] = useState('');
+    const setDocument = (input) => {
+        setDoc(input)
+    }
+
+    const [proyectos, setProyectos] = useState([])
+    const setAllProjects = (input) => {
+        setProyectos(input)
+    }
     return(
-        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos, fechasIndicadores, todasLasFechas }}>
+        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos, fechasIndicadores, todasLasFechas, finishedUpdate, finishedHandler, indice, setindexProject, response, setNewResponse, doc, setDocument, proyectos, setAllProjects }}>
             {children}
         </ThemeContext.Provider>
     )

@@ -15,7 +15,7 @@ import Actividades from "./componets/actividades/actividades";
 import Indicadores from "./componets/indicadores/indicadores";
 
 import Home from "./componets/home/home"
-
+import Footer from "../src/componets/navigation/footer"
 
 function App() {
   const location = useLocation()
@@ -27,10 +27,12 @@ function App() {
              <Route path='/Gastos' element= {<Gastos/>} />
              <Route path='/actividades' element= {<Actividades/>} />
              <Route path='/indicadores' element= {<Indicadores/>} />
+
            {/* <Route path='/about' element={<About/>} />
             <Route path='/detail/:detailId' element={<Detail/>} />
             <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}
           </Routes>
+          <Footer/>
       </div>
     </ThemeProvider>
   )

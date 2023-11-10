@@ -4,64 +4,82 @@ import Tarea from './tarea';
 import axios from 'axios';
 
 const Checklist = () => {
-  const [response, setResponse] = useState([]);
-  const { inputValue, setProjectData, todosAnticipos, todasLasFechas } = useContext(ThemeContext);
-  const [doc, setDoc] = useState('');
-  const [name, setName] = useState('');
-  const [finishedUpdate, setFinishedUpdate] = useState(false);
+  // const [response, setResponse] = useState([]);
+  const { finalValue, globalSearch, globalOptions, showOptions, indice, setindexProject, response, doc, proyectos, setAllProjects, finishedHandler} = useContext(ThemeContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (inputValue !== '') {
-          const user_name = localStorage.getItem('name');
-          setName(user_name.toString());
-          const docEmpleado = localStorage.getItem('doc_empleado');
-          setDoc(docEmpleado.toString());
-          const email = localStorage.getItem('email');
-          const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
-          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response.data[0].skuP, doc: docEmpleado });
-          const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
-          todosAnticipos(anticipo.data);
-          todasLasFechas(indicadores.data);
-          setProjectData({
-            //! aquí se agregarían más datos
-            SKU_Proyecto: response.data[0].skuP || '',
-            NitCliente: response.data[0].nitCliente || '',
-            idNodoProyecto: response.data[0].idNodoP || '',
-            idProceso: response.data[0].Codi_parteP || '',
-          });
-          setResponse(response?.data);
-          setFinishedUpdate(false);
-        }
-      } catch (error) {
-        console.error(error);
+  const [finishedUpdate, setFinishedUpdate] = useState(false)
+  const updateFinished = (value) => {
+    setFinishedUpdate(value)
+  }
+
+  useEffect(()=>{
+    const constulta = async() => {
+      console.log(indice, "*********************indice****************", !proyectos.length)
+      if(!proyectos.length){
+        if (localStorage.getItem("email")) {
+        const nomproyecto = await axios.get(`/proyect/nomProyect?email=${localStorage.getItem("email")}`)
+        setindexProject(true)
+        setAllProjects(nomproyecto.data)
+        console.log(nomproyecto.data)
       }
-    };
-    fetchData();
-  }, [inputValue, finishedUpdate]);
+      }
+    }
+    constulta()
+  },[])
 
   const [numberOfLines, setNumberOfLines] = useState(true);
   const handlePress = () => {
     setNumberOfLines(!numberOfLines);
   };
 
+  const handleSelect = async (e) => {
+    console.log("holaaaaa!!", e.target.innerText)
+    await globalSearch(e.target.innerText)
+    await finalValue(e.target.innerText)
+    console.log(showOptions, "**********")
+    setTimeout(() => {
+      globalOptions(false);
+    }, 2000);
+  }
+
   return (
-    <div className="md:container mx-auto pt-10 md:px-10">
-      {response?.map((pro, index) => (
-        <div key={index} className="mb-10 border p-1 bg-indigo-200 rounded-lg">
+    <div className="">
+      {indice
+      ?<div className='pt-4'>
+        <p className='py-4'>
+          indice de proyectos
+        </p>
+        <ol className='list-decimal'>
+          {proyectos.map((proyecto, index)=>
+            <li key={index} className='bg-darkGrayCreame my-2 flex flex-row rounded-lg border-turquesaCreame border-2 font-Horatio'>
+              <div className='flex items-center justify-center w-20 text-3xl text-turquesaCreame font-bold'>
+                {index+1}
+              </div>
+              <div className='rounded-r-lg pt-4 bg-naranjaCreame w-full'>
+                <div onClick={handleSelect} className='cursor-pointer bg-white p-4 rounded-br-lg'>
+                    {proyecto}
+                </div>
+              </div>
+            </li>
+          )}
+        </ol>
+      </div>
+      :response?.map((pro, index) => (
+        <div key={index} className="">
           {pro.componentes.map((compo, index) => (
-            <div key={index} className="mb-8">
+            <div key={index} className="mb-5 bg-azulCreame rounded-lg text-white border-turquesaCreame border-2 shadow-lg">
               {compo.actividades.length === 0 ? null : (
                 <>
-                  <div className="flex items-center mb-2 ">
-                  <p className="mr-3 text-xs sm:text-base break-normal min-w-fit">{compo.fecha}</p>
-                    <p onClick={handlePress} className={`text-black ${numberOfLines ? 'truncate' : ''} text-blue-500 underline cursor-pointer text-xs sm:text-base`}>
-                      {compo.componente}
-                    </p>
+                  <div className="flex items-center m-2">
+                  <p className="mr-3 text-xs sm:text-base break-normal min-w-fit">
+                    {compo.fecha}
+                  </p>
+                  <p onClick={handlePress}  className={`text-white ${numberOfLines ? 'truncate' : ''} text-white cursor-pointer text-xs sm:text-base no-underline`}>
+                    {compo.componente}
+                  </p>
                   </div>
                   {compo.actividades.map((act, ind) => (
-                    <div key={ind} className="bg-white mb-5 p-1 rounded">
+                    <div key={ind} className="bg-white m-2 p-1 rounded">
                       <Tarea
                         proyecto={pro.proyecto}
                         skuP={pro.skuP}
@@ -74,7 +92,7 @@ const Checklist = () => {
                         actividad={act.actividad}
                         entregable={act.entregable}
                         listaEntregable={act.nombre_entregable}
-                        finishedUpdate={(value) => setFinishedUpdate(value)}
+                        finishedUpdate={finishedHandler}
                       />
                     </div>
                   ))}
@@ -83,7 +101,8 @@ const Checklist = () => {
             </div>
           ))}
         </div>
-      ))}
+      ))
+      }
     </div>
   );
 };

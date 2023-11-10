@@ -18,7 +18,6 @@ const Logout = () => {
     try {
       localStorage.removeItem("token");
       const email = localStorage.getItem("email");
-      console.log(email, "hola") 
       await axios.get(`/proyect/logout?email=${email}`);
       localStorage.removeItem("name");
       localStorage.removeItem("email");
@@ -47,7 +46,7 @@ const Logout = () => {
 
   return (
     <button onClick={handleLogout}>
-      <FontAwesomeIcon icon={faRightFromBracket} className="h-8 text-gray-50"/>
+      <FontAwesomeIcon icon={faRightFromBracket} className="h-8 text-black"/>
     </button>
   );
 };

@@ -76,10 +76,13 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   const [date, setDate] = useState('');
+  const [normalDate, setNormalDate] = useState('');
 
   useEffect(() => {
     const currentDate = new Date();
     const formatDate = currentDate.toISOString().split('T')[0].split('-').join('');
+    const newDate = currentDate.toISOString().split('T')[0].split('-').reverse().join('-');
+    setNormalDate(newDate)
     setDate(formatDate);
   }, []);
 
@@ -117,29 +120,30 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-indigo-300 rounded p-1">
+    <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
       <button className={`btn btn-blue ${entrega ? '' : 'btn-disabled'}`} onClick={openModal}>
         {!isNaN(totalTime) ? totalTime : '00:00'}
       </button>
       {modalVisible && (
-        <div className='fixed inset-0 bg-black bg-opacity-30 blackdrop-blur-sm flex justify-center items-center'>
-          <div className="bg-azulCreame rounded-xl p-6">
+        <div className='fixed inset-0 bg-white bg-opacity-50 blackdrop-blur-sm flex justify-center items-center'>
+          <div className="bg-azulCreame rounded-xl p-6 shadow-turquesaCreame shadow-sm">
             <div className='flex justify-center flex-col items-center'>
-              <p className="text-white">Fecha: {date}</p>
+              <p className="text-white pb-4 text-lg font-Horatio">Fecha: {normalDate}</p>
               <div className="flex items-center justify-between w-60 my-2">
                 <label className="text-white">Hora inicio:</label>
                 <input
                   type="time"
-                  className="input input-bordered w-24"
+                  className="input input-bordered w-28 pl-2 rounded text-darkGrayCreame font-bold"
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
+                  placeholder='00:00'
                 />
               </div>
               <div className="flex items-center justify-between w-60 my-2">
                 <label className="text-white">Hora final:</label>
                 <input
                   type="time"
-                  className="input input-bordered w-24"
+                  className="input input-bordered w-28 pl-2 rounded text-darkGrayCreame font-bold"
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
                 />
@@ -149,7 +153,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                   <label className="text-white">Duración:</label>
                   <input
                     type="text"
-                    className="input input-bordered w-24"
+                    className="input input-bordered w-24 ml-2"
                     maxLength="5"
                     placeholder="00:00"
                     value={newDuration}
@@ -163,9 +167,9 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                 <div className="flex items-center my-2">
                   <label className="text-white">Duración:</label>
                   {editedTime ? (
-                    <p className="text-white">{newDuration}</p>
+                    <p className="text-white ml-2">{newDuration}</p>
                   ) : (
-                    <p className="text-white">{getDuration() !== '' ? getDuration() : '00:00'}</p>
+                    <p className="text-white ml-2">{getDuration() !== '' ? getDuration() : '00:00'}</p>
                   )}
                   <button className="btn btn-primary btn-sm mx-2" onClick={() => setManualDuration(true)}>
                     <i className="fas fa-pencil-alt"></i>
@@ -173,7 +177,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                 </div>
               )}
               <p className="text-white">Tiempo Total: {!isNaN(totalTime) ? totalTime : '00:00'}</p>
-              <button className={`btn btn-primary mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
+              <button className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
                 Aceptar
               </button>
               <div className={`modal ${errorModal ? 'block' : 'hidden'}`}>

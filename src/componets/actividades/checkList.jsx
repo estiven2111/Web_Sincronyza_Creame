@@ -5,7 +5,12 @@ import axios from 'axios';
 
 const Checklist = () => {
   // const [response, setResponse] = useState([]);
-  const { finalValue, globalSearch, globalOptions, showOptions, indice, setindexProject, response, doc, proyectos, setAllProjects} = useContext(ThemeContext);  
+  const { finalValue, globalSearch, globalOptions, showOptions, indice, setindexProject, response, doc, proyectos, setAllProjects, finishedHandler} = useContext(ThemeContext);
+
+  const [finishedUpdate, setFinishedUpdate] = useState(false)
+  const updateFinished = (value) => {
+    setFinishedUpdate(value)
+  }
 
   useEffect(()=>{
     const constulta = async() => {
@@ -87,7 +92,7 @@ const Checklist = () => {
                         actividad={act.actividad}
                         entregable={act.entregable}
                         listaEntregable={act.nombre_entregable}
-                        finishedUpdate={(value) => setFinishedUpdate(value)}
+                        finishedUpdate={finishedHandler}
                       />
                     </div>
                   ))}

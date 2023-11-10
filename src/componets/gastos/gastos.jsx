@@ -105,9 +105,9 @@ const Gastos = () => {
     totalSinIva: "",
     nombre: "",
     rete: "",
-    retePorc: 4,
+    retePorc: "",
     iva: "",
-    ivaPorc: 19,
+    ivaPorc: "",
     fecha: "",
     concepto: "",
     municipio: "",
@@ -256,6 +256,8 @@ const Gastos = () => {
           : `${(responsedata.totalSinIva * responsedata.retePorc) / 100}`;
       setResponsedata({
         ...responsedata,
+        retePorc: 4,
+        ivaPorc: 19,
         nit: response.data.nit,
         numFact: response.data.numFact,
         doc: response.data.doc,
@@ -266,7 +268,7 @@ const Gastos = () => {
         rete: rete,
         fecha: response.data.fecha,
         concepto: response.data.concepto,
-        ipc: responsedata.ipc,
+        ipc: response.data.ipc,
         municipio,
         codepostal,
       });
@@ -824,7 +826,7 @@ if (data) {
                       type="number"
                       className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.rete
+                      responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
                         : ""
                     }`}
@@ -834,7 +836,7 @@ if (data) {
                       htmlFor="Valor Rete"
                       className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                       ${
-                        responsedata.rete
+                        responsedata.totalSinIva
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
                           : ""
                       }`}

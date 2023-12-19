@@ -30,9 +30,9 @@ const Tarea = (props) => {
           title: "CONFIRMAR FINALIZACIÓN DE ACTIVIDAD",
           text: `Despúes de confirmar, la actividad ya no estara disponible en su usuario. ¿Está seguro de haber enviado todos los elementos requeridos?`,
           icon: "warning",
-          buttons: ["No", "Si"],
+          buttons: ["SI", "NO"],
         }).then(async (res) => {
-          if (res) {
+          if (!res) {
             setIsLoading(true)
             const email = localStorage.getItem('email'); // Obtener el email del almacenamiento local
             await axios.put('/proyect/update', {

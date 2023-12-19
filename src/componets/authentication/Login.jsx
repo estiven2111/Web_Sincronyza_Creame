@@ -33,7 +33,6 @@ const Login = () => {
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
-    console.log("object", user, password );
     setIsLoading(true)
     const response = await dispatch(loginredux(user, password ))
    localStorage.setItem("name", response.userName)

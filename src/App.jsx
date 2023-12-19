@@ -14,7 +14,6 @@ import Gastos from "./componets/gastos/gastos";
 import Actividades from "./componets/actividades/actividades";
 import Indicadores from "./componets/indicadores/indicadores";
 
-import Home from "./componets/home/home"
 import Footer from "../src/componets/navigation/footer"
 
 function App() {

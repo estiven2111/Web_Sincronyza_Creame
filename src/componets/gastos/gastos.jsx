@@ -62,19 +62,11 @@ const Gastos = () => {
   const renderOptions = () => {
     return totalAnt.map((option, index) => (
       <button
+        className="flex m-1 px-1 cursor-pointer bg-white rounded"
         key={index}
-        style={{
-          backgroundColor: "blue",
-          padding: "10px",
-          marginBottom: "10px",
-          outline: "none",
-          border: "none",
-          cursor: "pointer",
-        }}
         onClick={() => {
           handleOptionSelect(option.DetalleConcepto + option.NumeroComprobante);
           setPrepayment(option);
-          console.log(option, "es aqui!!!!!!  ****************************");
         }}
       >
         <span
@@ -90,14 +82,15 @@ const Gastos = () => {
     ));
   };
 
-  const renderSelectedOptions = () => {
-    return;
+const renderSelectedOptions = () => {
+  return (
     <div>
-      {selectedOptions.map((option, index) => (
-        <p key={index}>{option}</p>
-      ))}
-    </div>;
-  };
+      {selectedOptions.map((option, index) => {
+        return <p key={index}>{option}</p>;
+      })}
+    </div>
+  );
+};
 
   useEffect(() => {
     initTE({ Input });
@@ -221,7 +214,6 @@ const Gastos = () => {
         });
       }
     } catch (error) {
-      console.log("error", error);
     }
   };
 
@@ -229,11 +221,6 @@ const Gastos = () => {
     try {
       const user_name = localStorage.getItem("name");
       setIsLoading(true);
-      console.log("Latitud: " + latitude);
-      console.log("Longitud: " + longitude);
-      console.log(user_name);
-      console.log(imagen);
-      console.log(latitude, longitude);
       const formData = new FormData();
       formData.append("imagen", imagen);
 
@@ -284,8 +271,6 @@ const Gastos = () => {
       });
       setFillData(true);
       setIsLoading(false);
-      console.log(response.data)
-      console.log("finalizo");
     } catch (error) {
       console.error(error, "Error");
     }
@@ -359,7 +344,6 @@ const Gastos = () => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(send.data,"datos ocr");
     if (send.data === "archivos enviados correctamente") {
       Swal({
         title: "ENVIO CORRECTO",
@@ -375,7 +359,6 @@ const Gastos = () => {
   if (imagen) {
   LoginMicrosoft()
   .then((data) => {
-    // Maneja los datos recibidos aquí
     console.log("Datos recibidos:", data);
 if (data) {
   sendData(data)
@@ -398,7 +381,6 @@ if (data) {
 
   const handlerScan = async (e) => {
     try {
-      console.log(e.target.files);
       locations();
 
       // // Solicitar permiso para acceder a la ubicación del dispositivo
@@ -468,7 +450,6 @@ if (data) {
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
-    console.log(name, value);
     setResponsedata({
       ...responsedata,
       [name]: value,
@@ -503,25 +484,25 @@ if (data) {
   const handlerAnticipo = () => {};
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full ">
-      <div className="bg-lightBlueCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
+      <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between">
             <div className="inputIntLeftDrop">
               {justSelected ? (
-                <div className="block">
+                <div className="block text-white">
                   <button onClick={toggleDropdown}>
                     <span>{renderSelectedOptions()}</span>
                   </button>
                 </div>
               ) : (
-                <div className="blockNoSelected">
+                <div className="blockNoSelected text-white">
                   <button onClick={toggleDropdown}>
                     <span>Seleccionar opciones</span>
                   </button>
                 </div>
               )}
+            {isOpen && <div className="options bg-grayCreame absolute rounded">{renderOptions()}</div>}
             </div>
-            {isOpen && <div className="options">{renderOptions()}</div>}
             <input
               className="w-3/6"
               placeholder="$000.000.00"
@@ -581,7 +562,7 @@ if (data) {
                     <AiFillCamera size={90} />
                   </button>
                 </div> */}
-                    <div className="w-28 h-28 bg-azulCreame hover:bg-lightBlueCreame flex flex-col items-center justify-center border-2 rounded-full border-gray-400 border-solid  cursor-pointer shadow-xl">
+                    <div className="w-28 h-28 bg-naranjaCreame hover:bg-lightBlueCreame flex flex-col items-center justify-center border-2 rounded-full border-gray-400 border-solid  cursor-pointer shadow-xl">
                       <label className="">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6 ">
                           <p className="text-xs text-white ">
@@ -604,7 +585,7 @@ if (data) {
               </>
             )}
 
-            <div className="grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2">
+            <div className="grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame">
               <div className="col-span-2 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
@@ -615,7 +596,7 @@ if (data) {
                     name="concepto"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.concepto
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -643,7 +624,7 @@ if (data) {
                     name="nit"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.nit
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -676,7 +657,7 @@ if (data) {
                     name="nombre"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.nombre
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -709,7 +690,7 @@ if (data) {
                     name="total"
                     onChange={handleOnChange}
                     type="number"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.total
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -753,7 +734,7 @@ if (data) {
                       name="iva"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -789,7 +770,7 @@ if (data) {
                       name="ivaPorc"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ivaPorc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -834,7 +815,7 @@ if (data) {
                       name="rete"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -864,7 +845,7 @@ if (data) {
                       name="retePorc"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.retePorc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -898,7 +879,7 @@ if (data) {
                     name="fecha"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.fecha
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -931,7 +912,7 @@ if (data) {
                     name="Codpostal"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.codepostal
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -964,7 +945,7 @@ if (data) {
                     name="municipio"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.municipio
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -997,7 +978,7 @@ if (data) {
                     name="ipc"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ipc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -1030,7 +1011,7 @@ if (data) {
                     name="totalSinIva"
                     onChange={handleOnChange}
                     type="number"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -1058,7 +1039,7 @@ if (data) {
         <div className=" text-center">
           <button
             type="submit"
-            className="mt-10 w-full inline-block rounded bg-azulCreame px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-info-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-info-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
+            className="mt-10 w-full inline-block rounded bg-naranjaCreame px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:border-turquesaCreame hover:border hover:bg-azulCreame hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] md:w-1/2"
           >
             Enviar
           </button>

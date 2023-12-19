@@ -59,9 +59,6 @@ const Entregables = (props) => {
     setUpdates(!updates);
   };
 
-
-
-
   const sendData = async (data) => {
     setIsLoading(true);
 
@@ -81,7 +78,7 @@ const Entregables = (props) => {
     };
 
     const formData = new FormData();
-    formData.append("token",data.tokenSecret);
+    formData.append("token", data.tokenSecret);
     formData.append("tipo", "entregable");
     formData.append("user", user_name);
     formData.append(
@@ -158,7 +155,6 @@ const Entregables = (props) => {
           // Maneja los errores aquí
           console.error("Error:", error);
         });
-
     } catch (error) {
       console.error("Error al enviar el objeto:", error);
     }
@@ -261,7 +257,7 @@ const Entregables = (props) => {
                 Cancelar
               </button>
             </div>
-            {isLoading && (
+            {/* {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
                 <img
                   src={logo}
@@ -272,7 +268,12 @@ const Entregables = (props) => {
                   }}
                 />
               </div>
-            )}
+            )} */}
+            {isLoading ? (
+              <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+                <div className="loader"></div>
+              </div>
+            ) : null}
           </div>
         </div>
       )}

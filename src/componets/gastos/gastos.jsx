@@ -8,12 +8,12 @@ import { GrGallery } from "react-icons/gr";
 import { GiCancel } from "react-icons/gi";
 import { BiScan } from "react-icons/bi";
 import axios from "axios";
-import loading from "../../assets/img/loading.gif";
+// import loading from "../../assets/img/loading.gif";
 import { ThemeContext } from "../context/themeContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
 import LoginMicrosoft from "../authentication/loginmicrosfot";
-
+import logo from "../../assets/img/icon.png";
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
@@ -26,7 +26,17 @@ const Gastos = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [totalAnt, setTotalAnt] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const spinValue = useRef(0);
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (isLoading) {
+      const spinAnimation = setInterval(() => {
+        spinValue.current = (spinValue.current + 1) % 360;
+      }, 16);
+      return () => clearInterval(spinAnimation);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const ActulizarOptions = () => {
@@ -114,7 +124,7 @@ const Gastos = () => {
     codepostal: "",
     ipc: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+
   const openCamera = () => {
     setOpencam(!opencam);
   };
@@ -1054,7 +1064,7 @@ if (data) {
           </button>
         </div>
       </form>
-      {isLoading && (
+      {/* {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
           <div className="w-full">
             <div className="w-full flex justify-center">
@@ -1066,7 +1076,13 @@ if (data) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
+       {isLoading 
+      ?
+        <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+          <div className="loader"></div>
+        </div>
+      : null}
       {/* {opencam && <Modalcam closeCam={openCamera} imageData={imageData} />} */}
     </div>
   );

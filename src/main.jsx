@@ -8,7 +8,8 @@ import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios'
 
 // axios.defaults.baseURL = "http://localhost:5000/user/api"
-axios.defaults.baseURL = "https://syncronizabackup-production.up.railway.app/user/api"
+// axios.defaults.baseURL = "https://syncronizabackup-production.up.railway.app/user/api"
+axios.defaults.baseURL =  "http://incentivos.creame.com.co:5000/user/api"
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>

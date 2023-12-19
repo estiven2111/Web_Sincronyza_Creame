@@ -39,10 +39,6 @@ const Entregables = (props) => {
   };
 
   const handlerInfo = (value) => {
-    console.log(
-      "voy a cambiar el valor de info ahora!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-      value
-    );
     setInfo({
       ...info,
       ...value,
@@ -85,13 +81,7 @@ const Entregables = (props) => {
       "ActualizarEntregable",
       JSON.stringify({ ...ActualizarEntregable })
     );
-    console.log(
-      info,
-      "infossssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
-    );
-    console.log("estoy dentro del ifffffff");
     Object.entries(info).forEach(([key, value]) => {
-      console.log(value, "esta es el value del foreach de value");
       const extension = value.uri.name.split(".").pop().toLowerCase();
       const contentTypeMap = {
         pdf: "application/pdf",
@@ -105,16 +95,8 @@ const Entregables = (props) => {
       const currentDate = new Date().getTime();
       const formatKey = key.split(" ").join("_");
       const name = `${formatKey}${currentDate}.${extension}`;
-      console.log(`${value.Numero}-${name}`, "nombre de la imagennnn");
-      // formData.append(key, value.file);
-      console.log(value.uri, "imageeeeeeeeenansnassssssssssssssssssssss");
       const nombre_img = `${value.Numero}-${name}`;
       formData.append(key, value.uri, nombre_img);
-      // formData.append(key, {
-      //   uri: value.uri,
-      //   type: type,
-      //   name: nombre_img,
-      // });
     });
 
     const response = await axios.post("/creame-dashboard", formData, {
@@ -123,13 +105,10 @@ const Entregables = (props) => {
       },
     });
     setValidates(true);
-    console.log("Respuesta del servidor:", response.data);
-
     setInfo({});
     setModalVisible(false);
     setIsLoading(false);
-
-    console.log("Envío de archivos completado");
+    
     if (response.data === "archivos enviados correctamente") {
       Swal({
         title: "ENVIO CORRECTO",
@@ -141,18 +120,13 @@ const Entregables = (props) => {
   };
   const sendInfoToBack = async () => {
     try {
-      console.log(info, "******************************************");
-
       LoginMicrosoft()
         .then((data) => {
-          // Maneja los datos recibidos aquí
-          console.log("Datos recibidos:", data);
           if (data) {
             sendData(data);
           }
         })
         .catch((error) => {
-          // Maneja los errores aquí
           console.error("Error:", error);
         });
     } catch (error) {
@@ -164,13 +138,11 @@ const Entregables = (props) => {
     try {
       const formattedList = await Promise.all(
         props.lista.map(async (entregable) => {
-          console.log("mapeo de lista?", entregable);
 
           //! corregir la ruta
           const response = await axios.get(
             `/proyect/entregables?SKU_Proyecto=${props.SKU_Proyecto}&NitCliente=${props.nitCliente}&idNodoProyecto=${props.idNodoProyecto}&NumeroEntregable=${entregable.Numero}&idProceso=${entregable.id_proceso}`
           );
-          console.log(response.data);
           return { ...entregable, subido: response.data };
         })
       );
@@ -178,11 +150,11 @@ const Entregables = (props) => {
       const isComplete = formattedList.some((entregable) => !entregable.subido);
       setNewList(formattedList);
 
-      if (isComplete) {
-        console.log("No todos los entregables han sido subidos.");
-      } else {
-        console.log("Todos los entregables han sido subidos correctamente.");
-      }
+      // if (isComplete) {
+      //   console.log("No todos los entregables han sido subidos.");
+      // } else {
+      //   console.log("Todos los entregables han sido subidos correctamente.");
+      // }
     } catch (error) {
       console.error("Error al validar los entregables:", error);
     }

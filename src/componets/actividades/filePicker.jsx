@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const FilePickerButton = ({ ent, upLoaded, setUri, handlerInfo, deleteInfo, justUploaded, numero }) => {
-  // console.log("props de filepicker", ent, upLoaded, setUri, handlerInfo, deleteInfo, justUploaded, numero)
   const [fileCharged, setFileCharged] = useState(false)
   const [adicionalName, setAdicionalName] = useState("")
   useEffect(() => {
@@ -16,12 +15,11 @@ const FilePickerButton = ({ ent, upLoaded, setUri, handlerInfo, deleteInfo, just
       const uri = event.target.files[0];
       if (uri) {
         setFileCharged(true)
-        console.log("uriiiiiiiiiii", uri)
         handlerInfo({[ent]:{uri:uri, Numero:numero}})
         
       }
     } catch (error) {
-      console.log('Selección de archivo cancelada', error);
+      console.error('Selección de archivo cancelada', error);
     }
   };
 

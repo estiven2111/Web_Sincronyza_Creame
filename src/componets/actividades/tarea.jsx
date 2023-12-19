@@ -6,7 +6,6 @@ import Entregables from './entregables';
 
 
 const Tarea = (props) => {
-  console.log("props de tarea", props)
   const [checked, setChecked] = useState(false);
   const [isTotalTime, setIsTotalTime] = useState('');
   const [finished, setFinished] = useState(false);
@@ -44,7 +43,6 @@ const Tarea = (props) => {
               email: email,
               doc_id: props.documentoEmpleado,
             });
-            console.log(response.data, "respuesta de update/*********");
             setChecked(true);
             setFinished(true);
             props.finishedUpdate(true);

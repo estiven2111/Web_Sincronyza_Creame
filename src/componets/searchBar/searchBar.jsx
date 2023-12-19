@@ -38,17 +38,13 @@ const SearchBar = () => {
     const fetchData = async () => {
       try {
         if (inputValue !== '') {
-          console.log(inputValue,"peticionnnnnnnnnnn   inputvalue");
           const user_name = localStorage.getItem('name');
           const docEmpleado = localStorage.getItem('doc_empleado');
           setDocument(docEmpleado.toString());
           const email = localStorage.getItem('email');
           const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
-          console.log(response.data, "response!!!!!");
           const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0]?.skuP, doc: docEmpleado });
-          console.log(anticipo.data, "anticipo!!!!!");
           const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
-          console.log("todas las solicutudes", response.data, "segunda", anticipo.data, "y", indicadores.data)
           setindexProject(false)
           todosAnticipos(anticipo.data);
           todasLasFechas(indicadores.data);
@@ -71,17 +67,14 @@ const SearchBar = () => {
 
   const handleSearch = (text) => {
     if (text !== searchText) {
-      console.log(text)
       globalSearch(text);
       globalOptions(true);
     } else {
-      console.log("vamos a cerra", text)
       globalOptions(false);
     }
   };
 
   const handleSelectOption = (option) => {
-    console.log(option)
     globalSearch(option);
     finalValue(option);
     globalOptions(false);

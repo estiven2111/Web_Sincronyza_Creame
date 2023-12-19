@@ -46,7 +46,6 @@ const LoginMicrosoft = () => {
       // if (event.origin === `https://incentivos.creame.com.co:5000`) {
         if (event.origin === `https://syncronizabackup-production.up.railway.app`) {
         if (event.data) {
-          console.log(event.data, "datos dentro de loginmicrosoft");
           popup.close();
           resolve(event.data); // Resuelve la promesa con los datos que recibiste
         }

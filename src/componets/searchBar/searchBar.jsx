@@ -53,7 +53,7 @@ const SearchBar = () => {
             SKU_Proyecto: response?.data[0]?.skuP || '',
             NitCliente: response?.data[0]?.nitCliente || '',
             idNodoProyecto: response?.data[0]?.idNodoP || '',
-            idProceso: response?.data[0]?.Codi_parteP || '',
+            idProceso: parseInt(response?.data[0]?.Codi_parteP) || 0,
           });
           setNewResponse(response?.data);
           finishedHandler(false);

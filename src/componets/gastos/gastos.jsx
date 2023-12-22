@@ -14,12 +14,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
 import LoginMicrosoft from "../authentication/loginmicrosfot";
 import logo from "../../assets/img/icon.png";
+import { setCanvas } from "chart/lib";
+import { useLocation } from "react-router-dom";
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
+  console.log("*************************")
   const { infoProject, anticipos, inputValue,topSecret } = useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
@@ -28,6 +31,11 @@ const Gastos = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const spinValue = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const location = useLocation()
+  localStorage.setItem("ruta", location.pathname)
 
   useEffect(() => {
     if (isLoading) {
@@ -116,6 +124,7 @@ const renderSelectedOptions = () => {
     municipio: "",
     codepostal: "",
     ipc: "",
+    Descripcion: "",
   });
 
   const openCamera = () => {
@@ -127,6 +136,7 @@ const renderSelectedOptions = () => {
 
   const handleFileChange = (e) => {
     e.preventDefault();
+    setImageLoaded(true)
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -143,7 +153,7 @@ const renderSelectedOptions = () => {
     const input = event.target;
     if (input.files.length > 0) {
       const file = input.files[0];
-      const Extensions = [".jpg", ".jpeg", ".png"];
+      const Extensions = [".jpg", ".jpeg", ".png", ".pdf", ".docx"];
       const fileExtension = file.name.slice(
         ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
       );
@@ -268,6 +278,7 @@ const renderSelectedOptions = () => {
         ipc: response.data.ipc,
         municipio,
         codepostal,
+        // Descripcion
       });
       setFillData(true);
       setIsLoading(false);
@@ -327,6 +338,8 @@ const renderSelectedOptions = () => {
       Sub_Total: responsedata.totalSinIva
         ? parseInt(responsedata.totalSinIva)
         : 0, //
+      Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" 
+      
     };
 
     formData.append(
@@ -359,14 +372,11 @@ const renderSelectedOptions = () => {
   if (imagen) {
   LoginMicrosoft()
   .then((data) => {
-    console.log("Datos recibidos:", data);
-if (data) {
-  sendData(data)
-}
-    
+    if (data) {
+      sendData(data)
+    } 
   })
   .catch((error) => {
-    // Maneja los errores aquí
     console.error("Error:", error);
   });
 }else{
@@ -422,6 +432,8 @@ if (data) {
   };
 
   const handlerCancel = () => {
+    setImageLoaded(false);
+    setIsChecked(false)
     setResponsedata({
       nit: "",
       numFact: "",
@@ -438,6 +450,7 @@ if (data) {
       municipio: "",
       codepostal: "",
       ipc: "",
+      Descripcion: "",
     });
     setFillData(false);
     setImageSrc(null);
@@ -482,6 +495,16 @@ if (data) {
     // console.log("on change", responsedata);
   };
   const handlerAnticipo = () => {};
+
+  const handleCheckboxChange = () => {
+    setImageLoaded(false)
+    setIsChecked(!isChecked);
+    if (!isChecked) {
+      console.log("El checkbox está marcado");
+    } else {
+      console.log("El checkbox no está marcado");
+    }
+  };
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full ">
       <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
@@ -512,6 +535,18 @@ if (data) {
           </div>
         </div>
       </div>
+      <div>
+        <div className="flex">
+          <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange} disabled={isChecked}></input>
+          <p>Desea enviar un RUT</p>
+        </div>
+        {isChecked
+        ?
+          <input type="text" name="Descripcion" className="w-full border p-2" value={responsedata.Descripcion} onChange={handleOnChange}></input>
+        :
+          null
+        }
+      </div>
 
       <form className="" onSubmit={handlerSend}>
         <div className="">
@@ -539,16 +574,31 @@ if (data) {
                           <p>Cancelar</p>
                         </button>
                       </div>
-                      <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
-                        <button
-                          className="flex items-center justify-center w-28 h-16 rounded-full"
-                          type="button"
-                          onClick={handlerScan}
-                        >
-                          <BiScan size={40} />
-                          <p>Escanear</p>
-                        </button>
-                      </div>
+                      {isChecked
+                      ?
+                        <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
+                          <button
+                            className="flex items-center justify-center w-28 h-16 rounded-full"
+                            type="button"
+                            onClick={console.log("enviando rut")}
+                          >
+                            <BiScan size={40} />
+                            <p>Otro gato</p>
+                          </button>
+                        </div>
+                      :
+                        <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
+                          <button
+                            className="flex items-center justify-center w-28 h-16 rounded-full"
+                            type="button"
+                            onClick={handlerScan}
+                          >
+                            <BiScan size={40} />
+                            <p>Escanear</p>
+                          </button>
+                        </div>
+                    }
+                      
                     </div>
                   </div>
                 </div>
@@ -585,7 +635,7 @@ if (data) {
               </>
             )}
 
-            <div className="grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame">
+            <div className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${imageLoaded?null:"pointer-events-none opacity-50 bg-black"}`}>
               <div className="col-span-2 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
@@ -1032,7 +1082,6 @@ if (data) {
                   </label>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -1045,26 +1094,12 @@ if (data) {
           </button>
         </div>
       </form>
-      {/* {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-          <div className="w-full">
-            <div className="w-full flex justify-center">
-              <img
-                className="w-full max-w-md"
-                src={loading}
-                alt="Imagen capturada"
-              />
-            </div>
-          </div>
-        </div>
-      )} */}
        {isLoading 
       ?
         <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
           <div className="loader"></div>
         </div>
       : null}
-      {/* {opencam && <Modalcam closeCam={openCamera} imageData={imageData} />} */}
     </div>
   );
 };

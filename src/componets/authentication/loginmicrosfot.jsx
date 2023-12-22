@@ -34,6 +34,7 @@ const LoginMicrosoft = () => {
   return new Promise((resolve, reject) => {
     const URLS =
       // "https://incentivos.creame.com.co:5000/user/api/validation";
+      // "https://appincentivos.creame.com.co/user/api";
       "https://syncronizabackup-production.up.railway.app/user/api/validation";
 
     const popup = window.open(
@@ -43,7 +44,7 @@ const LoginMicrosoft = () => {
     );
 
     const messageHandler = async (event) => {
-      // if (event.origin === `https://incentivos.creame.com.co:5000`) {
+      // if (event.origin === `https://appincentivos.creame.com.co`) {
         if (event.origin === `https://syncronizabackup-production.up.railway.app`) {
         if (event.data) {
           popup.close();

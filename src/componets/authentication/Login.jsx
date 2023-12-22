@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import icon from "../../assets/img/icon.png"
@@ -6,7 +6,10 @@ import swal from "sweetalert";
 import { useDispatch,useSelector } from "react-redux";
 import { loginredux } from "../redux/reducer/login.slice";
 import "../../index.css";
+import { ThemeContext } from '../context/themeContext';
 const Login = () => {
+  const { setAuthenticated, setindexProject} = useContext(ThemeContext);
+
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState(false);
@@ -15,18 +18,22 @@ const Login = () => {
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
 
+
   useEffect(() => {
     setTimeout(() => {
-      handleGetToken();
+      handleGetToken(localStorage.getItem("ruta"));
+      setindexProject(true)
     }, 0);
   }, []);
 
-  const handleGetToken = () => {
+  const handleGetToken = (ruta) => {
     const datatoken = localStorage.getItem("token");
     if (!datatoken) {
         navigation("/");
     } else {
-         navigation("/actividades");
+        setAuthenticated(true)
+        navigation(ruta);
+        // navigation("/actividades");
     }
   };
 
@@ -41,6 +48,7 @@ const Login = () => {
    localStorage.setItem("doc_empleado", response.doc_empleado)
     setPassword("");
     setIsLoading(false)
+    setAuthenticated(true)
     navigation("/actividades");
     } catch (error) {
       setIsLoading(false)

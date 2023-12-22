@@ -6,6 +6,7 @@ import { ThemeContext} from "../context/themeContext"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 let grafica = {
   dis:35,
   pro:35,
@@ -18,6 +19,9 @@ const Indicadores = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [infoFecha, setInfoFecha] = useState({});
   const [horasDisp, setHorasDisp] = useState({});
+
+  const location = useLocation()
+  localStorage.setItem("ruta", location.pathname)
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 

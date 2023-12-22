@@ -73,8 +73,15 @@ export const ThemeProvider = ({children}) => {
     const setAllProjects = (input) => {
         setProyectos(input)
     }
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const setAuthenticated = (input) => {
+        setIsAuthenticated(input)
+    }
+
+
     return(
-        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos, fechasIndicadores, todasLasFechas, finishedUpdate, finishedHandler, indice, setindexProject, response, setNewResponse, doc, setDocument, proyectos, setAllProjects }}>
+        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos, fechasIndicadores, todasLasFechas, finishedUpdate, finishedHandler, indice, setindexProject, response, setNewResponse, doc, setDocument, proyectos, setAllProjects, isAuthenticated, setAuthenticated }}>
             {children}
         </ThemeContext.Provider>
     )

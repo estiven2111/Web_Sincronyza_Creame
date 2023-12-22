@@ -6,18 +6,13 @@ import axios from 'axios';
 const Checklist = () => {
   // const [response, setResponse] = useState([]);
   const { finalValue, globalSearch, globalOptions, showOptions, indice, setindexProject, response, doc, proyectos, setAllProjects, finishedHandler} = useContext(ThemeContext);
-
-  const [finishedUpdate, setFinishedUpdate] = useState(false)
-  const updateFinished = (value) => {
-    setFinishedUpdate(value)
-  }
+  
 
   useEffect(()=>{
     const constulta = async() => {
       if(!proyectos.length){
         if (localStorage.getItem("email")) {
         const nomproyecto = await axios.get(`/proyect/nomProyect?email=${localStorage.getItem("email")}`)
-        setindexProject(true)
         setAllProjects(nomproyecto.data)
       }
       }

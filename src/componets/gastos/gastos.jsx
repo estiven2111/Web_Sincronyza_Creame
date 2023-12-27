@@ -16,13 +16,13 @@ import LoginMicrosoft from "../authentication/loginmicrosfot";
 import logo from "../../assets/img/icon.png";
 import { setCanvas } from "chart/lib";
 import { useLocation } from "react-router-dom";
+import logoPDF from "../../assets/img/logoPDF.png"
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  console.log("*************************")
   const { infoProject, anticipos, inputValue,topSecret } = useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
@@ -137,7 +137,6 @@ const renderSelectedOptions = () => {
   const handleFileChange = (e) => {
     e.preventDefault();
     setImageLoaded(true)
-    console.log("la imagen esta subida")
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -145,7 +144,13 @@ const renderSelectedOptions = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        setImageSrc(reader.result);
+        console.log("nombre de la imagen", imagen.name.split(".")[1])
+        if (imagen.name.split(".")[1]=== "pdf"){
+          setImageSrc(logoPDF);
+        } else {
+          setImageSrc(reader.result);
+        }
+        
       };
     }
   };
@@ -434,6 +439,7 @@ const renderSelectedOptions = () => {
 
   const handlerCancel = () => {
     setImageLoaded(false);
+    setIsChecked(false)
     setResponsedata({
       nit: "",
       numFact: "",
@@ -497,11 +503,13 @@ const renderSelectedOptions = () => {
   const handlerAnticipo = () => {};
 
   const handleCheckboxChange = () => {
+    setImageSrc(null)
     setIsChecked(!isChecked);
     if (!isChecked) {
-      console.log("El checkbox está marcado");
+      console.log("El checkbox está marcado", imageLoaded);
     } else {
-      console.log("El checkbox no está marcado");
+      console.log("El checkbox no está marcado", imageLoaded);
+      setImageLoaded(false)
     }
   };
   return (
@@ -540,11 +548,14 @@ const renderSelectedOptions = () => {
       <div>
         <div className="flex">
           <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange}></input>
-          <p>Desea enviar un RUT</p>
+          <p className="text-naranjaCreame text-xl font-Horatio">Desea enviar un RUT</p>
         </div>
         {isChecked
         ?
-          <input type="text" name="Descripcion" className="w-full border p-2" value={responsedata.Descripcion} onChange={handleOnChange}></input>
+          <>
+            <p className="text-sm">* Para los proveedores obligados a expedir factura electrónica y los no responsables de IVA no obligados a facturar electrónicamente es obligatorio adjuntar el RUT</p>
+            <input type="text" name="Descripcion" className="w-full border rounded-md p-2 border-azulCreame my-4" value={responsedata.Descripcion} onChange={handleOnChange} placeholder="Escribe aquí la descripción del envío del RUT"></input>
+          </>
         :
           null
         }
@@ -616,7 +627,7 @@ const renderSelectedOptions = () => {
                           className="hidden"
                           onChange={handleFileChange}
                           // ref={fileInputRef}
-                          accept=".jpg, .jpeg, .png"
+                          accept={isChecked ? ".jpg, .jpeg, .png, .pdf, .docx" : ".jpg, .jpeg, .png"}
                           onInput={handlerValidation}
                         />
                       </label>

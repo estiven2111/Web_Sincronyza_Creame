@@ -9,12 +9,10 @@ const Checklist = () => {
   
 
   useEffect(()=>{
-    console.log("*/*/*/*/*/*/", proyectos)
     const constulta = async() => {
       if(!proyectos.length){
         if (localStorage.getItem("email")) {
         const nomproyecto = await axios.get(`/proyect/nomProyect?email=${localStorage.getItem("email")}`)
-        console.log("************************", nomproyecto)
         setAllProjects(nomproyecto.data)
       }
       }

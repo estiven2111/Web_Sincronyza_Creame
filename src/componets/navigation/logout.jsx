@@ -9,7 +9,7 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { ThemeContext } from "../context/themeContext";
 
 const Logout = () => {
-  const { resetInputValue, globalSearch, setindexProject } = useContext(ThemeContext);
+  const { resetInputValue, globalSearch, setindexProject, setAllProjects } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -23,6 +23,7 @@ const Logout = () => {
       localStorage.removeItem("email");
       localStorage.removeItem("doc_empleado");
       setindexProject(true)
+      setAllProjects([])
       navigate("/"); // Redirige al usuario a la página de inicio de sesión
     } catch (error) {
 

@@ -137,6 +137,7 @@ const renderSelectedOptions = () => {
   const handleFileChange = (e) => {
     e.preventDefault();
     setImageLoaded(true)
+    console.log("la imagen esta subida")
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -433,7 +434,6 @@ const renderSelectedOptions = () => {
 
   const handlerCancel = () => {
     setImageLoaded(false);
-    setIsChecked(false)
     setResponsedata({
       nit: "",
       numFact: "",
@@ -450,7 +450,7 @@ const renderSelectedOptions = () => {
       municipio: "",
       codepostal: "",
       ipc: "",
-      Descripcion: "",
+      // Descripcion: "",
     });
     setFillData(false);
     setImageSrc(null);
@@ -497,7 +497,6 @@ const renderSelectedOptions = () => {
   const handlerAnticipo = () => {};
 
   const handleCheckboxChange = () => {
-    setImageLoaded(false)
     setIsChecked(!isChecked);
     if (!isChecked) {
       console.log("El checkbox está marcado");
@@ -535,9 +534,12 @@ const renderSelectedOptions = () => {
           </div>
         </div>
       </div>
+      
+
+      <form className="" onSubmit={handlerSend}>
       <div>
         <div className="flex">
-          <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange} disabled={isChecked}></input>
+          <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange}></input>
           <p>Desea enviar un RUT</p>
         </div>
         {isChecked
@@ -547,14 +549,12 @@ const renderSelectedOptions = () => {
           null
         }
       </div>
-
-      <form className="" onSubmit={handlerSend}>
         <div className="">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto">
             {imageSrc ? (
               <>
                 <div className="mx-auto text-center h-90 rounded-lg ">
-                  <div className="rounded-lg grid grid-cols-1 bg-lightBlueCreame ">
+                  <div className="rounded-lg grid grid-cols-1 bg-azulCreame ">
                     <div className=" col-span-1  flex items-center justify-center mb-5">
                       <img
                         className="w-72 h-72 rounded-t-lg"
@@ -576,16 +576,7 @@ const renderSelectedOptions = () => {
                       </div>
                       {isChecked
                       ?
-                        <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
-                          <button
-                            className="flex items-center justify-center w-28 h-16 rounded-full"
-                            type="button"
-                            onClick={console.log("enviando rut")}
-                          >
-                            <BiScan size={40} />
-                            <p>Otro gato</p>
-                          </button>
-                        </div>
+                        null
                       :
                         <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
                           <button
@@ -635,7 +626,7 @@ const renderSelectedOptions = () => {
               </>
             )}
 
-            <div className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${imageLoaded?null:"pointer-events-none opacity-50 bg-black"}`}>
+            <div className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${imageLoaded && !isChecked?null:"pointer-events-none opacity-50 bg-darkGrayCreame"}`}>
               <div className="col-span-2 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
@@ -1088,7 +1079,8 @@ const renderSelectedOptions = () => {
         <div className=" text-center">
           <button
             type="submit"
-            className="mt-10 w-full inline-block rounded bg-naranjaCreame px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:border-turquesaCreame hover:border hover:bg-azulCreame hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] md:w-1/2"
+            className={`mt-10 w-full inline-block rounded ${imageLoaded && isChecked ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]" : "opacity-50 bg-darkGrayCreame"} px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
+            disabled={!imageLoaded && !isChecked}
           >
             Enviar
           </button>

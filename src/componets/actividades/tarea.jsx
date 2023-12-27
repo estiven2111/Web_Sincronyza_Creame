@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Time from './time';
+import swal from 'sweetalert';
 import Entregables from './entregables';
 
 
 const Tarea = (props) => {
-  console.log("props de tarea", props)
   const [checked, setChecked] = useState(false);
-  const [confirmModal, setConfirmModal] = useState(false);
   const [isTotalTime, setIsTotalTime] = useState('');
   const [finished, setFinished] = useState(false);
   const spinValue = useRef(0);
@@ -23,10 +22,39 @@ const Tarea = (props) => {
   };
 
   const handleCheckboxToggle = () => {
-      setConfirmModal(true);
-    // } 
-    // else {
-    //   alert('Por favor adjunte todos los entregables');
+      // setConfirmModal(true);
+      try {
+
+        swal({
+          title: "CONFIRMAR FINALIZACIÓN DE ACTIVIDAD",
+          text: `Despúes de confirmar, la actividad ya no estara disponible en su usuario. ¿Está seguro de haber enviado todos los elementos requeridos?`,
+          icon: "warning",
+          buttons: ["SI", "NO"],
+        }).then(async (res) => {
+          if (!res) {
+            setIsLoading(true)
+            const email = localStorage.getItem('email'); // Obtener el email del almacenamiento local
+            await axios.put('/proyect/update', {
+              idNodoProyecto: props.idNodoActividad,
+              SKU_Proyecto: props.skuP,
+              finished: 1,
+            });
+            const response = await axios.put('/proyect/updateProyect', {
+              email: email,
+              doc_id: props.documentoEmpleado,
+            });
+            setChecked(true);
+            setFinished(true);
+            props.finishedUpdate(true);
+            setIsTotalTime('');
+            setReadyTocheck(false);
+            setIsLoading(false)
+          }
+        });
+       
+      } catch (error) {
+        console.error(error);
+      }
   
   };
 
@@ -42,34 +70,6 @@ const Tarea = (props) => {
     Cod_Parte: props.Cod_Parte,
   };
 
-  const confirmChecked = async () => {
-    setIsLoading(true)
-    try {
-      const email = localStorage.getItem('email'); // Obtener el email del almacenamiento local
-      await axios.put('/proyect/update', {
-        idNodoProyecto: props.idNodoActividad,
-        SKU_Proyecto: props.skuP,
-        finished: 1,
-      });
-      const response = await axios.put('/proyect/updateProyect', {
-        email: email,
-        doc_id: props.documentoEmpleado,
-      });
-      console.log(response.data, "respuesta de update/*********");
-      setConfirmModal(false);
-      setChecked(true);
-      setFinished(true);
-      props.finishedUpdate(true);
-      console.log("ya chuleao")
-      setIsLoading(false)
-      setIsTotalTime('');
-      alert('Se completó la tarea');
-      setReadyTocheck(false);
-      console.log("va a chulear")
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const [uri, setUri] = useState('');
   const [numberOfLines, setNumberOfLines] = useState(true);
@@ -80,6 +80,12 @@ const Tarea = (props) => {
 
   return (
     <div className="flex items-center justify-between ">
+      {isLoading 
+      ?
+        <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+          <div className="loader"></div>
+        </div>
+      : null}
       <div className="w-3/5 pr-4 ">
         <p onClick={handlePress} className={`text-black ${numberOfLines ? 'truncate' : ''} cursor-pointer text-xs sm:text-base`}>
           {props.actividad}
@@ -95,24 +101,7 @@ const Tarea = (props) => {
             }
           }}
         />
-        {confirmModal && (
-          <div className="modal">
-            <div className="modal-content bg-black">
-              <p className="text-red-500">
-                Después de confirmar, la actividad ya no estará disponible en su dispositivo. ¿Está seguro de haber
-                enviado todos los elementos requeridos?
-              </p>
-              <div className="buttons">
-                <button className="btn-confirm" onClick={confirmChecked}>
-                  Confirmar
-                </button>
-                <button className="btn-cancel" onClick={() => setConfirmModal(false)}>
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+       
         <Time entrega={props.entregable} postInfo={postInfo} isTime={setIsTotalTime} setChecked={setChecked} />
         <Entregables
           entrega={props.entregable}

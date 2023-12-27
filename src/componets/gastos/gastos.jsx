@@ -8,12 +8,15 @@ import { GrGallery } from "react-icons/gr";
 import { GiCancel } from "react-icons/gi";
 import { BiScan } from "react-icons/bi";
 import axios from "axios";
-import loading from "../../assets/img/loading.gif";
+// import loading from "../../assets/img/loading.gif";
 import { ThemeContext } from "../context/themeContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
 import LoginMicrosoft from "../authentication/loginmicrosfot";
-
+import logo from "../../assets/img/icon.png";
+import { setCanvas } from "chart/lib";
+import { useLocation } from "react-router-dom";
+import logoPDF from "../../assets/img/logoPDF.png"
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
@@ -26,7 +29,22 @@ const Gastos = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [totalAnt, setTotalAnt] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const spinValue = useRef(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
+  const location = useLocation()
+  localStorage.setItem("ruta", location.pathname)
+
+  useEffect(() => {
+    if (isLoading) {
+      const spinAnimation = setInterval(() => {
+        spinValue.current = (spinValue.current + 1) % 360;
+      }, 16);
+      return () => clearInterval(spinAnimation);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const ActulizarOptions = () => {
@@ -52,19 +70,11 @@ const Gastos = () => {
   const renderOptions = () => {
     return totalAnt.map((option, index) => (
       <button
+        className="flex m-1 px-1 cursor-pointer bg-white rounded"
         key={index}
-        style={{
-          backgroundColor: "blue",
-          padding: "10px",
-          marginBottom: "10px",
-          outline: "none",
-          border: "none",
-          cursor: "pointer",
-        }}
         onClick={() => {
           handleOptionSelect(option.DetalleConcepto + option.NumeroComprobante);
           setPrepayment(option);
-          console.log(option, "es aqui!!!!!!  ****************************");
         }}
       >
         <span
@@ -80,14 +90,15 @@ const Gastos = () => {
     ));
   };
 
-  const renderSelectedOptions = () => {
-    return;
+const renderSelectedOptions = () => {
+  return (
     <div>
-      {selectedOptions.map((option, index) => (
-        <p key={index}>{option}</p>
-      ))}
-    </div>;
-  };
+      {selectedOptions.map((option, index) => {
+        return <p key={index}>{option}</p>;
+      })}
+    </div>
+  );
+};
 
   useEffect(() => {
     initTE({ Input });
@@ -113,8 +124,9 @@ const Gastos = () => {
     municipio: "",
     codepostal: "",
     ipc: "",
+    Descripcion: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+
   const openCamera = () => {
     setOpencam(!opencam);
   };
@@ -124,6 +136,7 @@ const Gastos = () => {
 
   const handleFileChange = (e) => {
     e.preventDefault();
+    setImageLoaded(true)
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -131,7 +144,13 @@ const Gastos = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        setImageSrc(reader.result);
+        console.log("nombre de la imagen", imagen.name.split(".")[1])
+        if (imagen.name.split(".")[1]=== "pdf"){
+          setImageSrc(logoPDF);
+        } else {
+          setImageSrc(reader.result);
+        }
+        
       };
     }
   };
@@ -140,7 +159,7 @@ const Gastos = () => {
     const input = event.target;
     if (input.files.length > 0) {
       const file = input.files[0];
-      const Extensions = [".jpg", ".jpeg", ".png"];
+      const Extensions = [".jpg", ".jpeg", ".png", ".pdf", ".docx"];
       const fileExtension = file.name.slice(
         ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
       );
@@ -211,7 +230,6 @@ const Gastos = () => {
         });
       }
     } catch (error) {
-      console.log("error", error);
     }
   };
 
@@ -219,11 +237,6 @@ const Gastos = () => {
     try {
       const user_name = localStorage.getItem("name");
       setIsLoading(true);
-      console.log("Latitud: " + latitude);
-      console.log("Longitud: " + longitude);
-      console.log(user_name);
-      console.log(imagen);
-      console.log(latitude, longitude);
       const formData = new FormData();
       formData.append("imagen", imagen);
 
@@ -271,11 +284,10 @@ const Gastos = () => {
         ipc: response.data.ipc,
         municipio,
         codepostal,
+        // Descripcion
       });
       setFillData(true);
       setIsLoading(false);
-      console.log(response.data)
-      console.log("finalizo");
     } catch (error) {
       console.error(error, "Error");
     }
@@ -332,6 +344,8 @@ const Gastos = () => {
       Sub_Total: responsedata.totalSinIva
         ? parseInt(responsedata.totalSinIva)
         : 0, //
+      Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" 
+      
     };
 
     formData.append(
@@ -349,7 +363,6 @@ const Gastos = () => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(send.data,"datos ocr");
     if (send.data === "archivos enviados correctamente") {
       Swal({
         title: "ENVIO CORRECTO",
@@ -365,15 +378,11 @@ const Gastos = () => {
   if (imagen) {
   LoginMicrosoft()
   .then((data) => {
-    // Maneja los datos recibidos aquí
-    console.log("Datos recibidos:", data);
-if (data) {
-  sendData(data)
-}
-    
+    if (data) {
+      sendData(data)
+    } 
   })
   .catch((error) => {
-    // Maneja los errores aquí
     console.error("Error:", error);
   });
 }else{
@@ -388,7 +397,6 @@ if (data) {
 
   const handlerScan = async (e) => {
     try {
-      console.log(e.target.files);
       locations();
 
       // // Solicitar permiso para acceder a la ubicación del dispositivo
@@ -430,6 +438,8 @@ if (data) {
   };
 
   const handlerCancel = () => {
+    setImageLoaded(false);
+    setIsChecked(false)
     setResponsedata({
       nit: "",
       numFact: "",
@@ -446,6 +456,7 @@ if (data) {
       municipio: "",
       codepostal: "",
       ipc: "",
+      // Descripcion: "",
     });
     setFillData(false);
     setImageSrc(null);
@@ -458,7 +469,6 @@ if (data) {
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
-    console.log(name, value);
     setResponsedata({
       ...responsedata,
       [name]: value,
@@ -491,27 +501,38 @@ if (data) {
     // console.log("on change", responsedata);
   };
   const handlerAnticipo = () => {};
+
+  const handleCheckboxChange = () => {
+    setImageSrc(null)
+    setIsChecked(!isChecked);
+    if (!isChecked) {
+      console.log("El checkbox está marcado", imageLoaded);
+    } else {
+      console.log("El checkbox no está marcado", imageLoaded);
+      setImageLoaded(false)
+    }
+  };
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full ">
-      <div className="bg-lightBlueCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
+      <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between">
             <div className="inputIntLeftDrop">
               {justSelected ? (
-                <div className="block">
+                <div className="block text-white">
                   <button onClick={toggleDropdown}>
                     <span>{renderSelectedOptions()}</span>
                   </button>
                 </div>
               ) : (
-                <div className="blockNoSelected">
+                <div className="blockNoSelected text-white">
                   <button onClick={toggleDropdown}>
                     <span>Seleccionar opciones</span>
                   </button>
                 </div>
               )}
+            {isOpen && <div className="options bg-grayCreame absolute rounded">{renderOptions()}</div>}
             </div>
-            {isOpen && <div className="options">{renderOptions()}</div>}
             <input
               className="w-3/6"
               placeholder="$000.000.00"
@@ -521,14 +542,30 @@ if (data) {
           </div>
         </div>
       </div>
+      
 
       <form className="" onSubmit={handlerSend}>
+      <div>
+        <div className="flex">
+          <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange}></input>
+          <p className="text-naranjaCreame text-xl font-Horatio">Desea enviar un RUT</p>
+        </div>
+        {isChecked
+        ?
+          <>
+            <p className="text-sm">* Para los proveedores obligados a expedir factura electrónica y los no responsables de IVA no obligados a facturar electrónicamente es obligatorio adjuntar el RUT</p>
+            <input type="text" name="Descripcion" className="w-full border rounded-md p-2 border-azulCreame my-4" value={responsedata.Descripcion} onChange={handleOnChange} placeholder="Escribe aquí la descripción del envío del RUT"></input>
+          </>
+        :
+          null
+        }
+      </div>
         <div className="">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto">
             {imageSrc ? (
               <>
                 <div className="mx-auto text-center h-90 rounded-lg ">
-                  <div className="rounded-lg grid grid-cols-1 bg-lightBlueCreame ">
+                  <div className="rounded-lg grid grid-cols-1 bg-azulCreame ">
                     <div className=" col-span-1  flex items-center justify-center mb-5">
                       <img
                         className="w-72 h-72 rounded-t-lg"
@@ -548,16 +585,22 @@ if (data) {
                           <p>Cancelar</p>
                         </button>
                       </div>
-                      <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
-                        <button
-                          className="flex items-center justify-center w-28 h-16 rounded-full"
-                          type="button"
-                          onClick={handlerScan}
-                        >
-                          <BiScan size={40} />
-                          <p>Escanear</p>
-                        </button>
-                      </div>
+                      {isChecked
+                      ?
+                        null
+                      :
+                        <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
+                          <button
+                            className="flex items-center justify-center w-28 h-16 rounded-full"
+                            type="button"
+                            onClick={handlerScan}
+                          >
+                            <BiScan size={40} />
+                            <p>Escanear</p>
+                          </button>
+                        </div>
+                    }
+                      
                     </div>
                   </div>
                 </div>
@@ -571,7 +614,7 @@ if (data) {
                     <AiFillCamera size={90} />
                   </button>
                 </div> */}
-                    <div className="w-28 h-28 bg-azulCreame hover:bg-lightBlueCreame flex flex-col items-center justify-center border-2 rounded-full border-gray-400 border-solid  cursor-pointer shadow-xl">
+                    <div className="w-28 h-28 bg-naranjaCreame hover:bg-lightBlueCreame flex flex-col items-center justify-center border-2 rounded-full border-gray-400 border-solid  cursor-pointer shadow-xl">
                       <label className="">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6 ">
                           <p className="text-xs text-white ">
@@ -584,7 +627,7 @@ if (data) {
                           className="hidden"
                           onChange={handleFileChange}
                           // ref={fileInputRef}
-                          accept=".jpg, .jpeg, .png"
+                          accept={isChecked ? ".jpg, .jpeg, .png, .pdf, .docx" : ".jpg, .jpeg, .png"}
                           onInput={handlerValidation}
                         />
                       </label>
@@ -594,7 +637,7 @@ if (data) {
               </>
             )}
 
-            <div className="grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2">
+            <div className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${imageLoaded && !isChecked?null:"pointer-events-none opacity-50 bg-darkGrayCreame"}`}>
               <div className="col-span-2 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
@@ -605,7 +648,7 @@ if (data) {
                     name="concepto"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.concepto
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -633,7 +676,7 @@ if (data) {
                     name="nit"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.nit
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -666,7 +709,7 @@ if (data) {
                     name="nombre"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.nombre
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -699,7 +742,7 @@ if (data) {
                     name="total"
                     onChange={handleOnChange}
                     type="number"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.total
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -743,7 +786,7 @@ if (data) {
                       name="iva"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -779,7 +822,7 @@ if (data) {
                       name="ivaPorc"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ivaPorc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -824,7 +867,7 @@ if (data) {
                       name="rete"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -854,7 +897,7 @@ if (data) {
                       name="retePorc"
                       onChange={handleOnChange}
                       type="number"
-                      className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.retePorc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -888,7 +931,7 @@ if (data) {
                     name="fecha"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.fecha
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -921,7 +964,7 @@ if (data) {
                     name="Codpostal"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.codepostal
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -954,7 +997,7 @@ if (data) {
                     name="municipio"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.municipio
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -987,7 +1030,7 @@ if (data) {
                     name="ipc"
                     onChange={handleOnChange}
                     type="text"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ipc
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -1020,7 +1063,7 @@ if (data) {
                     name="totalSinIva"
                     onChange={handleOnChange}
                     type="number"
-                    className={`bg-lightBlueCreame peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
@@ -1041,33 +1084,25 @@ if (data) {
                   </label>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
         <div className=" text-center">
           <button
             type="submit"
-            className="mt-10 w-full inline-block rounded bg-azulCreame px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-info-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-info-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
+            className={`mt-10 w-full inline-block rounded ${imageLoaded && isChecked ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]" : "opacity-50 bg-darkGrayCreame"} px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
+            disabled={!imageLoaded && !isChecked}
           >
             Enviar
           </button>
         </div>
       </form>
-      {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-          <div className="w-full">
-            <div className="w-full flex justify-center">
-              <img
-                className="w-full max-w-md"
-                src={loading}
-                alt="Imagen capturada"
-              />
-            </div>
-          </div>
+       {isLoading 
+      ?
+        <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+          <div className="loader"></div>
         </div>
-      )}
-      {/* {opencam && <Modalcam closeCam={openCamera} imageData={imageData} />} */}
+      : null}
     </div>
   );
 };

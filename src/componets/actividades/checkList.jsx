@@ -6,21 +6,14 @@ import axios from 'axios';
 const Checklist = () => {
   // const [response, setResponse] = useState([]);
   const { finalValue, globalSearch, globalOptions, showOptions, indice, setindexProject, response, doc, proyectos, setAllProjects, finishedHandler} = useContext(ThemeContext);
-
-  const [finishedUpdate, setFinishedUpdate] = useState(false)
-  const updateFinished = (value) => {
-    setFinishedUpdate(value)
-  }
+  
 
   useEffect(()=>{
     const constulta = async() => {
-      console.log(indice, "*********************indice****************", !proyectos.length)
       if(!proyectos.length){
         if (localStorage.getItem("email")) {
         const nomproyecto = await axios.get(`/proyect/nomProyect?email=${localStorage.getItem("email")}`)
-        setindexProject(true)
         setAllProjects(nomproyecto.data)
-        console.log(nomproyecto.data)
       }
       }
     }
@@ -33,10 +26,8 @@ const Checklist = () => {
   };
 
   const handleSelect = async (e) => {
-    console.log("holaaaaa!!", e.target.innerText)
     await globalSearch(e.target.innerText)
     await finalValue(e.target.innerText)
-    console.log(showOptions, "**********")
     setTimeout(() => {
       globalOptions(false);
     }, 2000);
@@ -46,8 +37,8 @@ const Checklist = () => {
     <div className="">
       {indice
       ?<div className='pt-4'>
-        <p className='py-4'>
-          indice de proyectos
+        <p className='py-4 text-center font-bold font-Horatio text-4xl text-darkGrayCreame'>
+          ÍNDICE DE PROYECTOS
         </p>
         <ol className='list-decimal'>
           {proyectos.map((proyecto, index)=>
@@ -71,10 +62,10 @@ const Checklist = () => {
               {compo.actividades.length === 0 ? null : (
                 <>
                   <div className="flex items-center m-2">
-                  <p className="mr-3 text-xs sm:text-base break-normal min-w-fit">
+                  <p className="mr-3 text-xs sm:text-base break-normal min-w-fit font-Horatio">
                     {compo.fecha}
                   </p>
-                  <p onClick={handlePress}  className={`text-white ${numberOfLines ? 'truncate' : ''} text-white cursor-pointer text-xs sm:text-base no-underline`}>
+                  <p onClick={handlePress}  className={`text-white ${numberOfLines ? 'truncate' : ''} text-white cursor-pointer text-xs sm:text-base no-underline font-Horatio`}>
                     {compo.componente}
                   </p>
                   </div>

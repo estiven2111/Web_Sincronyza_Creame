@@ -75,6 +75,12 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     }
   };
 
+  const cancelModal = () => {
+    setStartTime('');
+    setEndTime('');
+    setModalVisible(false);
+}
+
   const [date, setDate] = useState('');
   const [normalDate, setNormalDate] = useState('');
 
@@ -177,9 +183,14 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                 </div>
               )}
               <p className="text-white">Tiempo Total: {!isNaN(totalTime) ? totalTime : '00:00'}</p>
-              <button className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
+              <div>
+             <button className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
                 Aceptar
               </button>
+              <button className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2`} onClick={cancelModal}>
+                Cancelar
+              </button>
+             </div>
               <div className={`modal ${errorModal ? 'block' : 'hidden'}`}>
                 <div className="modal-content">
                   <p className="text-white text-center font-bold">Formato no válido</p>

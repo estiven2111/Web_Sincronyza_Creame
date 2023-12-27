@@ -89,7 +89,6 @@ if (userAgent.match(/Android/i)) {
     const imageUrl = canvas.toDataURL("image/jpeg");
     setImageSrc(imageUrl);
     stopcamera();
-    console.log(imageUrl);
   };
 
   // Función para cambiar entre la cámara frontal y trasera
@@ -172,7 +171,6 @@ if (userAgent.match(/Android/i)) {
                   <AiFillCloseCircle size={60} />
                 </button>
               </div>
-              {console.log(movil, "movil")}
               {movil && (
                 <div className=" lg:ml-10 md:ml-1 w-20 h-20 lg:w-38 lg:h-38 md:w-26 md:h-26 flex flex-col items-center justify-center border-2 rounded-full border-gray-300 border-dashed  cursor-pointer  bg-gray-500 hover:bg-gray-400  active:bg-slate-800">
                   <button type="button" onClick={toggleCamera}>

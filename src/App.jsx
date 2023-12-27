@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ThemeProvider } from "./componets/context/themeContext";
+// import { ThemeProvider } from "./componets/context/themeContext";
 
 import {
   useLocation,
@@ -14,27 +14,30 @@ import Gastos from "./componets/gastos/gastos";
 import Actividades from "./componets/actividades/actividades";
 import Indicadores from "./componets/indicadores/indicadores";
 
-import Home from "./componets/home/home"
 import Footer from "../src/componets/navigation/footer"
+import { ThemeContext } from './componets/context/themeContext';
+import { useContext } from "react";
 
 function App() {
   const location = useLocation()
+  const { isAuthenticated } = useContext(ThemeContext);
+
   return (
-    <ThemeProvider>
       <div className='w-full min-h-screen'  >
         {location.pathname === "/" ? <Login /> :<NavBar/>}
           <Routes>
-             <Route path='/Gastos' element= {<Gastos/>} />
-             <Route path='/actividades' element= {<Actividades/>} />
-             <Route path='/indicadores' element= {<Indicadores/>} />
-
-           {/* <Route path='/about' element={<About/>} />
-            <Route path='/detail/:detailId' element={<Detail/>} />
-            <Route path="favorites" element={<Favorites onClose={onClose} />}/> */}
+            <Route path="/gastos" element={isAuthenticated 
+              ? (<Gastos />) : (<Navigate to="/" replace={true} />)} 
+            />
+            <Route path='/actividades' element= {isAuthenticated 
+              ? (<Actividades />) : (<Navigate to="/" replace={true} />)} 
+             />
+            <Route path='/indicadores' element= {isAuthenticated 
+              ? (<Indicadores />) : (<Navigate to="/" replace={true} />)} 
+            />
           </Routes>
           <Footer/>
       </div>
-    </ThemeProvider>
   )
 }
 

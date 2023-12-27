@@ -6,6 +6,7 @@ import { ThemeContext} from "../context/themeContext"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 let grafica = {
   dis:35,
   pro:35,
@@ -18,6 +19,9 @@ const Indicadores = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [infoFecha, setInfoFecha] = useState({});
   const [horasDisp, setHorasDisp] = useState({});
+
+  const location = useLocation()
+  localStorage.setItem("ruta", location.pathname)
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -63,7 +67,6 @@ var datas = {
 
   const showGraphHandler = ()=> {
     setShowGraph(true)
-    console.log(data.activity)
   }
 
   const [data, setData] = useState({
@@ -81,13 +84,12 @@ var datas = {
     if (name === "hDisp") {
          grafica.dis   = text
     }
-if (name === "hCump") {
-  grafica.cump = text
-}
-if (name === "hProg") {
-  grafica.pro = text
-}
-console.log( grafica.dis,"rrrrr")
+    if (name === "hCump") {
+      grafica.cump = text
+    }
+    if (name === "hProg") {
+      grafica.pro = text
+    }
   };
   
 
@@ -117,7 +119,6 @@ console.log( grafica.dis,"rrrrr")
 
   useEffect(() => {
     const ActulizarOptions = () => {
-      console.log("aqui las fechas", horasDisp)
       if (fechasIndicadores){
       setTotlaFechas(fechasIndicadores.fechas)
       setHorasDisp(fechasIndicadores.HDisponibles)
@@ -132,13 +133,11 @@ console.log( grafica.dis,"rrrrr")
   };
 
   const handleOptionSelect = async(option) => {
-    {console.log(option, "************************************* se selecciono una opcion carguen todo!!!!!")}
     const infoFechas = await axios.get(`/indicadores/horas?docId=${docId._j}&id=${option[0].id}`)
     if (!selectedOptions.includes(option)) {
       setSelectedOptions(option);
       setInfoFecha(infoFechas.data)
       }
-      console.log(docId._j, "este es el id", option[0].id, infoFechas.data)
     setIsOpen(false);
     SetJustSelected(true)
   };
@@ -202,7 +201,6 @@ console.log( grafica.dis,"rrrrr")
             <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={isNaN(horasDisp) ? data.hDisp: data.hDisp} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
             <label className="label">Horas Cumplidas :</label>
             <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.CumplidasPeriodo) && !isNaN(infoFecha.atrazo) ? (infoFecha.CumplidasPeriodo + infoFecha.atrazo).toString() : data.hCump} onChange={(e) => handleOnChange(e.target.value, "hCump")} placeholder="Horas" type="number"/>
-            {console.log(infoFecha.CumplidasPeriodo + infoFecha.atrazo, "hola!!!")}
           </div>
           <div className="inputCont  m-5">
             <label className="label">Horas Prog :</label>

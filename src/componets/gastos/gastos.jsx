@@ -344,7 +344,9 @@ const renderSelectedOptions = () => {
       Sub_Total: responsedata.totalSinIva
         ? parseInt(responsedata.totalSinIva)
         : 0, //
-      Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" 
+      Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" ,
+      iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : "" ,
+      reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : "" ,
       
     };
 
@@ -463,6 +465,7 @@ const renderSelectedOptions = () => {
   };
 
   const handlerSend = (e) => {
+    console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
     e.preventDefault();
     conetionMicrosoft();
   };
@@ -545,21 +548,21 @@ const renderSelectedOptions = () => {
       
 
       <form className="" onSubmit={handlerSend}>
-      <div>
-        <div className="flex">
-          <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange}></input>
-          <p className="text-naranjaCreame text-xl font-Horatio">Desea enviar un RUT</p>
+        <div>
+          <div className="flex">
+            <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange}></input>
+            <p className="text-naranjaCreame text-xl font-Horatio">Desea enviar un RUT</p>
+          </div>
+          {isChecked
+          ?
+            <>
+              <p className="text-sm">* Para los proveedores obligados a expedir factura electrónica y los no responsables de IVA no obligados a facturar electrónicamente es obligatorio adjuntar el RUT</p>
+              <input type="text" name="Descripcion" className="w-full border rounded-md p-2 border-azulCreame my-4" value={responsedata.Descripcion} onChange={handleOnChange} placeholder="Escribe aquí la descripción del envío del RUT"></input>
+            </>
+          :
+            null
+          }
         </div>
-        {isChecked
-        ?
-          <>
-            <p className="text-sm">* Para los proveedores obligados a expedir factura electrónica y los no responsables de IVA no obligados a facturar electrónicamente es obligatorio adjuntar el RUT</p>
-            <input type="text" name="Descripcion" className="w-full border rounded-md p-2 border-azulCreame my-4" value={responsedata.Descripcion} onChange={handleOnChange} placeholder="Escribe aquí la descripción del envío del RUT"></input>
-          </>
-        :
-          null
-        }
-      </div>
         <div className="">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto">
             {imageSrc ? (
@@ -784,8 +787,9 @@ const renderSelectedOptions = () => {
                           : ""
                       }
                       name="iva"
+                      readOnly
                       onChange={handleOnChange}
-                      type="number"
+                      type="text"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.totalSinIva
@@ -795,7 +799,7 @@ const renderSelectedOptions = () => {
                       id="Valor Iva"
                     />
                     <label
-                      htmlFor="Valor Iva"
+                      htmlFor="iva"
                       className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                       ${
                         responsedata.totalSinIva

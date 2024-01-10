@@ -144,7 +144,6 @@ const renderSelectedOptions = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        console.log("nombre de la imagen", imagen.name.split(".")[1])
         if (imagen.name.split(".")[1]=== "pdf"){
           setImageSrc(logoPDF);
         } else {
@@ -253,11 +252,15 @@ const renderSelectedOptions = () => {
         response.data.codepostal === undefined ||
         response.data.codepostal === undefined
       ) {
-        municipio = "";
         codepostal = "";
       } else {
+         codepostal = response.data.codepostal;
+      }
+      if ( response.data.municipio === undefined ||
+        response.data.municipio === undefined) {
+          municipio = "";
+      }else{
         municipio = response.data.municipio;
-        codepostal = response.data.codepostal;
       }
       const iva =
         !responsedata.ivaPorc || !responsedata.totalSinIva
@@ -345,8 +348,8 @@ const renderSelectedOptions = () => {
         ? parseInt(responsedata.totalSinIva)
         : 0, //
       Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" ,
-      iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : "" ,
-      reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : "" ,
+      iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : 0 ,
+      reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : 0 ,
       
     };
 
@@ -465,7 +468,6 @@ const renderSelectedOptions = () => {
   };
 
   const handlerSend = (e) => {
-    console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
     e.preventDefault();
     conetionMicrosoft();
   };
@@ -509,9 +511,8 @@ const renderSelectedOptions = () => {
     setImageSrc(null)
     setIsChecked(!isChecked);
     if (!isChecked) {
-      console.log("El checkbox está marcado", imageLoaded);
+      //
     } else {
-      console.log("El checkbox no está marcado", imageLoaded);
       setImageLoaded(false)
     }
   };

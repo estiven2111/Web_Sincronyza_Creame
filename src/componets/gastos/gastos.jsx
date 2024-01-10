@@ -125,6 +125,7 @@ const renderSelectedOptions = () => {
     codepostal: "",
     ipc: "",
     Descripcion: "",
+    ica: ""
   });
 
   const openCamera = () => {
@@ -284,7 +285,8 @@ const renderSelectedOptions = () => {
         ipc: response.data.ipc,
         municipio,
         codepostal,
-        // Descripcion
+        // Descripcion,
+        // ica
       });
       setFillData(true);
       setIsLoading(false);
@@ -347,6 +349,7 @@ const renderSelectedOptions = () => {
       Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" ,
       iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : "" ,
       reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : "" ,
+      ica : responsedata.ica ? responsedata.ica : "" ,
       
     };
 
@@ -458,7 +461,8 @@ const renderSelectedOptions = () => {
       municipio: "",
       codepostal: "",
       ipc: "",
-      // Descripcion: "",
+      Descripcion: "",
+      ica: "",
     });
     setFillData(false);
     setImageSrc(null);
@@ -466,6 +470,7 @@ const renderSelectedOptions = () => {
 
   const handlerSend = (e) => {
     console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
+    console.log(isChecked, imageLoaded)
     e.preventDefault();
     conetionMicrosoft();
   };
@@ -610,7 +615,7 @@ const renderSelectedOptions = () => {
               </>
             ) : (
               <>
-                <div className="h-96 flex items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 ">
+                <div className="flex items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 ">
                   <div className=" rounded-lg ">
                     {/* <div className="hover:bg-slate-300 mr-5 lg:mr-60  w-28 h-28 lg:w-48 lg:h-48 md:w-36 md:h-36 flex flex-col items-center justify-center border-2 rounded-full border-gray-700 border-dashed  cursor-pointer bg-gray-50">
                   <button type="button" onClick={openCamera}>
@@ -641,6 +646,8 @@ const renderSelectedOptions = () => {
             )}
 
             <div className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${imageLoaded && !isChecked?null:"pointer-events-none opacity-50 bg-darkGrayCreame"}`}>
+
+              {/* CONCEPTO */}
               <div className="col-span-2 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
@@ -965,7 +972,7 @@ const renderSelectedOptions = () => {
                 >
                   <input
                     value={responsedata.codepostal}
-                    name="Codpostal"
+                    name="codepostal"
                     onChange={handleOnChange}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
@@ -974,10 +981,10 @@ const renderSelectedOptions = () => {
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
                         : ""
                     }`}
-                    id="Codpostal"
+                    id="codepostal"
                   />
                   <label
-                    htmlFor="Codpostal"
+                    htmlFor="codepostal"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                       ${
                         responsedata.codepostal
@@ -1088,13 +1095,46 @@ const renderSelectedOptions = () => {
                   </label>
                 </div>
               </div>
+
+            {/* ICA */}
+            <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.ica}
+                    name="ica"
+                    onChange={handleOnChange}
+                    type="number"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.ica
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="ica"
+                  />
+                  <label
+                    htmlFor="ica"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.ica
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
+                  >
+                    ICA
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div className=" text-center">
           <button
             type="submit"
-            className={`mt-10 w-full inline-block rounded ${imageLoaded && isChecked ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]" : "opacity-50 bg-darkGrayCreame"} px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
+            className={`mt-10 w-full inline-block rounded ${imageLoaded && isChecked || imageLoaded && fillData ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]" : "opacity-50 bg-darkGrayCreame"} px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
             disabled={!imageLoaded && !isChecked}
           >
             Enviar

@@ -115,6 +115,7 @@ const renderSelectedOptions = () => {
     total: "",
     totalSinIva: "",
     nombre: "",
+    razon_social:"",
     rete: "",
     retePorc: "",
     iva: "",
@@ -145,7 +146,6 @@ const renderSelectedOptions = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        console.log("nombre de la imagen", imagen.name.split(".")[1])
         if (imagen.name.split(".")[1]=== "pdf"){
           setImageSrc(logoPDF);
         } else {
@@ -254,11 +254,15 @@ const renderSelectedOptions = () => {
         response.data.codepostal === undefined ||
         response.data.codepostal === undefined
       ) {
-        municipio = "";
         codepostal = "";
       } else {
+         codepostal = response.data.codepostal;
+      }
+      if ( response.data.municipio === undefined ||
+        response.data.municipio === undefined) {
+          municipio = "";
+      }else{
         municipio = response.data.municipio;
-        codepostal = response.data.codepostal;
       }
       const iva =
         !responsedata.ivaPorc || !responsedata.totalSinIva
@@ -278,6 +282,7 @@ const renderSelectedOptions = () => {
         total: response.data.total,
         totalSinIva: response.data.totalSinIva,
         nombre: user_name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
+       razon_social:response.data.razon_social,//todo revisar y poner en razon social
         iva: iva,
         rete: rete,
         fecha: response.data.fecha,
@@ -286,8 +291,9 @@ const renderSelectedOptions = () => {
         municipio,
         codepostal,
         // Descripcion,
-        // ica
+         ica : response.data.ica
       });
+      console.log(responsedata)
       setFillData(true);
       setIsLoading(false);
     } catch (error) {
@@ -347,9 +353,10 @@ const renderSelectedOptions = () => {
         ? parseInt(responsedata.totalSinIva)
         : 0, //
       Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" ,
-      iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : "" ,
-      reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : "" ,
+      iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : 0 ,
+      reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : 0 ,
       ica : responsedata.ica ? responsedata.ica : "" ,
+      razon_social : responsedata.razon_social ? responsedata.razon_social : "" ,
       
     };
 
@@ -452,6 +459,7 @@ const renderSelectedOptions = () => {
       total: "",
       totalSinIva: "",
       nombre: "",
+      razon_social: "",
       rete: "",
       retePorc: "",
       iva: "",
@@ -514,9 +522,8 @@ const renderSelectedOptions = () => {
     setImageSrc(null)
     setIsChecked(!isChecked);
     if (!isChecked) {
-      console.log("El checkbox está marcado", imageLoaded);
+      //
     } else {
-      console.log("El checkbox no está marcado", imageLoaded);
       setImageLoaded(false)
     }
   };
@@ -526,11 +533,13 @@ const renderSelectedOptions = () => {
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between">
             <div className="inputIntLeftDrop">
+            
               {justSelected ? (
                 <div className="block text-white">
                   <button onClick={toggleDropdown}>
                     <span>{renderSelectedOptions()}</span>
                   </button>
+                 
                 </div>
               ) : (
                 <div className="blockNoSelected text-white">
@@ -714,14 +723,15 @@ const renderSelectedOptions = () => {
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
                 >
+                  {console.log(responsedata)}
                   <input
-                    value={responsedata.nombre}
-                    name="nombre"
+                    value={responsedata.razon_social}
+                    name="razon_social"
                     onChange={handleOnChange}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.nombre
+                      responsedata.razon_social
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
                         : ""
                     }`}
@@ -731,12 +741,12 @@ const renderSelectedOptions = () => {
                     htmlFor="Nombre"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                 ${
-                  responsedata.nombre
+                  responsedata.razon_social
                     ? "-translate-y-[0.9rem] scale-75 text-black/100 "
                     : ""
                 }`}
                   >
-                    Nombre
+                    Razon social
                   </label>
                 </div>
               </div>
@@ -1110,7 +1120,7 @@ const renderSelectedOptions = () => {
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ica
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
                         : ""
                     }`}
                     id="ica"

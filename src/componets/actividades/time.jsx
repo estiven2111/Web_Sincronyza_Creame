@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Time = ({ entrega, postInfo, isTime, setChecked }) => {
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [manualDuration, setManualDuration] = useState(false);
-  const [newDuration, setNewDuration] = useState('');
+  const [newDuration, setNewDuration] = useState("");
   const [editedTime, setEditedTime] = useState(false);
 
   const handleNewDuration = (value) => {
-    const numericValue = value.replace(/[^0-9]/g, '');
-    let formattedValue = '';
+    const numericValue = value.replace(/[^0-9]/g, "");
+    let formattedValue = "";
     if (numericValue.length > 0) {
-      formattedValue = numericValue.replace(/(\d{2})(\d{0,2})/, '$1:$2');
+      formattedValue = numericValue.replace(/(\d{2})(\d{0,2})/, "$1:$2");
     }
-    const isValidTime = /^([0-1][0-9]|2[0-3])(?::([0-5][0-9]?){0,2})?$/.test(formattedValue);
+    const isValidTime = /^([0-1][0-9]|2[0-3])(?::([0-5][0-9]?){0,2})?$/.test(
+      formattedValue
+    );
     if (formattedValue.length > 2) {
       setNewDuration(isValidTime ? formattedValue : null);
     } else {
@@ -24,10 +26,10 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
 
   const getDuration = () => {
     if (startTime.length === 5 && endTime.length === 5) {
-      const start = startTime.split(':');
+      const start = startTime.split(":");
       const startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
 
-      const end = endTime.split(':');
+      const end = endTime.split(":");
       const endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
       let totalMinutes = 0;
       if (endMinutes >= startMinutes) {
@@ -35,10 +37,16 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
       } else {
         totalMinutes = 24 * 60 + (endMinutes - startMinutes);
       }
-      const duration = `${Math.floor(totalMinutes / 60) < 10 ? '0' + Math.floor(totalMinutes / 60) : Math.floor(totalMinutes / 60)}:${totalMinutes % 60 < 10 ? '0' + totalMinutes % 60 : totalMinutes % 60}`;
+      const duration = `${
+        Math.floor(totalMinutes / 60) < 10
+          ? "0" + Math.floor(totalMinutes / 60)
+          : Math.floor(totalMinutes / 60)
+      }:${
+        totalMinutes % 60 < 10 ? "0" + (totalMinutes % 60) : totalMinutes % 60
+      }`;
       return duration;
     } else {
-      return '';
+      return "";
     }
   };
 
@@ -54,10 +62,11 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   const closeModal = () => {
+    setFechaSeleccionada(new Date().toISOString().split("T")[0])
     if (startTime.length === 0 && endTime.length === 0) {
       if (editedTime) {
         sendInfoDB();
-        setNewDuration('');
+        setNewDuration("");
         setModalVisible(false);
         setEditedTime(false);
         return;
@@ -67,8 +76,8 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     }
     if (startTime.length === 5 && endTime.length === 5) {
       sendInfoDB();
-      setStartTime('');
-      setEndTime('');
+      setStartTime("");
+      setEndTime("");
       setModalVisible(false);
     } else {
       toggleOverlay();
@@ -76,33 +85,48 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   const cancelModal = () => {
-    setStartTime('');
-    setEndTime('');
+    setFechaSeleccionada(new Date().toISOString().split("T")[0])
+    setStartTime("");
+    setEndTime("");
     setModalVisible(false);
-}
-
-  const [date, setDate] = useState('');
-  const [normalDate, setNormalDate] = useState('');
+  };
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(
+    new Date().toISOString().split("T")[0]
+    
+  );
+  const [date, setDate] = useState("");
+  const [normalDate, setNormalDate] = useState("");
 
   useEffect(() => {
     const currentDate = new Date();
-    const formatDate = currentDate.toISOString().split('T')[0].split('-').join('');
-    const newDate = currentDate.toISOString().split('T')[0].split('-').reverse().join('-');
-    setNormalDate(newDate)
+    const formatDate = currentDate
+      .toISOString()
+      .split("T")[0]
+      .split("-")
+      .join("");
+    const newDate = currentDate
+      .toISOString()
+      .split("T")[0]
+      .split("-")
+      .reverse()
+      .join("-");
+    setNormalDate(newDate);
     setDate(formatDate);
   }, []);
 
-  const [totalTime, setTotalTime] = useState('');
+  const [totalTime, setTotalTime] = useState("");
 
   useEffect(() => {
     const solicitud = async () => {
       try {
-        const response = await axios.get(`/proyect/hours?idNodoActividad=${postInfo.idNodoActividad}&idNodoProyecto=${postInfo.idNodoProyecto}`);
+        const response = await axios.get(
+          `/proyect/hours?idNodoActividad=${postInfo.idNodoActividad}&idNodoProyecto=${postInfo.idNodoProyecto}`
+        );
         setTotalTime(response.data);
         isTime(response.data);
         setChecked(false);
       } catch (error) {
-        console.error('No se envió la información correctamente', error);
+        console.error("No se envió la información correctamente", error);
       }
     };
     solicitud();
@@ -110,31 +134,52 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
 
   const sendInfoDB = async () => {
     try {
-      const response = await axios.post('/proyect/hours', {
+      const response = await axios.post("/proyect/hours", {
         ...postInfo,
         FechaRegistro: date,
-        FechaInicio: `${date} ${startTime ? startTime + ':00' : '00:00:00'}`,
-        FechaFinal: `${date} ${startTime ? endTime + ':00' : '00:00:00'}`,
-        DuracionHoras: editedTime ? newDuration.split(':').join('.') : getDuration().split(':').join('.'),
+        FechaInicio: `${fechaSeleccionada} ${startTime ? startTime + ":00" : "00:00:00"}`,
+        FechaFinal: `${fechaSeleccionada} ${startTime ? endTime + ":00" : "00:00:00"}`,
+        DuracionHoras: editedTime
+          ? newDuration.split(":").join(".")
+          : getDuration().split(":").join("."),
         finished: false,
       });
       isTime(response.data.horaTotal);
       setTotalTime(response.data.horaTotal);
     } catch (error) {
-      console.error('No se envió la información correctamente', error);
+      console.error("No se envió la información correctamente", error);
     }
   };
 
+
+
+  // Función para manejar el cambio en la fecha seleccionada
+  const handleChange = (event) => {
+    setFechaSeleccionada(event.target.value);
+  };
+
+  
+
   return (
     <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
-      <button className={`btn btn-blue ${entrega ? '' : 'btn-disabled'}`} onClick={openModal}>
-        {!isNaN(totalTime) ? totalTime : '00:00'}
+      <button
+        className={`btn btn-blue ${entrega ? "" : "btn-disabled"}`}
+        onClick={openModal}
+      >
+        {!isNaN(totalTime) ? totalTime : "00:00"}
       </button>
       {modalVisible && (
-        <div className='fixed inset-0 bg-white bg-opacity-50 blackdrop-blur-sm flex justify-center items-center'>
+        <div className="fixed inset-0 bg-white bg-opacity-50 blackdrop-blur-sm flex justify-center items-center">
           <div className="bg-azulCreame rounded-xl p-6 shadow-turquesaCreame shadow-sm">
-            <div className='flex justify-center flex-col items-center'>
-              <p className="text-white pb-4 text-lg font-Horatio">Fecha: {normalDate}</p>
+            <div className="flex justify-center flex-col items-center">
+              {/* <p className="text-white pb-4 text-lg font-Horatio">Fecha: {normalDate}</p> */}
+              <div className="text-black">
+                <input
+                  type="date"
+                  value={fechaSeleccionada}
+                  onChange={handleChange}
+                />
+              </div>
               <div className="flex items-center justify-between w-60 my-2">
                 <label className="text-white">Hora inicio:</label>
                 <input
@@ -142,7 +187,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                   className="input input-bordered w-28 pl-2 rounded text-darkGrayCreame font-bold"
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
-                  placeholder='00:00'
+                  placeholder="00:00"
                 />
               </div>
               <div className="flex items-center justify-between w-60 my-2">
@@ -165,7 +210,13 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                     value={newDuration}
                     onChange={(e) => handleNewDuration(e.target.value)}
                   />
-                  <button className="btn btn-primary btn-sm mx-2" onClick={() => { setEditedTime(true); setManualDuration(false); }}>
+                  <button
+                    className="btn btn-primary btn-sm mx-2"
+                    onClick={() => {
+                      setEditedTime(true);
+                      setManualDuration(false);
+                    }}
+                  >
                     <i className="fas fa-check"></i>
                   </button>
                 </div>
@@ -175,25 +226,42 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                   {editedTime ? (
                     <p className="text-white ml-2">{newDuration}</p>
                   ) : (
-                    <p className="text-white ml-2">{getDuration() !== '' ? getDuration() : '00:00'}</p>
+                    <p className="text-white ml-2">
+                      {getDuration() !== "" ? getDuration() : "00:00"}
+                    </p>
                   )}
-                  <button className="btn btn-primary btn-sm mx-2" onClick={() => setManualDuration(true)}>
+                  <button
+                    className="btn btn-primary btn-sm mx-2"
+                    onClick={() => setManualDuration(true)}
+                  >
                     <i className="fas fa-pencil-alt"></i>
                   </button>
                 </div>
               )}
-              <p className="text-white">Tiempo Total: {!isNaN(totalTime) ? totalTime : '00:00'}</p>
+              <p className="text-white">
+                Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
+              </p>
               <div>
-             <button className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2 ${manualDuration ? 'btn-disabled' : ''}`} onClick={closeModal}>
-                Aceptar
-              </button>
-              <button className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2`} onClick={cancelModal}>
-                Cancelar
-              </button>
-             </div>
-              <div className={`modal ${errorModal ? 'block' : 'hidden'}`}>
+                <button
+                  className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2 ${
+                    manualDuration ? "btn-disabled" : ""
+                  }`}
+                  onClick={closeModal}
+                >
+                  Aceptar
+                </button>
+                <button
+                  className={`btn btn-primary bg-naranjaCreame py-1 mt-2 px-12 rounded-lg shadow-lg mx-2`}
+                  onClick={cancelModal}
+                >
+                  Cancelar
+                </button>
+              </div>
+              <div className={`modal ${errorModal ? "block" : "hidden"}`}>
                 <div className="modal-content">
-                  <p className="text-white text-center font-bold">Formato no válido</p>
+                  <p className="text-white text-center font-bold">
+                    Formato no válido
+                  </p>
                 </div>
               </div>
             </div>
@@ -202,6 +270,6 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
       )}
     </div>
   );
-}
+};
 
-export default Time
+export default Time;

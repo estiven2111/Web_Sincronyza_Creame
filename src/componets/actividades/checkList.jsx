@@ -41,7 +41,7 @@ const Checklist = () => {
           ÍNDICE DE PROYECTOS
         </p>
         <ol className='list-decimal'>
-          {proyectos.map((proyecto, index)=>
+          {proyectos.length > 0 && proyectos.map((proyecto, index)=>
             <li key={index} className='bg-darkGrayCreame my-2 flex flex-row rounded-lg border-turquesaCreame border-2 font-Horatio'>
               <div className='flex items-center justify-center w-20 text-3xl text-turquesaCreame font-bold'>
                 {index+1}

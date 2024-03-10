@@ -171,7 +171,7 @@ const renderSelectedOptions = () => {
       if (!Extensions.includes("." + fileExtension.toLowerCase())) {
         Swal({
           title: "ARCHIVO INCORRECTO",
-          text: "Debe seleccionar un archivo .JPG, .JPEG o .PNG",
+          text: "Debe seleccionar un archivo .JPG, .JPEG, .PNG o .PDF",
           icon: "warning",
           buttons: "Aceptar",
         });
@@ -734,7 +734,7 @@ const renderSelectedOptions = () => {
                           className="hidden"
                           onChange={handleFileChange}
                           // ref={fileInputRef}
-                          accept={isChecked ? ".jpg, .jpeg, .png, .pdf, .docx" : ".jpg, .jpeg, .png"}
+                          accept={isChecked ? ".jpg, .jpeg, .png,.pdf" : ".jpg, .jpeg, .png,.pdf"}
                           onInput={handlerValidation}
                         />
                       </label>

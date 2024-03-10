@@ -29,11 +29,12 @@ const Gastos = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [totalAnt, setTotalAnt] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [Anticipo, setAnticipo] = useState("");
   const spinValue = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-
+  let porcrete = 0
   const location = useLocation()
   localStorage.setItem("ruta", location.pathname)
 
@@ -60,8 +61,10 @@ const Gastos = () => {
     setIsOpen(!isOpen);
   };
   const handleOptionSelect = (option) => {
+   
     if (!selectedOptions.includes(option)) {
       setSelectedOptions([option]);
+      setAnticipo(option)
     }
     setIsOpen(false);
     SetJustSelected(true);
@@ -73,7 +76,7 @@ const Gastos = () => {
         className="flex m-1 px-1 cursor-pointer bg-white rounded"
         key={index}
         onClick={() => {
-          handleOptionSelect(option.DetalleConcepto + option.NumeroComprobante);
+          handleOptionSelect(option.NumeroComprobante  +" "+ option.DetalleConcepto );
           setPrepayment(option);
         }}
       >
@@ -84,7 +87,7 @@ const Gastos = () => {
             textOverflow: "ellipsis",
           }}
         >
-          {option.NumeroComprobante + option.DetalleConcepto}
+          {option.NumeroComprobante + " "+option.DetalleConcepto}
         </span>
       </button>
     ));
@@ -126,7 +129,8 @@ const renderSelectedOptions = () => {
     codepostal: "",
     ipc: "",
     Descripcion: "",
-    ica: ""
+    ica: "",
+    notas: "",
   });
 
   const openCamera = () => {
@@ -160,7 +164,7 @@ const renderSelectedOptions = () => {
     const input = event.target;
     if (input.files.length > 0) {
       const file = input.files[0];
-      const Extensions = [".jpg", ".jpeg", ".png", ".pdf", ".docx"];
+      const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
       const fileExtension = file.name.slice(
         ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
       );
@@ -272,9 +276,20 @@ const renderSelectedOptions = () => {
         !responsedata.retePorc || !responsedata.totalSinIva
           ? ""
           : `${(responsedata.totalSinIva * responsedata.retePorc) / 100}`;
+         
+          if (response.data.concepto === "servicio") {
+            porcrete =4
+          }else {
+            if(response.data.concepto === "producto"){
+              porcrete =2.5
+            }else{
+              porcrete = 0
+            }
+          }
+          
       setResponsedata({
         ...responsedata,
-        retePorc: 4,
+        retePorc:porcrete ,
         ivaPorc: 19,
         nit: response.data.nit,
         numFact: response.data.numFact,
@@ -293,7 +308,6 @@ const renderSelectedOptions = () => {
         // Descripcion,
          ica : response.data.ica
       });
-      console.log(responsedata)
       setFillData(true);
       setIsLoading(false);
     } catch (error) {
@@ -335,9 +349,10 @@ const renderSelectedOptions = () => {
         ? parseInt(responsedata.total)
         : 0, //
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
-      NombreComprobante: responsedata.concepto
+      concepto: responsedata.concepto
         ? responsedata.concepto
         : "", //
+      NombreComprobante:Anticipo?Anticipo:"",
       CiudadComprobante: responsedata.municipio
         ? responsedata.municipio
         : "", //
@@ -357,6 +372,7 @@ const renderSelectedOptions = () => {
       reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : 0 ,
       ica : responsedata.ica ? responsedata.ica : "" ,
       razon_social : responsedata.razon_social ? responsedata.razon_social : "" ,
+      notas : responsedata.notas ? responsedata.notas : "" ,
       
     };
 
@@ -471,24 +487,100 @@ const renderSelectedOptions = () => {
       ipc: "",
       Descripcion: "",
       ica: "",
+      notas: "",
     });
     setFillData(false);
     setImageSrc(null);
   };
 
   const handlerSend = (e) => {
-    console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
-    console.log(isChecked, imageLoaded)
     e.preventDefault();
-    conetionMicrosoft();
+    if(parseFloat(responsedata.retePorc) === 0 && responsedata.totalSinIva != 0){
+      Swal({
+        title: "LLENAR PORCENTAJE DE RETENCIÓN A LA FUENTE",
+        text: "Si conoce el porcentaje de la retención a la fuente por favor colóquelo de lo contrario presione el botón Enviar y se enviara en 0 (cero)",
+        icon: "info",
+        buttons: ["Enviar", "Llenar porcentaje"],
+      })
+      .then((respuesta) => {
+        console.log(respuesta,"ffffff")
+        if (respuesta) {
+         return
+        } else {
+          // Código para manejar la opción "No"
+          conetionMicrosoft();
+          return
+        }
+      });
+    }else{
+       conetionMicrosoft();
+      //todo: validar 
+    //  if (responsedata.retePorc === 0 && responsedata.totalSinIva === "") {
+    //   Swal({
+    //     title: "FACTURA SIN SUBTOTAL",
+    //     text: 'Esta factura ',
+    //     icon: "info",
+    //     buttons: "Aceptar",
+    //   })
+    //  }else{
+    //   alert("envio correcto")
+    //  }
+    }
+
+    // console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
+    // console.log(isChecked, imageLoaded)
+   
+    // conetionMicrosoft();
   };
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
-    setResponsedata({
-      ...responsedata,
-      [name]: value,
-    });
+  //  const concepto = value.toLowerCase();
+   setResponsedata({
+    ...responsedata,
+    [name]: value,
+  });
+  
+  
+   // TODO ****************************************************************
+    // if (concepto === "servicio" && name === "concepto") {
+    //   console.log( "servicio12")
+    //   setResponsedata({
+    //     ...responsedata,
+    //     [name]: concepto,
+    //     retePorc : 4
+    //   });
+    //   // porcrete = 4
+      
+    // }else {
+    //   if(concepto === "producto" && name === "concepto" ){
+    //     console.log( "producto12")
+    //     setResponsedata({
+    //       ...responsedata,
+    //       [name]: concepto,
+    //       retePorc : 2.5
+    //     });
+    //     // porcrete = 2.5
+    //   }else{
+    //     if(concepto !== "servicio" || concepto !== "producto" && name === "concepto"){
+    //       console.log( "vacio 12")
+    //       setResponsedata({
+    //         ...responsedata,
+    //         [name]: concepto,
+    //         retePorc : 0
+    //       });
+    //       // porcrete = 0
+    //     }
+    //     else{
+    //       setResponsedata({
+    //         ...responsedata,
+    //         [name]: value,
+    //       });
+    //     }
+    //   }
+    // }
+
+       // TODO ****************************************************************
     // if (name === "ivaPorc" || name === "totalSinIva") {
 
     //   value = (!responsedata.ivaPorc || !responsedata.totalSinIva) ? "" : `${responsedata.totalSinIva*responsedata.ivaPorc/100}`
@@ -544,7 +636,7 @@ const renderSelectedOptions = () => {
               ) : (
                 <div className="blockNoSelected text-white">
                   <button onClick={toggleDropdown}>
-                    <span>Seleccionar opciones</span>
+                    <span>Seleccionar Anticipos</span>
                   </button>
                 </div>
               )}
@@ -559,8 +651,6 @@ const renderSelectedOptions = () => {
           </div>
         </div>
       </div>
-      
-
       <form className="" onSubmit={handlerSend}>
         <div>
           <div className="flex">
@@ -723,7 +813,7 @@ const renderSelectedOptions = () => {
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
                 >
-                  {console.log(responsedata)}
+                 
                   <input
                     value={responsedata.razon_social}
                     name="razon_social"
@@ -877,7 +967,7 @@ const renderSelectedOptions = () => {
                       value={
                         fillData
                           ? !responsedata.retePorc || !responsedata.totalSinIva
-                            ? ""
+                            ? 0
                             : `${
                                 (responsedata.totalSinIva *
                                   responsedata.retePorc) /
@@ -900,12 +990,12 @@ const renderSelectedOptions = () => {
                       htmlFor="Valor Rete"
                       className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                       ${
-                        responsedata.totalSinIva
+                        responsedata.totalSinIva || responsedata.retePorc === 0
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
                           : ""
                       }`}
                     >
-                      Valor Rete
+                      Valor Rete *
                     </label>
                   </div>
 
@@ -930,7 +1020,7 @@ const renderSelectedOptions = () => {
                       htmlFor="% Rete"
                       className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
                       ${
-                        responsedata.retePorc
+                        responsedata.retePorc || responsedata.retePorc === 0
                           ? "-translate-y-[0.9rem] scale-75 text-black/100"
                           : ""
                       }`}
@@ -1135,6 +1225,40 @@ const renderSelectedOptions = () => {
                       }`}
                   >
                     ICA
+                  </label>
+                </div>
+              </div>
+
+
+
+              <div className="flex items-center justify-center col-span-2">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <textarea
+                    value={responsedata.notas}
+                    name="notas"
+                    onChange={handleOnChange}
+                    type="number"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.notas
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
+                        : ""
+                    }`}
+                    id="notas"
+                  />
+                  <label
+                    htmlFor="notas"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.notas
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
+                  >
+                    Notas
                   </label>
                 </div>
               </div>

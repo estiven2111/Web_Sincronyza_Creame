@@ -169,7 +169,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
         {!isNaN(totalTime) ? totalTime : "00:00"}
       </button>
       {modalVisible && (
-        <div className="fixed inset-0 bg-white bg-opacity-50 blackdrop-blur-sm flex justify-center items-center">
+        <div className="fixed inset-0 bg-white bg-opacity-50 blackdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-azulCreame rounded-xl p-6 shadow-turquesaCreame shadow-sm">
             <div className="flex justify-center flex-col items-center">
               {/* <p className="text-white pb-4 text-lg font-Horatio">Fecha: {normalDate}</p> */}

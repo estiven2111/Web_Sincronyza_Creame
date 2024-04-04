@@ -62,10 +62,9 @@ const Gastos = () => {
     setIsOpen(!isOpen);
   };
   const handleOptionSelect = (option) => {
-   
     if (!selectedOptions.includes(option)) {
       setSelectedOptions([option]);
-      setAnticipo(option)
+      setAnticipo(option);
     }
     setIsOpen(false);
     SetJustSelected(true);
@@ -77,7 +76,9 @@ const Gastos = () => {
         className="flex m-1 px-1 cursor-pointer bg-white rounded"
         key={index}
         onClick={() => {
-          handleOptionSelect(option.NumeroComprobante  +" "+ option.DetalleConcepto );
+          handleOptionSelect(
+            option.NumeroComprobante + " " + option.DetalleConcepto
+          );
           setPrepayment(option);
         }}
       >
@@ -88,7 +89,7 @@ const Gastos = () => {
             textOverflow: "ellipsis",
           }}
         >
-          {option.NumeroComprobante + " "+option.DetalleConcepto}
+          {option.NumeroComprobante + " " + option.DetalleConcepto}
         </span>
       </button>
     ));
@@ -276,20 +277,20 @@ const Gastos = () => {
         !responsedata.retePorc || !responsedata.totalSinIva
           ? ""
           : `${(responsedata.totalSinIva * responsedata.retePorc) / 100}`;
-         
-          if (response.data.concepto === "servicio") {
-            porcrete =4
-          }else {
-            if(response.data.concepto === "producto"){
-              porcrete =2.5
-            }else{
-              porcrete = 0
-            }
-          }
-          
+
+      if (response.data.concepto === "servicio") {
+        porcrete = 4;
+      } else {
+        if (response.data.concepto === "producto") {
+          porcrete = 2.5;
+        } else {
+          porcrete = 0;
+        }
+      }
+
       setResponsedata({
         ...responsedata,
-        retePorc:porcrete ,
+        retePorc: porcrete,
         ivaPorc: 19,
         nit: response.data.nit,
         numFact: response.data.numFact,
@@ -493,54 +494,55 @@ const Gastos = () => {
     // );
     // console.log(isChecked, imageLoaded);
     e.preventDefault();
-    if(parseFloat(responsedata.retePorc) === 0 && responsedata.totalSinIva != 0){
+    if (
+      parseFloat(responsedata.retePorc) === 0 &&
+      responsedata.totalSinIva != 0
+    ) {
       Swal({
         title: "LLENAR PORCENTAJE DE RETENCIÓN A LA FUENTE",
         text: "Si conoce el porcentaje de la retención a la fuente por favor colóquelo de lo contrario presione el botón Enviar y se enviara en 0 (cero)",
         icon: "info",
         buttons: ["Enviar", "Llenar porcentaje"],
-      })
-      .then((respuesta) => {
-        console.log(respuesta,"ffffff")
+      }).then((respuesta) => {
+        console.log(respuesta, "ffffff");
         if (respuesta) {
-         return
+          return;
         } else {
           // Código para manejar la opción "No"
           conetionMicrosoft();
-          return
+          return;
         }
       });
-    }else{
-       conetionMicrosoft();
-      //todo: validar 
-    //  if (responsedata.retePorc === 0 && responsedata.totalSinIva === "") {
-    //   Swal({
-    //     title: "FACTURA SIN SUBTOTAL",
-    //     text: 'Esta factura ',
-    //     icon: "info",
-    //     buttons: "Aceptar",
-    //   })
-    //  }else{
-    //   alert("envio correcto")
-    //  }
+    } else {
+      conetionMicrosoft();
+      //todo: validar
+      //  if (responsedata.retePorc === 0 && responsedata.totalSinIva === "") {
+      //   Swal({
+      //     title: "FACTURA SIN SUBTOTAL",
+      //     text: 'Esta factura ',
+      //     icon: "info",
+      //     buttons: "Aceptar",
+      //   })
+      //  }else{
+      //   alert("envio correcto")
+      //  }
     }
 
     // console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
     // console.log(isChecked, imageLoaded)
-   
+
     // conetionMicrosoft();
   };
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
-  //  const concepto = value.toLowerCase();
-   setResponsedata({
-    ...responsedata,
-    [name]: value,
-  });
-  
-  
-   // TODO ****************************************************************
+    //  const concepto = value.toLowerCase();
+    setResponsedata({
+      ...responsedata,
+      [name]: value,
+    });
+
+    // TODO ****************************************************************
     // if (concepto === "servicio" && name === "concepto") {
     //   console.log( "servicio12")
     //   setResponsedata({
@@ -549,7 +551,7 @@ const Gastos = () => {
     //     retePorc : 4
     //   });
     //   // porcrete = 4
-      
+
     // }else {
     //   if(concepto === "producto" && name === "concepto" ){
     //     console.log( "producto12")
@@ -578,7 +580,7 @@ const Gastos = () => {
     //   }
     // }
 
-       // TODO ****************************************************************
+    // TODO ****************************************************************
     // if (name === "ivaPorc" || name === "totalSinIva") {
 
     //   value = (!responsedata.ivaPorc || !responsedata.totalSinIva) ? "" : `${responsedata.totalSinIva*responsedata.ivaPorc/100}`
@@ -637,7 +639,8 @@ const Gastos = () => {
       const file = input[0];
       const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
       const fileExtension = file.name.slice(
-        ((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
+        ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
+      );
       if (!Extensions.includes("." + fileExtension.toLowerCase())) {
         Swal({
           title: "ARCHIVO INCORRECTO",
@@ -646,8 +649,8 @@ const Gastos = () => {
           buttons: "Aceptar",
         });
         input.value = "";
-      }else{
-         handleFileChange2(input)
+      } else {
+        handleFileChange2(input);
       }
     }
   };
@@ -836,7 +839,7 @@ const Gastos = () => {
                       />
                     </label>
                   </div>
-                  <div className="flex flex-col items-center justify-center mt-4">
+                  <div className="hidden xs:hidden md:flex flex-col items-center justify-center mt-4">
                     <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
                   </div>
                 </div>
@@ -1334,8 +1337,6 @@ const Gastos = () => {
                   </label>
                 </div>
               </div>
-
-
 
               <div className="flex items-center justify-center col-span-2">
                 <div

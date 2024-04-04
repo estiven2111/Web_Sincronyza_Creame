@@ -10,20 +10,21 @@ import { BiScan } from "react-icons/bi";
 import axios from "axios";
 // import loading from "../../assets/img/loading.gif";
 import { ThemeContext } from "../context/themeContext";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
 import LoginMicrosoft from "../authentication/loginmicrosfot";
 import logo from "../../assets/img/icon.png";
 import { setCanvas } from "chart/lib";
 import { useLocation } from "react-router-dom";
-import logoPDF from "../../assets/img/logoPDF.png"
+import logoPDF from "../../assets/img/logoPDF.png";
 // <input type="file" capture="camera" />
 let imagen = null;
 let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  const { infoProject, anticipos, inputValue,topSecret } = useContext(ThemeContext);
+  const { infoProject, anticipos, inputValue, topSecret } =
+    useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -34,8 +35,8 @@ const Gastos = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const location = useLocation()
-  localStorage.setItem("ruta", location.pathname)
+  const location = useLocation();
+  localStorage.setItem("ruta", location.pathname);
 
   useEffect(() => {
     if (isLoading) {
@@ -90,15 +91,15 @@ const Gastos = () => {
     ));
   };
 
-const renderSelectedOptions = () => {
-  return (
-    <div>
-      {selectedOptions.map((option, index) => {
-        return <p key={index}>{option}</p>;
-      })}
-    </div>
-  );
-};
+  const renderSelectedOptions = () => {
+    return (
+      <div>
+        {selectedOptions.map((option, index) => {
+          return <p key={index}>{option}</p>;
+        })}
+      </div>
+    );
+  };
 
   useEffect(() => {
     initTE({ Input });
@@ -115,7 +116,7 @@ const renderSelectedOptions = () => {
     total: "",
     totalSinIva: "",
     nombre: "",
-    razon_social:"",
+    razon_social: "",
     rete: "",
     retePorc: "",
     iva: "",
@@ -126,7 +127,7 @@ const renderSelectedOptions = () => {
     codepostal: "",
     ipc: "",
     Descripcion: "",
-    ica: ""
+    ica: "",
   });
 
   const openCamera = () => {
@@ -138,7 +139,7 @@ const renderSelectedOptions = () => {
 
   const handleFileChange = (e) => {
     e.preventDefault();
-    setImageLoaded(true)
+    setImageLoaded(true);
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -146,12 +147,11 @@ const renderSelectedOptions = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        if (imagen.name.split(".")[1]=== "pdf"){
+        if (imagen.name.split(".")[1] === "pdf") {
           setImageSrc(logoPDF);
         } else {
           setImageSrc(reader.result);
         }
-        
       };
     }
   };
@@ -160,7 +160,7 @@ const renderSelectedOptions = () => {
     const input = event.target;
     if (input.files.length > 0) {
       const file = input.files[0];
-      const Extensions = [".jpg", ".jpeg", ".png", ".pdf", ".docx"];
+      const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
       const fileExtension = file.name.slice(
         ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
       );
@@ -230,8 +230,7 @@ const renderSelectedOptions = () => {
           buttons: "Aceptar",
         });
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const peticionOcr = async () => {
@@ -256,12 +255,14 @@ const renderSelectedOptions = () => {
       ) {
         codepostal = "";
       } else {
-         codepostal = response.data.codepostal;
+        codepostal = response.data.codepostal;
       }
-      if ( response.data.municipio === undefined ||
-        response.data.municipio === undefined) {
-          municipio = "";
-      }else{
+      if (
+        response.data.municipio === undefined ||
+        response.data.municipio === undefined
+      ) {
+        municipio = "";
+      } else {
         municipio = response.data.municipio;
       }
       const iva =
@@ -282,7 +283,7 @@ const renderSelectedOptions = () => {
         total: response.data.total,
         totalSinIva: response.data.totalSinIva,
         nombre: user_name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
-       razon_social:response.data.razon_social,//todo revisar y poner en razon social
+        razon_social: response.data.razon_social, //todo revisar y poner en razon social
         iva: iva,
         rete: rete,
         fecha: response.data.fecha,
@@ -291,9 +292,9 @@ const renderSelectedOptions = () => {
         municipio,
         codepostal,
         // Descripcion,
-         ica : response.data.ica
+        ica: response.data.ica,
       });
-      console.log(responsedata)
+      // console.log(responsedata);
       setFillData(true);
       setIsLoading(false);
     } catch (error) {
@@ -301,8 +302,7 @@ const renderSelectedOptions = () => {
     }
   };
 
-  const sendData = async(data) =>{
-
+  const sendData = async (data) => {
     const formData = new FormData();
 
     const user_name = localStorage.getItem("name");
@@ -324,40 +324,33 @@ const renderSelectedOptions = () => {
       Nombre_Empleado: user_name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, ""),
-      NumeroComprobante: prepayment
-        ? prepayment.NumeroComprobante
-        : "", //
+      NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
       Fecha: formatDate, //
       FechaComprobante: responsedata.fecha
         ? responsedata.fecha.split("/").join("-")
         : "", //
-      ValorComprobante: responsedata.total
-        ? parseInt(responsedata.total)
-        : 0, //
+      ValorComprobante: responsedata.total ? parseInt(responsedata.total) : 0, //
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
-      NombreComprobante: responsedata.concepto
-        ? responsedata.concepto
-        : "", //
-      CiudadComprobante: responsedata.municipio
-        ? responsedata.municipio
-        : "", //
+      NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
+      CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
       DireccionComprobante: responsedata.codepostal
         ? responsedata.codepostal.toString()
         : "", //
       CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
-      idAnticipo: prepayment
-        ? parseInt(prepayment.IdResponsable)
-        : "", //
+      idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
       ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
       Sub_Total: responsedata.totalSinIva
         ? parseInt(responsedata.totalSinIva)
         : 0, //
-      Descripcion : responsedata.Descripcion ? responsedata.Descripcion : "" ,
-      iva : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.ivaPorc/100 : 0 ,
-      reteFuente : responsedata.totalSinIva ? responsedata.totalSinIva*responsedata.retePorc/100 : 0 ,
-      ica : responsedata.ica ? responsedata.ica : "" ,
-      razon_social : responsedata.razon_social ? responsedata.razon_social : "" ,
-      
+      Descripcion: responsedata.Descripcion ? responsedata.Descripcion : "",
+      iva: responsedata.totalSinIva
+        ? (responsedata.totalSinIva * responsedata.ivaPorc) / 100
+        : 0,
+      reteFuente: responsedata.totalSinIva
+        ? (responsedata.totalSinIva * responsedata.retePorc) / 100
+        : 0,
+      ica: responsedata.ica ? responsedata.ica : "",
+      razon_social: responsedata.razon_social ? responsedata.razon_social : "",
     };
 
     formData.append(
@@ -382,29 +375,29 @@ const renderSelectedOptions = () => {
         icon: "success",
         buttons: "Aceptar",
       });
-      handlerCancel()
+      handlerCancel();
     }
-  }
+  };
 
   const conetionMicrosoft = async () => {
-  if (imagen) {
-  LoginMicrosoft()
-  .then((data) => {
-    if (data) {
-      sendData(data)
-    } 
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
-}else{
-  Swal({
-    title: "SUBA UNA IMAGEN",
-    text: "Escane y suba una imagen",
-    icon: "warning",
-    buttons: "Aceptar",
-  });
-}
+    if (imagen) {
+      LoginMicrosoft()
+        .then((data) => {
+          if (data) {
+            sendData(data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      Swal({
+        title: "SUBA UNA IMAGEN",
+        text: "Escane y suba una imagen",
+        icon: "warning",
+        buttons: "Aceptar",
+      });
+    }
   };
 
   const handlerScan = async (e) => {
@@ -451,7 +444,7 @@ const renderSelectedOptions = () => {
 
   const handlerCancel = () => {
     setImageLoaded(false);
-    setIsChecked(false)
+    setIsChecked(false);
     setResponsedata({
       nit: "",
       numFact: "",
@@ -477,8 +470,13 @@ const renderSelectedOptions = () => {
   };
 
   const handlerSend = (e) => {
-    console.log(responsedata.iva, responsedata.rete, "******************************", responsedata)
-    console.log(isChecked, imageLoaded)
+    // console.log(
+    //   responsedata.iva,
+    //   responsedata.rete,
+    //   "******************************",
+    //   responsedata
+    // );
+    // console.log(isChecked, imageLoaded);
     e.preventDefault();
     conetionMicrosoft();
   };
@@ -517,14 +515,58 @@ const renderSelectedOptions = () => {
     // console.log("on change", responsedata);
   };
   const handlerAnticipo = () => {};
+  function handleDrop(event) {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    handlerValidation2(files);
+  }
+
+  const handleFileChange2 = (files) => {
+    setImageLoaded(true);
+    // Verifica si recibes los archivos correctamente
+    if (files && files.length > 0) {
+      const file = files[0];
+      imagen = file;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (imagen.name.split(".")[1] === "pdf") {
+          setImageSrc(logoPDF);
+        } else {
+          setImageSrc(reader.result);
+        }
+      };
+    }
+  };
+
+  const handlerValidation2 = (event) => {
+    const input = event;
+    if (input.length > 0) {
+      const file = input[0];
+      const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
+      const fileExtension = file.name.slice(
+        ((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
+      if (!Extensions.includes("." + fileExtension.toLowerCase())) {
+        Swal({
+          title: "ARCHIVO INCORRECTO",
+          text: "Debe seleccionar un archivo .JPG, .JPEG o .PNG",
+          icon: "warning",
+          buttons: "Aceptar",
+        });
+        input.value = "";
+      }else{
+         handleFileChange2(input)
+      }
+    }
+  };
 
   const handleCheckboxChange = () => {
-    setImageSrc(null)
+    setImageSrc(null);
     setIsChecked(!isChecked);
     if (!isChecked) {
       //
     } else {
-      setImageLoaded(false)
+      setImageLoaded(false);
     }
   };
   return (
@@ -533,13 +575,11 @@ const renderSelectedOptions = () => {
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between">
             <div className="inputIntLeftDrop">
-            
               {justSelected ? (
                 <div className="block text-white">
                   <button onClick={toggleDropdown}>
                     <span>{renderSelectedOptions()}</span>
                   </button>
-                 
                 </div>
               ) : (
                 <div className="blockNoSelected text-white">
@@ -548,7 +588,11 @@ const renderSelectedOptions = () => {
                   </button>
                 </div>
               )}
-            {isOpen && <div className="options bg-grayCreame absolute rounded">{renderOptions()}</div>}
+              {isOpen && (
+                <div className="options bg-grayCreame absolute rounded">
+                  {renderOptions()}
+                </div>
+              )}
             </div>
             <input
               className="w-3/6"
@@ -559,23 +603,37 @@ const renderSelectedOptions = () => {
           </div>
         </div>
       </div>
-      
 
       <form className="" onSubmit={handlerSend}>
         <div>
           <div className="flex">
-            <input type="checkbox" name="rut" checked={isChecked} onChange={handleCheckboxChange}></input>
-            <p className="text-naranjaCreame text-xl font-Horatio">Desea enviar un RUT</p>
+            <input
+              type="checkbox"
+              name="rut"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            ></input>
+            <p className="text-naranjaCreame text-xl font-Horatio">
+              Desea enviar un RUT
+            </p>
           </div>
-          {isChecked
-          ?
+          {isChecked ? (
             <>
-              <p className="text-sm">* Para los proveedores obligados a expedir factura electrónica y los no responsables de IVA no obligados a facturar electrónicamente es obligatorio adjuntar el RUT</p>
-              <input type="text" name="Descripcion" className="w-full border rounded-md p-2 border-azulCreame my-4" value={responsedata.Descripcion} onChange={handleOnChange} placeholder="Escribe aquí la descripción del envío del RUT"></input>
+              <p className="text-sm">
+                * Para los proveedores obligados a expedir factura electrónica y
+                los no responsables de IVA no obligados a facturar
+                electrónicamente es obligatorio adjuntar el RUT
+              </p>
+              <input
+                type="text"
+                name="Descripcion"
+                className="w-full border rounded-md p-2 border-azulCreame my-4"
+                value={responsedata.Descripcion}
+                onChange={handleOnChange}
+                placeholder="Escribe aquí la descripción del envío del RUT"
+              ></input>
             </>
-          :
-            null
-          }
+          ) : null}
         </div>
         <div className="">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto">
@@ -602,10 +660,7 @@ const renderSelectedOptions = () => {
                           <p>Cancelar</p>
                         </button>
                       </div>
-                      {isChecked
-                      ?
-                        null
-                      :
+                      {isChecked ? null : (
                         <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
                           <button
                             className="flex items-center justify-center w-28 h-16 rounded-full"
@@ -616,26 +671,27 @@ const renderSelectedOptions = () => {
                             <p>Escanear</p>
                           </button>
                         </div>
-                    }
-                      
+                      )}
                     </div>
                   </div>
                 </div>
               </>
             ) : (
               <>
-                <div className="flex items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 ">
-                  <div className=" rounded-lg ">
-                    {/* <div className="hover:bg-slate-300 mr-5 lg:mr-60  w-28 h-28 lg:w-48 lg:h-48 md:w-36 md:h-36 flex flex-col items-center justify-center border-2 rounded-full border-gray-700 border-dashed  cursor-pointer bg-gray-50">
-                  <button type="button" onClick={openCamera}>
-                    <AiFillCamera size={90} />
-                  </button>
-                </div> */}
+                {/* <div
+                  className="flex items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 "
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => handleDrop(e)}
+                >
+                  <div className="rounded-lg">
                     <div className="w-28 h-28 bg-naranjaCreame hover:bg-lightBlueCreame flex flex-col items-center justify-center border-2 rounded-full border-gray-400 border-solid  cursor-pointer shadow-xl">
                       <label className="">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6 ">
-                          <p className="text-xs text-white ">
-                            <FontAwesomeIcon icon={faCloudArrowUp} className="h-12"/>
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <p className="text-xs text-white">
+                            <FontAwesomeIcon
+                              icon={faCloudArrowUp}
+                              className="h-12"
+                            />
                           </p>
                         </div>
                         <input
@@ -644,18 +700,64 @@ const renderSelectedOptions = () => {
                           className="hidden"
                           onChange={handleFileChange}
                           // ref={fileInputRef}
-                          accept={isChecked ? ".jpg, .jpeg, .png, .pdf, .docx" : ".jpg, .jpeg, .png"}
+                          accept={
+                            isChecked
+                              ? ".jpg, .jpeg, .png, .pdf"
+                              : ".jpg, .jpeg, .png, .pdf"
+                          }
                           onInput={handlerValidation}
                         />
                       </label>
                     </div>
                   </div>
+                  <div className="flex flex-col items-center justify-center">
+                    <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
+                  </div>
+                </div> */}
+                <div
+                  className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 h-96"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => handleDrop(e)}
+                >
+                  <div className=" w-48 h-48 bg-naranjaCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
+                    <label className="">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <p className="text-xs text-white">
+                          <FontAwesomeIcon
+                            icon={faCloudArrowUp}
+                            className="h-12"
+                          />
+                        </p>
+                      </div>
+                      <input
+                        name="image"
+                        type="file"
+                        className="hidden"
+                        onChange={handleFileChange}
+                        // ref={fileInputRef}
+                        accept={
+                          isChecked
+                            ? ".jpg, .jpeg, .png, .pdf"
+                            : ".jpg, .jpeg, .png, .pdf"
+                        }
+                        onInput={handlerValidation}
+                      />
+                    </label>
+                  </div>
+                  <div className="flex flex-col items-center justify-center mt-4">
+                    <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
+                  </div>
                 </div>
               </>
             )}
 
-            <div className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${imageLoaded && !isChecked?null:"pointer-events-none opacity-50 bg-darkGrayCreame"}`}>
-
+            <div
+              className={`grid grid-cols-2 gap-4 rounded-lg mx-auto border-2 border-gray-300 p-2 bg-azulCreame ${
+                imageLoaded && !isChecked
+                  ? null
+                  : "pointer-events-none opacity-50 bg-darkGrayCreame"
+              }`}
+            >
               {/* CONCEPTO */}
               <div className="col-span-2 flex items-center justify-center">
                 <div
@@ -689,7 +791,10 @@ const renderSelectedOptions = () => {
               </div>
               {/* NIT */}
               <div className="flex items-center justify-center col-span-1  ">
-                <div className="relative mb-3 w-full" data-te-input-wrapper-init>
+                <div
+                  className="relative mb-3 w-full"
+                  data-te-input-wrapper-init
+                >
                   <input
                     value={responsedata.nit}
                     name="nit"
@@ -723,7 +828,6 @@ const renderSelectedOptions = () => {
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
                 >
-                  {console.log(responsedata)}
                   <input
                     value={responsedata.razon_social}
                     name="razon_social"
@@ -1106,8 +1210,8 @@ const renderSelectedOptions = () => {
                 </div>
               </div>
 
-            {/* ICA */}
-            <div className="flex items-center justify-center col-span-1">
+              {/* ICA */}
+              <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
@@ -1144,19 +1248,22 @@ const renderSelectedOptions = () => {
         <div className=" text-center">
           <button
             type="submit"
-            className={`mt-10 w-full inline-block rounded ${imageLoaded && isChecked || imageLoaded && fillData ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]" : "opacity-50 bg-darkGrayCreame"} px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
+            className={`mt-10 w-full inline-block rounded ${
+              (imageLoaded && isChecked) || (imageLoaded && fillData)
+                ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
+                : "opacity-50 bg-darkGrayCreame"
+            } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
             disabled={!imageLoaded && !isChecked}
           >
             Enviar
           </button>
         </div>
       </form>
-       {isLoading 
-      ?
+      {isLoading ? (
         <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
           <div className="loader"></div>
         </div>
-      : null}
+      ) : null}
     </div>
   );
 };

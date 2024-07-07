@@ -23,6 +23,24 @@ const FilePickerButton = ({ ent, upLoaded, setUri, handlerInfo, deleteInfo, just
     }
   };
 
+  function handleDrop(event) {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+     handleFilePick2(files)
+  }
+  const handleFilePick2 = (event) => {
+    try {
+      const uri = event[0];
+      if (uri) {
+        setFileCharged(true)
+        handlerInfo({[ent]:{uri:uri, Numero:numero}})
+        
+      }
+    } catch (error) {
+      console.error('Selección de archivo cancelada', error);
+    }
+  };
+
   const handlerCancel = () => {
     setFileCharged(false)
     deleteInfo(ent);
@@ -55,10 +73,16 @@ const FilePickerButton = ({ ent, upLoaded, setUri, handlerInfo, deleteInfo, just
           X
         </button>
       ) : (
-        <label className={`${justUploaded ? 'bg-gray-400' : 'bg-lightBlueCreame'} w-1/10 h-10 bg-lightgrey rounded flex items-center justify-center ml-2 cursor-pointer text-black`}>
+        <div
+        className="w-1/10 h-10  flex items-center justify-center "
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => handleDrop(e)}
+                >
+        <label className={`${justUploaded ? 'bg-gray-400' : 'bg-lightBlueCreame'} w-full h-10 bg-lightgrey rounded flex items-center justify-center ml-2 cursor-pointer text-black`}>
           ...
           <input type="file" className="hidden" onChange={handleFilePick} disabled={justUploaded?true:false}/>
         </label>
+        </div>
       )}
     </div>
   );

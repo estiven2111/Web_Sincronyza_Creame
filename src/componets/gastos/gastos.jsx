@@ -515,19 +515,21 @@ const Gastos = () => {
     // console.log("on change", responsedata);
   };
   const handlerAnticipo = () => {};
+
   function handleDrop(event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
-    handlerValidation2(files);
+    handlerValidation2(files)
   }
 
   const handleFileChange2 = (files) => {
     setImageLoaded(true);
-    // Verifica si recibes los archivos correctamente
     if (files && files.length > 0) {
       const file = files[0];
       imagen = file;
+      console.log(file, "file changed");
       const reader = new FileReader();
+      console.log(reader.result,"eeeeeerrrrrrdsdsdf")
       reader.readAsDataURL(file);
       reader.onload = () => {
         if (imagen.name.split(".")[1] === "pdf") {
@@ -545,17 +547,18 @@ const Gastos = () => {
       const file = input[0];
       const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
       const fileExtension = file.name.slice(
-        ((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
+        ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
+      );
       if (!Extensions.includes("." + fileExtension.toLowerCase())) {
         Swal({
           title: "ARCHIVO INCORRECTO",
-          text: "Debe seleccionar un archivo .JPG, .JPEG o .PNG",
+          text: "Debe seleccionar un archivo .JPG, .JPEG, .PNG o .PDF",
           icon: "warning",
           buttons: "Aceptar",
         });
         input.value = "";
-      }else{
-         handleFileChange2(input)
+      } else {
+        handleFileChange2(input);
       }
     }
   };
@@ -678,42 +681,6 @@ const Gastos = () => {
               </>
             ) : (
               <>
-                {/* <div
-                  className="flex items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 "
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={(e) => handleDrop(e)}
-                >
-                  <div className="rounded-lg">
-                    <div className="w-28 h-28 bg-naranjaCreame hover:bg-lightBlueCreame flex flex-col items-center justify-center border-2 rounded-full border-gray-400 border-solid  cursor-pointer shadow-xl">
-                      <label className="">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <p className="text-xs text-white">
-                            <FontAwesomeIcon
-                              icon={faCloudArrowUp}
-                              className="h-12"
-                            />
-                          </p>
-                        </div>
-                        <input
-                          name="image"
-                          type="file"
-                          className="hidden"
-                          onChange={handleFileChange}
-                          // ref={fileInputRef}
-                          accept={
-                            isChecked
-                              ? ".jpg, .jpeg, .png, .pdf"
-                              : ".jpg, .jpeg, .png, .pdf"
-                          }
-                          onInput={handlerValidation}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
-                  </div>
-                </div> */}
                 <div
                   className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 h-96"
                   onDragOver={(e) => e.preventDefault()}

@@ -133,10 +133,26 @@ var datas = {
   };
 
   const handleOptionSelect = async(option) => {
-    const infoFechas = await axios.get(`/indicadores/horas?docId=${docId._j}&id=${option[0].id}`)
+    const infoFechas = await axios.get(`/indicadores/horas?docId=${docId}&id=${option[0].id}`)
     if (!selectedOptions.includes(option)) {
       setSelectedOptions(option);
       setInfoFecha(infoFechas.data)
+      if (!isNaN(infoFecha.hdisp)) {
+        grafica.dis = infoFecha.hdisp
+      }
+      if (!isNaN(infoFecha.hdisp)) {
+        grafica.dis = infoFecha.hdisp
+      }
+      if (!isNaN(infoFecha.hdisp)) {
+        grafica.dis = infoFecha.hdisp
+      }
+
+      setData({
+        hDisp : infoFechas.data,
+        hProg : infoFechas.data,
+        hCump : infoFechas.data,
+        hFrec : infoFechas.data,
+      })
       }
     setIsOpen(false);
     SetJustSelected(true)
@@ -197,8 +213,9 @@ var datas = {
           </div>
          
           <div className="inputCont  m-5">
+            {console.log(infoFecha)}
             <label className="label">Horas Disp :</label>
-            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={isNaN(horasDisp) ? data.hDisp: data.hDisp} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
+            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.hdisp) ? infoFecha.hdisp: data.hDisp} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
             <label className="label">Horas Cumplidas :</label>
             <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.CumplidasPeriodo) && !isNaN(infoFecha.atrazo) ? (infoFecha.CumplidasPeriodo + infoFecha.atrazo).toString() : data.hCump} onChange={(e) => handleOnChange(e.target.value, "hCump")} placeholder="Horas" type="number"/>
           </div>

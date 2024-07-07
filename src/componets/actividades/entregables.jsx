@@ -55,6 +55,29 @@ const Entregables = (props) => {
     setUpdates(!updates);
   };
 
+
+  function normalizeString(str) {
+    // Reemplaza las tildes
+    const map = {
+        'á': 'a',
+        'é': 'e',
+        'í': 'i',
+        'ó': 'o',
+        'ú': 'u',
+        'Á': 'A',
+        'É': 'E',
+        'Í': 'I',
+        'Ó': 'O',
+        'Ú': 'U',
+        'ñ': 'n',
+        'Ñ': 'N'
+    };
+    const normalizedStr = str.replace(/[áéíóúÁÉÍÓÚñÑ]/g, match => map[match]);
+
+    // Elimina caracteres especiales (manteniendo guiones y subrayados si es necesario)
+    return normalizedStr.replace(/[^a-zA-Z0-9-_]/g, '');
+}
+
   const sendData = async (data) => {
     setIsLoading(true);
 
@@ -96,9 +119,14 @@ const Entregables = (props) => {
       const formatKey = key.split(" ").join("_");
       const name = `${formatKey}${currentDate}.${extension}`;
       const nombre_img = `${value.Numero}-${name}`;
-      formData.append(key, value.uri, nombre_img);
-    });
+      let nombreLimpio = normalizeString(nombre_img);
 
+
+
+      // formData.append(key, value.uri, nombre_img);
+      formData.append(key, value.uri, nombreLimpio);
+      // console.log(nombreLimpio,"nombre")
+    });
     const response = await axios.post("/creame-dashboard", formData, {
       headers: {
         "Content-Type": "multipart/form-data",

@@ -2,11 +2,10 @@ export default {
     apps: [
       {
         name: 'app_creame',
-        script: 'npm',
-        args: 'run dev',
-        watch: true,
+        script: 'serve',
+        args: '-s dist',
         env: {
-          NODE_ENV: 'development',
+          NODE_ENV: 'production',
         }
       }
     ]

@@ -45,7 +45,6 @@ const Checklist = () => {
       globalOptions(false);
     }, 2000);
   };
-
   return (
     <div className="">
       {indice ? (

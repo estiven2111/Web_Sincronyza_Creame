@@ -4,6 +4,7 @@ import Tarea from "./tarea";
 import axios from "axios";
 
 const Checklist = () => {
+  
   const {
     finalValue,
     globalSearch,

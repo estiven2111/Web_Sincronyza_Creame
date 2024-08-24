@@ -4,7 +4,6 @@ import Tarea from "./tarea";
 import axios from "axios";
 
 const Checklist = () => {
-  // const [response, setResponse] = useState([]);
   const {
     finalValue,
     globalSearch,
